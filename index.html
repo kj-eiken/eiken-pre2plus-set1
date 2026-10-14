@@ -1,0 +1,3339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英検準2級プラス 演習アプリ Set1</title>
+<style>
+:root{
+  --bg:#f7f6f3;--surface:#fff;--border:#e2e0da;--border2:#cccac3;
+  --text:#1a1a18;--muted:#6b6960;--hint:#9b9890;
+  --accent:#2563c4;--accent-bg:#eef3fc;
+  --green:#0f6e56;--green-bg:#e1f5ee;
+  --red:#993c1d;--red-bg:#faece7;
+  --amber:#854f0b;--amber-bg:#faeeda;
+  --blue-dark:#1a4a8a;--blue-mid:#2563c0;--blue-light:#dbeafe;--blue-pale:#f0f6ff;
+  --radius:10px;--rsm:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;font-size:15px;line-height:1.7}
+ruby rt{font-size:0.55em;color:var(--muted)}
+button ruby rt{color:inherit}
+
+/* ===== NAV ===== */
+.nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:820px;margin:0 auto;padding:0;display:flex;flex-direction:column;}
+.nav-row1{display:flex;align-items:center;padding:0 1.25rem;border-bottom:1px solid var(--border);min-height:44px;}
+.nav-logo{font-size:13px;font-weight:700;white-space:nowrap;margin-right:auto;}
+.nav-logo span{color:var(--accent)}
+.nav-score{font-size:12px;color:var(--muted);white-space:nowrap;padding:0 8px;}
+.nav-row2{display:flex;align-items:center;padding:0 1.25rem;overflow-x:auto;scrollbar-width:none;}
+.nav-row2::-webkit-scrollbar{display:none}
+.nav-tabs{display:flex;gap:0;flex:1;}
+.nav-tab{padding:10px 12px 8px;font-size:13px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;transition:color .15s,border-color .15s}
+.nav-tab:hover{color:var(--text)}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.nav-tab.listening{color:#1a4a8a}
+.nav-tab.listening.active{color:#1a4a8a;border-bottom-color:#1a4a8a;font-weight:700}
+/* サブタブ（大問1-6、第1-3部） */
+.nav-subtabs{display:flex;gap:0;background:#f7f6f3;border-bottom:1px solid var(--border);padding:0 1.25rem;overflow-x:auto;scrollbar-width:none;}
+.nav-subtabs::-webkit-scrollbar{display:none}
+.nav-subtab{padding:7px 10px 5px;font-size:12px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;transition:color .15s,border-color .15s;}
+.nav-subtab:hover{color:var(--text)}
+.nav-subtab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.nav-subtab.listening{color:#1a4a8a}
+.nav-subtab.listening.active{color:#1a4a8a;border-bottom-color:#1a4a8a;font-weight:700}
+.nav-subtabs.hidden{display:none;}
+.nav-logout{margin-left:auto;padding:6px 12px;font-size:12px;font-weight:700;color:#993c1d;background:#faece7;border:1px solid #f5c6b8;border-radius:5px;cursor:pointer;white-space:nowrap;align-self:center;margin-left:8px;}
+.nav-logout:hover{background:#f5c6b8;}
+
+/* ===== PAGES ===== */
+.page{display:none;max-width:820px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.page.active{display:block}
+#page-admin{max-width:1100px;}
+
+/* ===== HOME ===== */
+.home-header{text-align:center;padding:2rem 0 1.5rem}
+.home-title{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-bottom:.4rem}
+.home-sub{font-size:14px;color:var(--muted)}
+.prog-wrap{background:var(--border);height:6px;border-radius:3px;margin:1.5rem 0 .4rem;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s}
+.prog-label{font-size:12px;color:var(--muted);margin-bottom:1.5rem}
+.sec-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:1.25rem}
+.sec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;cursor:pointer;transition:border-color .15s}
+.sec-card:hover{border-color:var(--accent)}
+.sec-card.listening-card{border-color:#b8d0f5;background:var(--blue-pale)}
+.sec-card.listening-card:hover{border-color:#1a4a8a;background:#e0ecff}
+.sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.sc-num{width:30px;height:30px;background:var(--text);color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.sc-num.listening-num{background:linear-gradient(135deg,#1a4a8a,#2563c0)}
+.sc-badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--green-bg);color:var(--green);font-weight:600}
+.sc-badge.listening-badge{background:var(--blue-light);color:#1a4a8a}
+.sc-title{font-size:14px;font-weight:600;margin-bottom:2px}
+.sc-sub{font-size:12px;color:var(--muted)}
+.sc-count{font-size:11px;color:var(--hint);margin-top:.5rem}
+
+/* ===== SECTION COMMON ===== */
+.sec-hdr{margin-bottom:1.5rem}
+.sec-hdr h2{font-size:20px;font-weight:700;margin-bottom:.25rem}
+.sec-hdr p{font-size:13px;color:var(--muted)}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;margin-bottom:1.25rem;background:none;border:none;padding:0}
+.back-btn:hover{color:var(--text)}
+
+/* ===== READING PARTS ===== */
+.email-box{border:1px solid var(--border2);border-radius:var(--radius);margin-bottom:1.5rem;overflow:hidden}
+.email-head{background:#f0ede8;border-bottom:1px solid var(--border);padding:.75rem 1.25rem;font-size:13px}
+.email-head table{border-collapse:collapse;width:100%}
+.email-head td{padding:2px 0;vertical-align:top;color:var(--muted)}
+.email-head td:first-child{width:60px;font-weight:600;color:var(--text)}
+.email-body{padding:1.25rem 1.5rem;font-size:15px;line-height:1.85}
+.email-body p{margin-bottom:.85rem}
+.email-body p:last-child{margin-bottom:0}
+.passage-box{border:1px solid var(--border2);border-radius:var(--radius);padding:1.5rem 1.75rem;margin-bottom:1.5rem}
+.p-title{text-align:center;font-size:18px;font-style:italic;font-weight:700;margin-bottom:1.25rem}
+.p-text{font-size:15px;line-height:1.9}
+.p-text p{margin-bottom:1rem;text-indent:1.5em}
+.p-text p:last-child{margin-bottom:0}
+.blank-slot{display:inline-block;border-bottom:2px solid var(--text);min-width:70px;text-align:center;font-size:13px;font-style:italic;font-weight:600;padding:0 4px;vertical-align:middle}
+.conv-box{border:1px solid var(--border2);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1.25rem;font-size:15px;line-height:1.85}
+.conv-line{display:flex;gap:8px;margin-bottom:.5rem}
+.conv-line:last-child{margin-bottom:0}
+.conv-who{font-weight:700;min-width:20px;color:var(--muted);flex-shrink:0}
+
+/* ===== CHOICES ===== */
+.q-block{margin-bottom:1.25rem}
+.q-label{font-size:15px;font-style:italic;font-weight:600;margin-bottom:.6rem}
+.q-text{font-size:14px;color:var(--muted);margin-bottom:.65rem;line-height:1.6}
+.choices{display:flex;flex-direction:column;gap:7px}
+.choice{display:flex;align-items:flex-start;gap:11px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--rsm);background:var(--surface);cursor:pointer;font-size:14px;line-height:1.5;transition:border-color .12s,background .12s}
+.choice:hover{border-color:var(--border2);background:#fafaf8}
+.choice.selected{border-color:var(--accent);background:var(--accent-bg)}
+.choice.show-ans{border-color:var(--green);background:var(--green-bg)}
+.choice.wrong{border-color:var(--red);background:var(--red-bg)}
+.cn{width:22px;height:22px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px}
+.hr{border:none;border-top:1px solid var(--border);margin:1.1rem 0}
+.divider-sec{border:none;border-top:2px solid var(--border);margin:1.75rem 0}
+
+/* ===== ACTION ROW ===== */
+.action-row{display:flex;gap:10px;align-items:center;margin-top:1.5rem;flex-wrap:wrap}
+.submit-btn{padding:11px 28px;background:var(--text);color:#fff;border:none;border-radius:var(--rsm);font-size:14px;font-weight:600;cursor:pointer}
+.submit-btn:hover{opacity:.85}
+.submit-btn:disabled{opacity:.35;cursor:not-allowed}
+.retry-btn{padding:10px 20px;background:var(--surface);color:var(--muted);border:1px solid var(--border2);border-radius:var(--rsm);font-size:13px;cursor:pointer}
+.retry-btn:hover{background:var(--bg)}
+
+/* ===== RESULTS ===== */
+.result-area{margin-top:1.5rem;display:none}
+.result-area.show{display:block}
+.score-banner{padding:1rem 1.25rem;border-radius:var(--radius);margin-bottom:1.2rem;font-weight:600;font-size:15px}
+.score-banner.perfect{background:var(--green-bg);color:var(--green)}
+.score-banner.partial{background:var(--amber-bg);color:var(--amber)}
+.score-banner.low{background:var(--red-bg);color:var(--red)}
+.result-q{border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:.9rem;background:var(--surface)}
+.rq-header{display:flex;align-items:center;gap:10px;margin-bottom:.6rem}
+.rb{padding:2px 9px;border-radius:4px;font-size:12px;font-weight:600;flex-shrink:0}
+.rb-ok{background:var(--green-bg);color:var(--green)}
+.rb-ng{background:var(--red-bg);color:var(--red)}
+.rq-label{font-size:14px;font-weight:600}
+.rq-ans{font-size:13px;color:var(--muted);margin-bottom:.7rem}
+.rq-choices{display:flex;flex-direction:column;gap:6px;margin-bottom:.75rem}
+.rc{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:var(--rsm);font-size:13px;line-height:1.5;border:1px solid transparent}
+.rc.rc-ok{border-color:var(--green);background:var(--green-bg)}
+.rc.rc-ng{border-color:var(--red);background:var(--red-bg)}
+.rc.rc-normal{border-color:var(--border);background:#fafaf8}
+.rc-icon{font-weight:700;flex-shrink:0;min-width:18px}
+.rc-body{flex:1}
+.rc-en{font-weight:600;margin-bottom:1px}
+.rc-ja{font-size:12px;color:var(--muted);margin-bottom:2px}
+.rc-reason{font-size:12px;color:var(--muted);font-style:italic}
+.point-box{padding:.65rem .9rem;background:#eef3fc;border-left:3px solid var(--accent);border-radius:0 var(--rsm) var(--rsm) 0;font-size:13px;color:#1a3a6e;line-height:1.7}
+.sub-label{display:inline-flex;align-items:center;gap:8px;margin-bottom:1rem}
+.sub-main{width:32px;height:32px;background:var(--text);color:#fff;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.sub-sub{width:26px;height:26px;border:2px solid var(--text);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+
+/* ===== WRITING ===== */
+.photo-submit-box{background:#fff8e1;border:1px solid #f0c040;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-top:1.5rem}
+.photo-submit-box h3{font-size:14px;font-weight:700;color:#854f0b;margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
+.photo-submit-steps{list-style:none;padding:0;margin:0 0 1rem 0}
+.photo-submit-steps li{font-size:13px;color:#5a4000;padding:.35rem 0;display:flex;align-items:flex-start;gap:8px;border-bottom:1px solid #f0e0a0}
+.photo-submit-steps li:last-child{border-bottom:none}
+.step-num{background:#854f0b;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.mail-addr{background:#fff;border:1px solid #f0c040;border-radius:var(--rsm);padding:.5rem 1rem;font-size:14px;font-weight:700;color:#2563c4;text-align:center;margin:.5rem 0;letter-spacing:.05em}
+
+/* ===== LISTENING SECTION ===== */
+.listening-banner{background:linear-gradient(135deg,#1a4a8a 0%,#2563c0 100%);color:#fff;padding:18px 20px 14px;text-align:center;border-radius:var(--radius);margin-bottom:1.5rem;box-shadow:0 3px 10px rgba(26,74,138,.2)}
+.listening-banner h2{font-size:1.1rem;font-weight:700;letter-spacing:.03em}
+.listening-banner p{font-size:.78rem;opacity:.85;margin-top:3px}
+
+.part-banner{background:linear-gradient(90deg,#1a4a8a,#2563c0);color:#fff;padding:12px 16px;border-radius:8px;text-align:center;margin-bottom:1.25rem}
+.part-banner h3{font-size:.95rem;font-weight:700}
+.part-banner p{font-size:.78rem;opacity:.9;margin-top:2px}
+.part-banner ruby rt{color:rgba(255,255,255,.8)}
+.listening-banner ruby rt{color:rgba(255,255,255,.8)}
+
+/* Audio player */
+.audio-section{margin-bottom:14px}
+.audio-btn{display:flex;align-items:center;gap:10px;background:var(--blue-pale);border:2px solid var(--blue-light);border-radius:8px;padding:11px 14px;cursor:pointer;width:100%;transition:background .2s,border-color .2s;text-align:left}
+.audio-btn:hover{background:var(--blue-light);border-color:#2563c0}
+.audio-btn.playing{background:var(--blue-light);border-color:#2563c0}
+.audio-mode-toggle{display:flex;gap:6px;margin-bottom:8px;}
+.audio-mode-btn{flex:1;padding:6px 4px;font-size:.78rem;font-weight:700;border-radius:6px;border:2px solid #2563c0;cursor:pointer;transition:all .2s;}
+.audio-mode-btn.active{background:#2563c0;color:#fff;}
+.audio-mode-btn:not(.active){background:#fff;color:#2563c0;}
+.audio-icon{width:36px;height:36px;border-radius:50%;background:#2563c0;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.audio-info{text-align:left;flex:1}
+.audio-info .audio-title{font-size:.85rem;font-weight:600;color:#1a4a8a}
+.audio-info .audio-hint{font-size:.72rem;color:var(--muted);margin-top:1px}
+.play-count-badge{font-size:.72rem;color:#e85d04;font-weight:600;white-space:nowrap}
+
+/* waveform */
+.waveform{display:flex;gap:3px;align-items:center;height:22px;flex-shrink:0}
+.waveform span{display:block;width:3px;background:#2563c0;border-radius:2px;animation:wave .8s infinite ease-in-out}
+.waveform span:nth-child(1){height:7px;animation-delay:0s}
+.waveform span:nth-child(2){height:16px;animation-delay:.15s}
+.waveform span:nth-child(3){height:11px;animation-delay:.3s}
+.waveform span:nth-child(4){height:18px;animation-delay:.45s}
+.waveform span:nth-child(5){height:9px;animation-delay:.6s}
+@keyframes wave{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+.waveform.hidden{display:none}
+
+/* Script box (Part 3) */
+.script-box{background:var(--bg);border-left:3px solid #2563c0;border-radius:0 6px 6px 0;padding:10px 14px;font-size:.83rem;color:var(--muted);line-height:1.7;margin-bottom:12px;display:none}
+.script-box.show{display:block}
+.script-toggle-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:#fff;color:#2563c0;border:1.5px solid #2563c0;border-radius:20px;font-size:.78rem;font-weight:700;cursor:pointer;margin-bottom:8px;transition:background .15s}
+.script-toggle-btn:hover{background:var(--blue-pale)}
+.speed-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.speed-btn{padding:5px 12px;border-radius:20px;border:1.5px solid #2563c0;font-size:.78rem;font-weight:700;cursor:pointer;background:#fff;color:#2563c0;transition:all .15s}
+.speed-btn:hover{background:var(--blue-pale)}
+.speed-btn.active{background:#2563c0;color:#fff}
+
+/* Listening choices */
+.lis-choice{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--rsm);background:var(--surface);cursor:pointer;font-size:14px;line-height:1.5;transition:all .15s;margin-bottom:7px}
+.lis-choice:hover{border-color:#2563c0;background:var(--blue-pale)}
+.lis-choice.selected{border-color:#2563c0;background:var(--blue-pale)}
+.lis-choice.show-ans{border-color:var(--green);background:var(--green-bg)}
+.lis-choice.wrong{border-color:var(--red);background:var(--red-bg)}
+.lis-cn{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px}
+
+/* Listening feedback */
+.lis-feedback{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.82rem;line-height:1.6;display:none}
+.lis-feedback.correct{background:var(--green-bg);border:1px solid #86efac;color:#166534;display:block}
+.lis-feedback.wrong{background:var(--red-bg);border:1px solid #fca5a5;color:#991b1b;display:block}
+
+/* Listening nav */
+.lis-nav-row{display:flex;justify-content:space-between;align-items:center;padding:0;margin-top:8px}
+.lis-nav-btn{padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-size:.88rem;font-weight:700;transition:all .2s}
+.lis-nav-btn.primary{background:#2563c0;color:#fff;box-shadow:0 2px 8px rgba(37,99,192,.3)}
+.lis-nav-btn.primary:hover{background:#1a4a8a}
+.lis-nav-btn.secondary{background:var(--surface);color:#2563c0;border:2px solid #2563c0}
+.lis-nav-btn.secondary:hover{background:var(--blue-pale)}
+.lis-nav-btn:disabled{opacity:.35;cursor:default}
+
+/* Listening progress */
+.lis-prog-wrap{background:var(--border);height:7px;border-radius:4px;margin-bottom:.4rem;overflow:hidden}
+.lis-prog-fill{height:100%;background:#2563c0;border-radius:4px;transition:width .4s ease}
+.lis-prog-label{font-size:.78rem;color:var(--muted);margin-bottom:1rem}
+
+/* Listening result */
+.lis-result-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:22px 20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(26,74,138,.08)}
+.score-circle{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#1a4a8a,#2563c0);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 4px 14px rgba(37,99,192,.3)}
+.score-circle .sc-n{font-size:2rem;font-weight:800;line-height:1}
+.score-circle .sc-d{font-size:.75rem;opacity:.85}
+.section-scores{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.ss-item{background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:8px;padding:10px 6px;text-align:center}
+.ss-item .ss-l{font-size:.7rem;color:var(--muted);margin-bottom:3px}
+.ss-item .ss-v{font-size:1.1rem;font-weight:800;color:#1a4a8a}
+.lis-review-item{background:var(--surface);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:4px solid var(--border)}
+.lis-review-item.ok{border-left-color:var(--green)}
+.lis-review-item.ng{border-left-color:var(--red)}
+
+/* Send button */
+.send-btn-blue{width:100%;padding:13px;background:#2563c0;color:#fff;border:none;border-radius:var(--rsm);font-size:.95rem;font-weight:700;cursor:pointer;letter-spacing:.03em;margin-bottom:.6rem}
+.send-btn-blue:hover{background:#1a4a8a}
+
+@media(max-width:480px){
+  .home-title{font-size:22px}
+  .page{padding:1.25rem .9rem 3rem}
+  .email-body{padding:1rem}
+  .passage-box{padding:1.1rem}
+  .section-scores{grid-template-columns:1fr}
+}
+
+/* ===== SITE FOOTER ===== */
+.site-footer{background:#1a1a18;color:#aaa;font-size:11px;line-height:1.8;padding:1.5rem 1.25rem;margin-top:0;text-align:center}
+.site-footer .footer-copy{font-weight:700;color:#fff;font-size:12px;margin-bottom:.5rem}
+.site-footer .footer-disc{color:#888;font-size:10.5px;line-height:1.9}
+.site-footer .footer-disc span{display:block}
+
+/* ===== PRINT BUTTON AREA ===== */
+.print-section{background:#fff8e1;border:1px solid #f0c040;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;}
+.print-section h3{font-size:14px;font-weight:700;color:#854f0b;margin-bottom:.85rem;display:flex;align-items:center;gap:6px;}
+.print-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
+.print-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 8px;background:#fff;border:1.5px solid #e0c050;border-radius:var(--rsm);cursor:pointer;font-size:12px;font-weight:700;color:#5a4000;transition:background .15s,border-color .15s;}
+.print-btn:hover{background:#fef9e7;border-color:#c89a00;}
+.print-btn .pb-icon{font-size:1.4rem;}
+.print-btn .pb-label{text-align:center;line-height:1.4;}
+.print-sep{width:100%;border:none;border-top:1px dashed #e0c050;margin:.65rem 0;}
+
+/* ===== @media print ===== */
+@media print{
+  /* 全ページ非表示 → activeなページのみ表示（見えているものをそのまま印刷） */
+  html{height:auto!important;}
+  body{height:auto!important;overflow:visible!important;background:#fff!important;font-size:12px;color:#000;}
+  .page{display:none!important;}
+  .page.active{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;overflow:visible!important;padding:0.5rem 1rem 1rem!important;margin:0!important;}
+
+  /* ナビバーは印刷不要 */
+  .nav{display:none!important;}
+
+  /* ログイン前はログイン画面のみ印刷 */
+  body:not(.logged-in) .page{display:none!important;}
+  body:not(.logged-in) .login-overlay{display:block!important;position:static!important;height:auto!important;}
+  body.logged-in .login-overlay{display:none!important;}
+
+  /* リスニング：lis-resultのみ表示 */
+  #page-listening #lis-start{display:none!important;}
+  #page-listening #lis-quiz{display:none!important;}
+  #page-listening #lis-result{display:block!important;}
+
+  /* 解答解説モード（beforeprintで自動付与） */
+  /* ①問題用紙モード：ボタン類を非表示 */
+  body.print-question-only .action-row,
+  body.print-question-only #q1-send-bottom,
+  body.print-question-only #q2-send-bottom,
+  body.print-question-only #q3-send-bottom,
+  body.print-question-only #q4-send-bottom,
+  body.print-question-only .retry-btn{display:none!important;}
+
+  /* ②解答解説モード：問題部分を非表示 */
+  body.print-answer-only .sec-hdr,
+  body.print-answer-only .q-block,
+  body.print-answer-only .passage-box,
+  body.print-answer-only .email-box,
+  body.print-answer-only .conv-box,
+  body.print-answer-only .sub-label,
+  body.print-answer-only .divider-sec,
+  body.print-answer-only #q1-send-bottom,
+  body.print-answer-only #q2-send-bottom,
+  body.print-answer-only #q3-send-bottom,
+  body.print-answer-only #q4-send-bottom,
+  body.print-answer-only #tab-type,
+  body.print-answer-only #tab-photo,
+  body.print-answer-only #tab6-type,
+  body.print-answer-only #tab6-photo,
+  body.print-answer-only .action-row,
+  body.print-answer-only #panel-type,
+  body.print-answer-only #panel-photo,
+  body.print-answer-only #panel6-type,
+  body.print-answer-only #panel6-photo{display:none!important;}
+  /* ①問題用紙モード：解答解説を非表示 */
+  body.print-question-only .result-area{display:none!important;}
+  /* ②解答解説モード：解答解説のみ表示 */
+  body.print-answer-only .result-area,
+  body.print-answer-only .result-area.show{display:block!important;}
+  /* ③画面印刷：result-areaはshowクラスがあれば表示、なければ非表示（画面状態そのまま） */
+  body:not(.print-question-only):not(.print-answer-only) .result-area:not(.show){display:none!important;}
+  body:not(.print-question-only):not(.print-answer-only) .result-area.show{display:block!important;}
+
+  /* 著作権ヘッダー・フッター（印刷時のみ表示） */
+  .print-header{display:block!important;border-bottom:2px solid #1a3a6e;padding-bottom:.4rem;margin-bottom:.8rem;}
+  .print-footer{display:block!important;border-top:1px solid #ccc;padding-top:.4rem;margin-top:1rem;font-size:10px;color:#555;text-align:center;}
+
+  /* 選択肢の色 */
+  .choice,.lis-choice{border:1px solid #aaa;background:#fff!important;}
+  .choice.show-ans,.lis-choice.show-ans{background:#e1f5ee!important;border-color:#0f6e56!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .choice.wrong,.lis-choice.wrong{background:#faece7!important;border-color:#993c1d!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+
+  /* ページ余白 */
+  @page{margin:15mm 12mm;}
+
+  /* ライティング解答欄 */
+  #q5-textarea,#q6-textarea{min-height:14cm!important;height:14cm!important;font-size:13px!important;line-height:calc(14cm/15)!important;color:#000!important;background:transparent!important;border:none!important;resize:none!important;overflow:hidden!important;}
+}
+
+/* 印刷時のみ表示する要素（通常時は非表示） */
+.print-header,.print-footer{display:none;}
+
+/* ===== LOGIN SCREEN ===== */
+.login-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#f7f6f3;z-index:9999;display:flex;align-items:center;justify-content:center;}
+.login-box{background:#fff;border:1px solid #e2e0da;border-radius:12px;padding:2.5rem 2rem;max-width:380px;width:90%;box-shadow:0 4px 20px rgba(0,0,0,.08);}
+.login-logo{text-align:center;font-size:22px;font-weight:700;color:#1a3a6e;margin-bottom:.4rem;}
+.login-sub{text-align:center;font-size:13px;color:#6b6960;margin-bottom:2rem;}
+.login-label{font-size:13px;font-weight:700;display:block;margin-bottom:.4rem;color:#1a1a18;}
+.login-input{width:100%;border:1px solid #cccac3;border-radius:6px;padding:.65rem .9rem;font-size:15px;font-family:inherit;outline:none;margin-bottom:1rem;box-sizing:border-box;}
+.login-input:focus{border-color:#2563c4;box-shadow:0 0 0 2px #eef3fc;}
+.login-btn{width:100%;padding:12px;background:#1a3a6e;color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.03em;}
+.login-btn:hover{background:#2563c4;}
+.login-error{color:#993c1d;font-size:13px;text-align:center;margin-top:.75rem;display:none;}
+/* ===== DEADLINE EXPIRED / IDLE TIMEOUT ===== */
+.login-expired{background:#faece7;border:1px solid #e8b4a0;border-radius:8px;padding:1rem 1.1rem;margin-bottom:1.25rem;text-align:center;color:#993c1d;font-size:13px;line-height:1.7;}
+.login-expired strong{display:block;font-size:15px;margin-bottom:.3rem;}
+/* idle timeout modal overlay */
+.idle-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);z-index:99998;display:none;align-items:center;justify-content:center;}
+.idle-modal.show{display:flex;}
+.idle-modal-box{background:#fff;border-radius:12px;padding:2rem 1.75rem;max-width:340px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.18);}
+.idle-modal-icon{font-size:2.5rem;margin-bottom:.6rem;}
+.idle-modal-title{font-size:17px;font-weight:700;color:#1a3a6e;margin-bottom:.5rem;}
+.idle-modal-msg{font-size:13px;color:#6b6960;line-height:1.7;margin-bottom:1.25rem;}
+.idle-modal-btn{width:100%;padding:11px;background:#1a3a6e;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;}
+.idle-modal-btn:hover{background:#2563c4;}
+
+/* ===== ADMIN DASHBOARD ===== */
+.admin-header{background:linear-gradient(135deg,#1a3a6e 0%,#2563c4 100%);color:#fff;padding:1.5rem 1.75rem;border-radius:var(--radius);margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.admin-header h2{font-size:20px;font-weight:700;margin:0;}
+.admin-header p{font-size:13px;opacity:.85;margin-top:3px;}
+.admin-header-left{}
+.admin-header-right{display:flex;gap:8px;flex-wrap:wrap;}
+.admin-dl-btn{padding:9px 16px;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;}
+.admin-dl-btn.csv{background:#e1f5ee;color:#0f6e56;}
+.admin-dl-btn.csv:hover{background:#c3edd8;}
+.admin-dl-btn.excel{background:#dbeafe;color:#1a4a8a;}
+.admin-dl-btn.excel:hover{background:#bfdbfe;}
+.admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem;}
+.admin-stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;text-align:center;}
+.admin-stat-num{font-size:28px;font-weight:800;color:var(--accent);line-height:1;}
+.admin-stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
+.admin-table-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow-x:auto;margin-bottom:1.5rem;}
+.admin-table{width:100%;border-collapse:collapse;font-size:11px;}
+.admin-table th{background:#f0f4ff;color:#1a3a6e;font-weight:700;padding:7px 8px;text-align:left;border-bottom:2px solid #dbeafe;white-space:nowrap;}
+.admin-table td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:middle;white-space:nowrap;}
+.admin-table tr:last-child td{border-bottom:none;}
+.admin-table tr:hover td{background:#fafbff;cursor:pointer;}
+.admin-score-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;}
+.admin-score-high{background:#d1fae5;color:#065f46;}
+.admin-score-mid{background:#fef3c7;color:#92400e;}
+.admin-score-low{background:#fee2e2;color:#991b1b;}
+.admin-score-none{background:#f1f0ec;color:#9b9890;}
+.admin-submit-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:#dbeafe;color:#1a4a8a;}
+/* 生徒詳細 */
+.admin-detail-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.admin-detail-back{padding:8px 16px;background:#fff;border:1px solid var(--border2);border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;color:var(--muted);}
+.admin-detail-back:hover{background:var(--bg);}
+.admin-detail-title{font-size:20px;font-weight:700;color:#1a3a6e;}
+.admin-detail-sub{font-size:13px;color:var(--muted);}
+.admin-score-grid{margin-bottom:1.5rem;}
+.admin-score-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;}
+.admin-score-row::-webkit-scrollbar{height:4px;}
+.admin-score-row::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.admin-score-arrow{color:var(--muted);font-size:14px;flex-shrink:0;}
+.admin-score-item{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1rem;text-align:center;flex-shrink:0;width:110px;}
+.admin-score-item.total{border-color:var(--accent);background:#eef3fc;width:120px;}
+.admin-score-item .asi-label{font-size:12px;color:var(--muted);margin-bottom:4px;}
+.admin-score-item .asi-val{font-size:22px;font-weight:800;color:#1a3a6e;line-height:1;}
+.admin-score-item .asi-max{font-size:11px;color:var(--hint);}
+.admin-score-item .asi-pct{font-size:13px;font-weight:600;margin-top:3px;}
+.admin-record-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;overflow:hidden;}
+.admin-record-head{background:#f5f4f1;padding:.75rem 1.1rem;font-size:13px;font-weight:700;color:#1a3a6e;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.admin-record-body{padding:1rem 1.1rem;font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap;word-break:break-all;}
+.admin-loading{text-align:center;padding:3rem;color:var(--muted);font-size:14px;}
+.admin-error{background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:1rem 1.1rem;color:#991b1b;font-size:13px;margin-bottom:1rem;}
+.admin-refresh-btn{padding:9px 16px;background:#fff;border:1.5px solid var(--border2);border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);}
+.admin-refresh-btn:hover{background:var(--bg);}
+/* 期間フィルター */
+.admin-filter-bar{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1.1rem;margin-bottom:1.25rem;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.admin-filter-bar label{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;}
+.admin-filter-bar select{padding:6px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;background:#fff;cursor:pointer;}
+.admin-filter-btn{padding:7px 14px;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff;}
+.admin-filter-btn:hover{background:#1a4a8a;}
+.admin-filter-reset{padding:7px 14px;border:1.5px solid var(--border2);border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);}
+.admin-filter-reset:hover{background:var(--bg);}
+.admin-period-label{font-size:12px;color:var(--accent);font-weight:700;padding:4px 10px;background:#eef3fc;border-radius:10px;}
+/* 推移グラフ */
+.admin-trend-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:1.25rem;}
+.admin-trend-title{font-size:14px;font-weight:700;color:#1a3a6e;margin-bottom:.75rem;}
+.admin-trend-chart{display:flex;align-items:flex-end;gap:6px;height:120px;padding-bottom:24px;position:relative;}
+.admin-trend-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;}
+.admin-trend-bar{width:100%;border-radius:4px 4px 0 0;transition:height .3s;min-height:3px;position:relative;}
+.admin-trend-bar.write{background:var(--accent);}
+.admin-trend-bar.lis{background:#0f6e56;}
+.admin-trend-label{font-size:10px;color:var(--muted);margin-top:4px;text-align:center;white-space:nowrap;}
+.admin-trend-val{font-size:10px;font-weight:700;text-align:center;margin-bottom:2px;}
+.admin-trend-legend{display:flex;gap:16px;margin-top:.5rem;font-size:12px;color:var(--muted);}
+.admin-trend-legend span{display:flex;align-items:center;gap:5px;}
+.admin-trend-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;}
+/* 生徒別推移 */
+.admin-student-trend{background:#f8f7f4;border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1rem;}
+.admin-student-trend-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:.6rem;}
+.admin-mini-chart{display:flex;align-items:flex-end;gap:4px;height:80px;padding-bottom:20px;}
+.admin-mini-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;}
+.admin-mini-bar{width:100%;border-radius:3px 3px 0 0;min-height:2px;}
+.admin-mini-bar.write{background:var(--accent);opacity:.85;}
+.admin-mini-bar.lis{background:#0f6e56;opacity:.85;}
+.admin-mini-label{font-size:9px;color:var(--muted);margin-top:3px;text-align:center;}
+/* 差分ハイライト */
+.diff-new{background:#fff3cd;border-radius:3px;padding:1px 2px;}
+/* 大問5・6テキスト表示 */
+.admin-writing-box{background:#f8f7f4;border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;font-size:13px;line-height:1.8;white-space:pre-wrap;word-break:break-all;margin-top:.4rem;color:var(--text);}
+/* 管理タブ（通常時は非表示・JS制御） */
+.nav-tab-admin{display:none;}
+
+</style>
+</head>
+<body>
+
+<!-- ===== 問題データ読み込み中オーバーレイ ===== -->
+<div id="questions-loading" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(247,246,243,0.92);z-index:9998;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div style="font-size:2rem;">📚</div>
+  <div style="font-size:15px;font-weight:700;color:#1a3a6e;">問題データを読み込んでいます…</div>
+  <div style="width:200px;height:6px;background:#e2e0da;border-radius:3px;overflow:hidden;">
+    <div style="height:100%;background:#2563c4;border-radius:3px;animation:loadbar 1.5s infinite ease-in-out;"></div>
+  </div>
+  <style>@keyframes loadbar{0%{width:0%}50%{width:80%}100%{width:100%}}</style>
+</div>
+
+<!-- ===== ログイン画面 ===== -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">🎧 英検<span style="color:#2563c4">準2級プラス</span> Set1</div>
+    <div class="login-sub">東進こども英語塾</div>
+    <!-- 期限切れメッセージ（期限後に表示） -->
+    <div class="login-expired" id="login-expired" style="display:none;">
+      <strong>⏰ 利用期間が終了しました</strong>
+      公開期間（2027年6月30日まで）が終了したため、このアプリは現在ご利用いただけません。
+    </div>
+    <!-- 通常ログインフォーム -->
+    <div id="login-form-body">
+      <label class="login-label">🔢 生徒番号（8桁）</label>
+      <input type="text" id="login-id" class="login-input" placeholder="例：00000001" maxlength="8" autocomplete="off">
+      <label class="login-label">👤 氏名</label>
+      <input type="text" id="login-name" class="login-input" placeholder="氏名を入力" autocomplete="off"
+        onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="login-btn" onclick="doLogin()">ログイン</button>
+      <div class="login-error" id="login-error">⚠️ 生徒番号または氏名が正しくありません。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== アイドルタイムアウト モーダル ===== -->
+<div class="idle-modal" id="idle-modal">
+  <div class="idle-modal-box">
+    <div class="idle-modal-icon">🔒</div>
+    <div class="idle-modal-title">セッションがタイムアウトしました</div>
+    <div class="idle-modal-msg">15分間操作がなかったため、セキュリティのため自動的にログアウトしました。<br>続けるには再度ログインしてください。</div>
+    <button class="idle-modal-btn" onclick="doIdleLogout()">ログイン画面へ</button>
+  </div>
+</div>
+
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <!-- 上段：ロゴ・スコア・ログアウト・管理 -->
+    <div class="nav-row1">
+      <div class="nav-logo">英検<span>準2級プラス</span> Set1</div>
+      <div class="nav-score" id="nav-score">0 / 61問</div>
+      <button class="nav-tab-admin nav-logout" id="nav-tab-admin" onclick="goPage('admin')" style="display:none;margin-right:6px;color:#1a3a6e;background:#dbeafe;border:1px solid #b8d0f5;border-radius:5px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;">📊 管理</button>
+      <button class="nav-logout" onclick="doLogout()">ログアウト</button>
+    </div>
+    <!-- 下段：メインタブ -->
+    <div class="nav-row2">
+      <div class="nav-tabs">
+        <button class="nav-tab active" id="maintab-home" onclick="goPage('home')">ホーム</button>
+        <button class="nav-tab" id="maintab-writing" onclick="showWritingSubtabs()">✏️ 筆記</button>
+        <button class="nav-tab listening" id="maintab-listening" onclick="showListeningSubtabs()">🎧 リスニング</button>
+      </div>
+    </div>
+    <!-- サブタブ：筆記 -->
+    <div class="nav-subtabs hidden" id="subtabs-writing">
+      <button class="nav-subtab" id="subtab-q1" onclick="goPage('q1')">大問1</button>
+      <button class="nav-subtab" id="subtab-q2" onclick="goPage('q2')">大問2</button>
+      <button class="nav-subtab" id="subtab-q3" onclick="goPage('q3')">大問3</button>
+      <button class="nav-subtab" id="subtab-q4" onclick="goPage('q5')">大問4</button>
+      <button class="nav-subtab" id="subtab-q5" onclick="goPage('q6')">大問5</button>
+    </div>
+    <!-- サブタブ：リスニング -->
+    <div class="nav-subtabs hidden" id="subtabs-listening">
+      <button class="nav-subtab listening" id="subtab-lis" onclick="goPage('listening')">▶ 全部</button>
+      <button class="nav-subtab listening" onclick="goPage('listening');setTimeout(()=>startListening(1),100)">第1部</button>
+      <button class="nav-subtab listening" onclick="goPage('listening');setTimeout(()=>startListening(2),100)">第2部</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HOME ===== -->
+<div class="page active" id="page-home">
+  <div class="home-header">
+    <div class="home-title">英検準2級プラス 演習アプリ</div>
+    <div class="home-sub">Set1 ― 大問1〜5 ＋ リスニング</div>
+  </div>
+
+  <div id="restore-msg" style="display:none;background:#e1f5ee;border:1px solid #0f6e56;border-radius:var(--rsm);padding:.6rem 1rem;font-size:13px;color:#0f6e56;margin-bottom:1rem;"></div>
+
+  <!-- 端末保存の注記 -->
+  <div style="background:#fafaf8;border:1px solid var(--border);border-radius:var(--rsm);padding:.65rem 1rem;margin-bottom:1rem;font-size:12px;color:var(--muted);line-height:1.8;">
+    📱 <strong style="color:var(--text);">学習データはこの端末のブラウザにのみ保存されます</strong><br>
+    ・同じ端末なら、次回も続きから学習できます<br>
+    ・<strong>別の端末では続きができません</strong>（最初からになります）<br>
+    ・途中で端末を変えると、それぞれの端末に別々に保存されます
+  </div>
+
+  <input type="hidden" id="student-id">
+  <input type="hidden" id="student-name">
+  <input type="hidden" id="student-email">
+
+  <div class="prog-wrap"><div class="prog-fill" id="total-bar" style="width:0%"></div></div>
+  <div class="prog-label" id="total-label">0 / 61 問完了</div>
+
+  <!-- 大問カード -->
+  <div class="sec-cards">
+    <div class="sec-card" onclick="goPage('q1')">
+      <div class="sc-top"><div class="sc-num">1</div><div class="sc-badge">17問</div></div>
+      <div class="sc-title">語彙・熟語</div>
+      <!-- ▼▼▼ CONTENT: ホーム画面プレビュー文言（大問1〜3概要）差し替え範囲 ▼▼▼ -->
+      <div class="sc-sub">単語・熟語の空所補充</div>
+      <div class="sc-count">4択 × 17</div>
+      <div class="sc-score not-done" id="home-score-q1">📩 送信するとスコアが表示されます</div>
+    </div>
+    <div class="sec-card" onclick="goPage('q2')">
+      <div class="sc-top"><div class="sc-num">2</div><div class="sc-badge">6問</div></div>
+      <div class="sc-title">長文空所補充</div>
+      <div class="sc-sub">パッセージA・B（各3問）</div>
+      <div class="sc-count">4択 × 6</div>
+      <div class="sc-score not-done" id="home-score-q2">📩 送信するとスコアが表示されます</div>
+    </div>
+    <div class="sec-card" onclick="goPage('q3')">
+      <div class="sc-top"><div class="sc-num">3</div><div class="sc-badge">8問</div></div>
+      <div class="sc-title">長文読解</div>
+      <div class="sc-sub">Eメール（3問）＋説明文（5問）</div>
+      <div class="sc-count">4択 × 8</div>
+      <div class="sc-score not-done" id="home-score-q3">📩 送信するとスコアが表示されます</div>
+    </div>
+    <div class="sec-card" onclick="goPage('q5')">
+      <div class="sc-top"><div class="sc-num">4</div><div class="sc-badge">1問</div></div>
+      <div class="sc-title">英文要約</div>
+      <div class="sc-sub">本文を読んで要約</div>
+      <div class="sc-count">25〜35語</div>
+      <div class="sc-score not-done" id="home-score-q5">📩 送信すると提出済みになります</div>
+    </div>
+    <div class="sec-card" onclick="goPage('q6')">
+      <div class="sc-top"><div class="sc-num">5</div><div class="sc-badge">1問</div></div>
+      <div class="sc-title">英作文（意見）</div>
+      <div class="sc-sub">意見＋理由2つ</div>
+      <!-- ▲▲▲ CONTENT: ホーム画面プレビュー文言 差し替え範囲終了 ▲▲▲ -->
+      <div class="sc-count">50〜60語</div>
+      <div class="sc-score not-done" id="home-score-q6">📩 送信すると提出済みになります</div>
+    </div>
+  </div>
+  <!-- 筆記合計バー -->
+  <div style="background:var(--accent-bg);border:1px solid #b8d0f5;border-radius:var(--rsm);padding:7px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+    <span style="font-size:12px;color:var(--accent);font-weight:600;">筆記合計（大問1〜3・選択式）　17＋6＋8</span>
+    <span style="font-size:16px;font-weight:800;color:var(--accent);">＝ 31問</span>
+  </div>
+
+  <!-- リスニングカード -->
+  <div class="sec-cards" style="grid-template-columns:1fr">
+    <div class="sec-card listening-card" onclick="goPage('listening')">
+      <div class="sc-top">
+        <div class="sc-num listening-num">🎧</div>
+        <div class="sc-badge listening-badge">30問</div>
+      </div>
+      <div class="sc-title">リスニング（第1部〜第2部）</div>
+      <div class="sc-sub">Set1</div>
+      <!-- 部ごとのボックス -->
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:.6rem;">
+        <div style="background:#fff;border:1px solid var(--blue-light);border-radius:var(--rsm);padding:6px 4px;text-align:center;">
+          <div style="font-size:10px;color:#1a4a8a;font-weight:700;">第1部</div>
+          <div style="font-size:11px;color:var(--muted);margin:2px 0;">対話の内容</div>
+          <div style="font-size:14px;font-weight:700;color:#1a4a8a;">15問</div>
+          <div class="sc-score not-done" id="home-score-lp1" style="font-size:12px;">📩 送信するとスコアが表示されます</div>
+        </div>
+        <div style="background:#fff;border:1px solid var(--blue-light);border-radius:var(--rsm);padding:6px 4px;text-align:center;">
+          <div style="font-size:10px;color:#1a4a8a;font-weight:700;">第2部</div>
+          <div style="font-size:11px;color:var(--muted);margin:2px 0;">文の内容</div>
+          <div style="font-size:14px;font-weight:700;color:#1a4a8a;">15問</div>
+          <div class="sc-score not-done" id="home-score-lp2" style="font-size:12px;">📩 送信するとスコアが表示されます</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- リスニング合計バー -->
+  <div style="background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--rsm);padding:7px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+    <span style="font-size:12px;color:#1a4a8a;font-weight:600;">リスニング合計（第1〜2部）　15＋15</span>
+    <span style="font-size:16px;font-weight:800;color:#1a4a8a;">＝ 30問</span>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;font-size:13px;color:var(--muted);text-align:center;margin-bottom:1rem">
+    📧 大問4・5のライティングは、手書きの写真をメールで提出することもできます。
+  </div>
+
+  <!-- 印刷・PDF -->
+  <div class="print-section">
+    <h3>🖨️ 印刷・PDF出力</h3>
+    <p style="font-size:12px;color:#5a4000;margin-bottom:.9rem;line-height:1.7;">大問ごとに「問題用紙」または「解答・解説」を印刷できます。<br>ブラウザの印刷ダイアログで「PDFに保存」を選ぶとPDFになります。</p>
+    <div class="print-grid">
+      <button class="print-btn" onclick="printSection('q1','question')">
+        <span class="pb-icon">📄</span>
+        <span class="pb-label">大問1<br>問題用紙</span>
+      </button>
+      <button class="print-btn" onclick="printSection('q1','answer')">
+        <span class="pb-icon">✅</span>
+        <span class="pb-label">大問1<br>解答・解説</span>
+      </button>
+      <button class="print-btn" onclick="printSection('q2','question')">
+        <span class="pb-icon">📄</span>
+        <span class="pb-label">大問2<br>問題用紙</span>
+      </button>
+      <button class="print-btn" onclick="printSection('q2','answer')">
+        <span class="pb-icon">✅</span>
+        <span class="pb-label">大問2<br>解答・解説</span>
+      </button>
+      <button class="print-btn" onclick="printSection('q3','question')">
+        <span class="pb-icon">📄</span>
+        <span class="pb-label">大問3<br>問題用紙</span>
+      </button>
+      <button class="print-btn" onclick="printSection('q3','answer')">
+        <span class="pb-icon">✅</span>
+        <span class="pb-label">大問3<br>解答・解説</span>
+      </button>
+      <button class="print-btn" onclick="printSection('q5','question')">
+        <span class="pb-icon">📄</span>
+        <span class="pb-label">大問4<br>問題用紙</span>
+      </button>
+      <button class="print-btn" onclick="printSection('q5','answer')">
+        <span class="pb-icon">✅</span>
+        <span class="pb-label">大問4<br>解答・解説</span>
+      </button>
+      <button class="print-btn" onclick="printSection('q6','question')">
+        <span class="pb-icon">📄</span>
+        <span class="pb-label">大問5<br>問題用紙</span>
+      </button>
+      <button class="print-btn" onclick="printSection('q6','answer')">
+        <span class="pb-icon">✅</span>
+        <span class="pb-label">大問5<br>解答・解説</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 送信ボタン -->
+  <div style="background:#eef3fc;border:1px solid #b8d0f5;border-radius:var(--radius);padding:1.25rem 1.5rem;">
+    <p style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:.5rem;">📨 学習結果を本部に送信する</p>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:1rem;line-height:1.7;">大問ごとに送信することも、全部終わってから送信することもできます。</p>
+    <button onclick="sendResults('all')" style="width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:var(--rsm);font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.03em;margin-bottom:.6rem;">📩 全大問＋リスニングの結果を送信する</button>
+    <button onclick="clearState()" style="width:100%;padding:9px;background:#fff;color:var(--red);border:1px solid var(--red);border-radius:var(--rsm);font-size:13px;cursor:pointer;">🔄 データをリセットして最初からやり直す</button>
+  </div>
+</div>
+
+<!-- ===== 大問1〜6（既存のまま） ===== -->
+<div class="page" id="page-q1">
+  <div class="print-header">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問1</span>
+      <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
+    </div>
+  </div>
+  <button class="back-btn" onclick="goPage('home')">← ホームへ</button>
+  <div class="sec-hdr">
+    <h2>大問1 ― 語彙・熟語</h2>
+    <p>次の(1)から(17)までの（　）に入れるのに最も適切なものを1，2，3，4の中から一つ選びなさい。</p>
+  </div>
+  <div id="q1-container"></div>
+  <div class="action-row">
+    <button class="submit-btn" id="q1-submit" onclick="checkSection('q1')">解答する</button>
+    <button class="retry-btn" onclick="resetSection('q1')">もう一度</button>
+    <button class="retry-btn" onclick="sendResults('q1')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 この結果を送信</button>
+  </div>
+  <div class="result-area" id="q1-result"></div>
+  <div id="q1-send-bottom" style="display:none;margin-top:1rem;">
+    <button class="retry-btn" onclick="resetSection('q1')" style="width:100%;margin-bottom:.5rem;">🔄 もう一度</button>
+    <button class="send-btn-blue" onclick="sendResults('q1')">📩 この結果を送信する</button>
+  </div>
+  <div class="print-footer">
+    © 2026 東進こども英語塾 All rights reserved. 本教材は英検®準2級プラスの出題形式に準拠したオリジナル演習コンテンツです。英検®は公益財団法人日本英語検定協会の登録商標です。本教材の無断転載・複製・再配布を禁じます。
+  </div>
+</div>
+
+<div class="page" id="page-q2">
+  <div class="print-header">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問2</span>
+      <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
+    </div>
+  </div>
+  <button class="back-btn" onclick="goPage('home')">← ホームへ</button>
+  <div class="sec-hdr">
+    <h2>大問2 ― 長文空所補充</h2>
+    <p>次の英文A，Bを読み，その文意にそって(18)から(23)までの（　）に入れるのに最も適切なものを1，2，3，4の中から一つ選びなさい。</p>
+  </div>
+  <div class="sub-label"><div class="sub-main">2</div><div class="sub-sub">A</div></div>
+  <div class="passage-box">
+    <!-- ▼▼▼ CONTENT: 大問2 パッセージA本文 差し替え範囲 ▼▼▼ -->
+    <div class="p-title">Birds and Glass Windows</div>
+    <div class="p-text">
+      <p>Birds are some of the most skilled flyers in nature. A small city bird can fly at speeds of more than sixty kilometers an hour, and it can change direction in the air in a split second. Their wings are light but strong, so many birds can stay in the sky for hours without resting and can cross whole countries. <span class="blank-slot">18</span>, birds have very sharp eyes. Many of them can spot a tiny insect from far away, and some can even see colors that humans cannot see at all.</p>
+      <p>Even so, accidents between birds and glass buildings are reported in cities around the world. The majority of these crashes take place <span class="blank-slot">19</span>. At those times, large groups of birds travel between their summer and winter homes. Many collisions happen on sunny days and near buildings with large glass walls. Studies show that birds usually avoid solid walls and dark corners. Yet a bright glass wall can look like open sky, and birds often do not slow down before they hit it.</p>
+      <p>Another reason for these accidents is <span class="blank-slot">20</span>. Clear glass lets birds see trees and flowers on the other side of a room. Some glass also reflects the blue sky and white clouds like a mirror. A bird flying toward it cannot tell that a hard wall is there. Because of this, birds often hit windows without any warning, and many cities now ask builders to use special glass with small patterns that birds can see easily.</p>
+    </div>
+    <!-- ▲▲▲ CONTENT: 大問2 パッセージA本文 差し替え範囲終了 ▲▲▲ -->
+  </div>
+  <div id="q2a-container"></div>
+  <div class="divider-sec"></div>
+  <div class="sub-label"><div class="sub-main">2</div><div class="sub-sub">B</div></div>
+  <div class="passage-box">
+    <!-- ▼▼▼ CONTENT: 大問2 パッセージB本文 差し替え範囲 ▼▼▼ -->
+    <div class="p-title">The Secret of Gecko Feet</div>
+    <div class="p-text">
+      <p>The gecko is a small lizard that lives in warm countries, from Southeast Asia to parts of Africa. Many people keep geckos as pets because they are quiet and easy to care for. <span class="blank-slot">21</span> being kept at home, geckos have long been seen as a sign of good luck in some countries. Some families even believe that a gecko on the wall protects their house. Scientists today are paying attention to another remarkable feature of this animal.</p>
+      <p>Gecko feet have a surprising ability. They can <span class="blank-slot">22</span>. A gecko can run up a glass wall and even walk upside down on a ceiling. Each toe has millions of tiny hairs, and these hairs are too small to see without a microscope. When a toe touches a surface, every hair pulls on it very lightly, but together they are strong. This lets the gecko hold on firmly without any glue, and it can lift its foot again with almost no effort.</p>
+      <p>The gecko's grip has <span class="blank-slot">23</span>. Engineers have borrowed this idea to make new kinds of tape, gloves, and robot hands. A few of these products can be used many times without losing their grip, and some can even be washed in water and used again. Others can carry heavy glass panels, which makes work at construction sites easier and safer for workers. Scientists are still testing even better versions. In this way, a small part of an animal has given people many new ideas for solving everyday problems.</p>
+    </div>
+    <!-- ▲▲▲ CONTENT: 大問2 パッセージB本文 差し替え範囲終了 ▲▲▲ -->
+  </div>
+  <div id="q2b-container"></div>
+  <div class="action-row">
+    <button class="submit-btn" id="q2-submit" onclick="checkSection('q2')">解答する</button>
+    <button class="retry-btn" onclick="resetSection('q2')">もう一度</button>
+    <button class="retry-btn" onclick="sendResults('q2')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 この結果を送信</button>
+  </div>
+  <div class="result-area" id="q2-result"></div>
+  <div id="q2-send-bottom" style="display:none;margin-top:1rem;">
+    <button class="retry-btn" onclick="resetSection('q2')" style="width:100%;margin-bottom:.5rem;">🔄 もう一度</button>
+    <button class="send-btn-blue" onclick="sendResults('q2')">📩 この結果を送信する</button>
+  </div>
+  <div class="print-footer">
+    © 2026 東進こども英語塾 All rights reserved. 本教材は英検®準2級プラスの出題形式に準拠したオリジナル演習コンテンツです。英検®は公益財団法人日本英語検定協会の登録商標です。本教材の無断転載・複製・再配布を禁じます。
+  </div>
+</div>
+
+<div class="page" id="page-q3">
+  <div class="print-header">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問3</span>
+      <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
+    </div>
+  </div>
+  <button class="back-btn" onclick="goPage('home')">← ホームへ</button>
+  <div class="sec-hdr">
+    <h2>大問3 ― 長文読解</h2>
+    <p>次の英文A，Bの内容に関して，(24)から(31)までの質問に対して最も適切なもの，または文を完成させるのに最も適切なものを1，2，3，4の中から一つ選びなさい。</p>
+  </div>
+  <div class="sub-label"><div class="sub-main">3</div><div class="sub-sub">A</div></div>
+  <div class="email-box">
+    <div class="email-head">
+    <!-- ▼▼▼ CONTENT: 大問3A メール文面 差し替え範囲 ▼▼▼ -->
+      <table><tr><td>From:</td><td>Laura Mitchell &lt;l.mitchell@lakeview-science.org&gt;</td></tr><tr><td>To:</td><td>Ethan Brooks &lt;ethan.brooks@mailbox-net.com&gt;</td></tr><tr><td>Date:</td><td>September 12</td></tr><tr><td>Subject:</td><td>Invitation to Young Inventors Day</td></tr></table>
+    </div>
+    <div class="email-body">
+      <p>Dear Ethan,</p>
+      <p>This is Laura Mitchell from the Lakeview Science Museum. Thank you for taking my call last week. I was happy to tell you that your robot arm, which you made from recycled materials, was selected for our special event because of its clever design. Today, I am writing because the museum has finally set the date, and I would very much like you to take part.</p>
+      <p>The event will start in the early afternoon on September 27 in Orion Hall. Other young inventors, their parents, and some teachers and museum staff will join. On stage, you will show your invention to the audience and get a chance to talk with a professor from a local university. A reporter from the museum's magazine will also interview you for a few minutes, and parts of what you say will appear in next month's issue.</p>
+      <p>I have one more thing to ask. We want as many visitors as possible to see your robot arm, so we hope to keep it on display near the museum entrance for a month after the event. This will let families learn about recycling and may encourage young visitors to build things themselves. Please tell me if this is all right with you, so we can prepare a stand and a sign for it.</p>
+      <p>Thank you,<br>Laura Mitchell</p>
+    </div>
+    <!-- ▲▲▲ CONTENT: 大問3A メール文面 差し替え範囲終了 ▲▲▲ -->
+  </div>
+  <div id="q3a-container"></div>
+  <div class="divider-sec"></div>
+  <div class="sub-label"><div class="sub-main">3</div><div class="sub-sub">B</div></div>
+  <div class="passage-box">
+    <!-- ▼▼▼ CONTENT: 大問3B パッセージ本文 差し替え範囲 ▼▼▼ -->
+    <div class="p-title">Traveling to See the Stars</div>
+    <div class="p-text">
+      <p>Astrotourism means traveling to places with very dark night skies in order to enjoy the stars. Many of these places are in mountains, deserts, or small islands far from big cities. During these trips, travelers can take part in activities such as watching the planets through a telescope, listening to a guide talk about space, or sleeping outside under the open sky. More than just a sightseeing trip, astrotourism gives people a chance to learn about the universe while they enjoy quiet nature.</p>
+      <p>Astrotourism can be good for visitors and for local people alike. Visitors, who often come from busy cities, can feel calm and relaxed under a quiet sky and give their minds a rest. At the same time, small towns can earn extra money by running hotels, tours, and cafés for the visitors. Some towns also protect their dark skies by using softer street lights, which helps the local wildlife, too. In this way, astrotourism helps people and nature at the same time.</p>
+      <p>Astrotourism has grown in popularity for several reasons, particularly among young people. First, city lights have become so bright that many people can hardly see any stars from their homes. They want to find places where the night sky still looks the way it did long ago. Second, social media plays a big role. Beautiful pictures of the Milky Way are shared online every day, and these photos make many viewers want to see it with their own eyes.</p>
+      <p>A recent survey in one country found that the number of people joining star-watching tours was about three times higher in 2024 than in 2018. In addition, many travelers now stay for several nights instead of just one evening. In some popular areas, hotels near dark places are fully booked months before the best seasons. These trends suggest that as modern cities grow brighter, more and more people long for the stars and for quiet places far away.</p>
+    </div>
+    <!-- ▲▲▲ CONTENT: 大問3B パッセージ本文 差し替え範囲終了 ▲▲▲ -->
+  </div>
+  <div id="q3b-container"></div>
+  <div class="action-row">
+    <button class="submit-btn" id="q3-submit" onclick="checkSection('q3')">解答する</button>
+    <button class="retry-btn" onclick="resetSection('q3')">もう一度</button>
+    <button class="retry-btn" onclick="sendResults('q3')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 この結果を送信</button>
+  </div>
+  <div class="result-area" id="q3-result"></div>
+  <div id="q3-send-bottom" style="display:none;margin-top:1rem;">
+    <button class="retry-btn" onclick="resetSection('q3')" style="width:100%;margin-bottom:.5rem;">🔄 もう一度</button>
+    <button class="send-btn-blue" onclick="sendResults('q3')">📩 この結果を送信する</button>
+  </div>
+  <div class="print-footer">
+    © 2026 東進こども英語塾 All rights reserved. 本教材は英検®準2級プラスの出題形式に準拠したオリジナル演習コンテンツです。英検®は公益財団法人日本英語検定協会の登録商標です。本教材の無断転載・複製・再配布を禁じます。
+  </div>
+</div>
+
+<div class="page" id="page-q5">
+  <div class="print-header">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問4</span>
+      <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
+    </div>
+  </div>
+  <button class="back-btn" onclick="goPage('home')">← ホームへ</button>
+  <div class="sec-hdr">
+    <h2>大問4 ― ライティング（英文要約）</h2>
+    <p>以下の英文を読んで，その内容を25〜35語の英語で要約しなさい。</p>
+  </div>
+  <div class="passage-box">
+    <!-- ▼▼▼ CONTENT: 大問4 要約対象の英文 差し替え範囲 ▼▼▼ -->
+    <div class="p-text">
+      <p>Bike-sharing services are becoming popular in big cities. People can borrow a bike near a subway station and return it at another station.</p>
+      <p>These services are useful because they help people move around the city quickly. Some office workers, for instance, can reach their jobs faster by bike than by bus.</p>
+      <p>But they also cause trouble. Many users leave bikes on sidewalks, and this makes it hard for people to walk safely. Cities should look for ways to keep the streets safe.</p>
+    </div>
+    <!-- ▲▲▲ CONTENT: 大問4 要約対象の英文 差し替え範囲終了 ▲▲▲ -->
+  </div>
+  <div style="display:flex;gap:0;margin-bottom:1rem;border-bottom:2px solid var(--border);">
+    <button id="tab-type" onclick="switchTab('type')" style="padding:10px 20px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-bottom:2px solid var(--accent);color:var(--accent);margin-bottom:-2px;">💻 タイプして提出</button>
+    <button id="tab-photo" onclick="switchTab('photo')" style="padding:10px 20px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);margin-bottom:-2px;">📷 手書き写メで提出</button>
+  </div>
+  <div id="panel-type">
+    <div style="position:relative;width:11cm;min-height:9cm;border:1.5px solid #999;margin:0.5rem 0;background:#fff;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;"><div style="height:100%;background-image:repeating-linear-gradient(to bottom,transparent,transparent calc(100%/10 - 1px),#d0cdc7 calc(100%/10 - 1px),#d0cdc7 calc(100%/10));"></div></div>
+      <textarea id="q5-textarea" style="position:relative;z-index:1;width:100%;min-height:9cm;border:none;background:transparent;padding:calc(100%/10/2 - 0.5em) 0.5rem 0;font-size:14px;line-height:calc(9cm/10);font-family:'Helvetica Neue',Arial,sans-serif;resize:none;outline:none;box-sizing:border-box;" placeholder="ここに要約を入力してください。（25〜35語）" spellcheck="false"></textarea>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.3rem;margin-bottom:1rem;">
+      <span style="font-size:11px;color:var(--hint);">解答欄：横11cm × 縦9cm</span>
+      <span style="font-size:12px;font-weight:600;" id="q5-wordcount">語数：0語</span>
+    </div>
+    <div class="action-row">
+      <button class="submit-btn" id="q5-submit" onclick="checkQ5()">解答する</button>
+      <button class="retry-btn" onclick="resetQ5()">もう一度</button>
+      <button class="retry-btn" onclick="sendResults('q5')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 解答を送信</button>
+    </div>
+    <div class="result-area" id="q5-result"></div>
+  </div>
+  <div id="panel-photo" style="display:none;">
+    <div class="photo-submit-box">
+      <h3>📷 手書き写メ提出の手順</h3>
+      <ol class="photo-submit-steps">
+        <li><span class="step-num">1</span><span><strong>解答を手書きで書く</strong>（25〜35語）<br><span style="font-size:12px;color:#6b4c00;line-height:1.8;">・自分のノートに書く、または問題用紙を印刷して書くことができます<br>・<strong>10行以内</strong>に収める・鉛筆HB/Bを使用・濃く大きめに書く</span></span></li>
+        <li><span class="step-num">2</span><span><strong>写真を撮影・確認する</strong><br><span style="font-size:12px;color:#6b4c00;line-height:1.8;">明るい場所で・真上から・ピント確認</span></span></li>
+        <li><span class="step-num">3</span><span><strong>件名：「Set1 大問4　氏名」でメール送信</strong></span></li>
+        <li><span class="step-num">4</span><span>先生からコメント入りの返信が届きます</span></li>
+      </ol>
+      <div class="mail-addr">✉️ online-eigojuku@toshin.com</div>
+    </div>
+    <div class="action-row" style="margin-top:1rem;">
+      <button class="submit-btn" id="q5-photo-submit" onclick="submitPhotoQ5()" style="background:#854f0b;">📷 メール送信しました（提出済みにする）</button>
+    </div>
+    <div id="q5-photo-done" style="display:none;background:var(--green-bg);border:1px solid #86efac;border-radius:var(--rsm);padding:.75rem 1rem;margin-top:.75rem;font-size:13px;color:#065f46;font-weight:600;">✅ 大問4（写メ）提出済みとして記録しました。</div>
+  </div>
+  <div class="print-footer">
+    © 2026 東進こども英語塾 All rights reserved. 本教材は英検®準2級プラスの出題形式に準拠したオリジナル演習コンテンツです。英検®は公益財団法人日本英語検定協会の登録商標です。本教材の無断転載・複製・再配布を禁じます。
+  </div>
+</div>
+
+<div class="page" id="page-q6">
+  <div class="print-header">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問5</span>
+      <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
+    </div>
+  </div>
+  <button class="back-btn" onclick="goPage('home')">← ホームへ</button>
+  <div class="sec-hdr">
+    <h2>大問5 ― ライティング（意見）</h2>
+    <p>QUESTIONについて、あなたの意見とその理由を2つ英文で書きなさい。（50〜60語）</p>
+  </div>
+  <div class="passage-box" style="text-align:center">
+    <!-- ▼▼▼ CONTENT: 大問5 QUESTION文 差し替え範囲 ▼▼▼ -->
+    <div class="p-title">QUESTION</div>
+    <p style="font-size:17px;font-style:italic;font-weight:600">Do you think people should write letters to their friends instead of sending text messages?</p>
+    <!-- ▲▲▲ CONTENT: 大問5 QUESTION文 差し替え範囲終了 ▲▲▲ -->
+  </div>
+  <div style="display:flex;gap:0;margin-bottom:1rem;border-bottom:2px solid var(--border);">
+    <button id="tab6-type" onclick="switchTab6('type')" style="padding:10px 20px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-bottom:2px solid var(--accent);color:var(--accent);margin-bottom:-2px;">💻 タイプして提出</button>
+    <button id="tab6-photo" onclick="switchTab6('photo')" style="padding:10px 20px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);margin-bottom:-2px;">📷 手書き写メで提出</button>
+  </div>
+  <div id="panel6-type">
+    <div style="position:relative;width:11cm;min-height:14cm;border:1.5px solid #999;margin:0.5rem 0;background:#fff;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;"><div style="height:100%;background-image:repeating-linear-gradient(to bottom,transparent,transparent calc(100%/15 - 1px),#d0cdc7 calc(100%/15 - 1px),#d0cdc7 calc(100%/15));"></div></div>
+      <textarea id="q6-textarea" style="position:relative;z-index:1;width:100%;min-height:14cm;border:none;background:transparent;padding:calc(100%/15/2 - 0.5em) 0.5rem 0;font-size:14px;line-height:calc(14cm/15);font-family:'Helvetica Neue',Arial,sans-serif;resize:none;outline:none;box-sizing:border-box;" placeholder="ここに英文を入力してください。（50〜60語）" spellcheck="false"></textarea>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.3rem;margin-bottom:1rem;">
+      <span style="font-size:11px;color:var(--hint);">解答欄：横11cm × 縦14cm</span>
+      <span style="font-size:12px;font-weight:600;" id="q6-wordcount">語数：0語</span>
+    </div>
+    <div class="action-row">
+      <button class="submit-btn" id="q6-submit" onclick="checkQ6()">解答する</button>
+      <button class="retry-btn" onclick="resetQ6()">もう一度</button>
+      <button class="retry-btn" onclick="sendResults('q6')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 解答を送信</button>
+    </div>
+    <div class="result-area" id="q6-result"></div>
+  </div>
+  <div id="panel6-photo" style="display:none;">
+    <div class="photo-submit-box">
+      <h3>📷 手書き写メ提出の手順</h3>
+      <ol class="photo-submit-steps">
+        <li><span class="step-num">1</span><span><strong>解答を手書きで書く</strong>（50〜60語）<br><span style="font-size:12px;color:#6b4c00;line-height:1.8;">・自分のノートに書く、または問題用紙を印刷して書くことができます</span></span></li>
+        <li><span class="step-num">2</span><span><strong>写真を撮影・確認する</strong></span></li>
+        <li><span class="step-num">3</span><span><strong>件名：「Set1 大問5　氏名」でメール送信</strong></span></li>
+        <li><span class="step-num">4</span><span>先生からコメント入りの返信が届きます</span></li>
+      </ol>
+      <div class="mail-addr">✉️ online-eigojuku@toshin.com</div>
+    </div>
+    <div class="action-row" style="margin-top:1rem;">
+      <button class="submit-btn" id="q6-photo-submit" onclick="submitPhotoQ6()" style="background:#854f0b;">📷 メール送信しました（提出済みにする）</button>
+    </div>
+    <div id="q6-photo-done" style="display:none;background:var(--green-bg);border:1px solid #86efac;border-radius:var(--rsm);padding:.75rem 1rem;margin-top:.75rem;font-size:13px;color:#065f46;font-weight:600;">✅ 大問5（写メ）提出済みとして記録しました。</div>
+  </div>
+  <div class="print-footer">
+    © 2026 東進こども英語塾 All rights reserved. 本教材は英検®準2級プラスの出題形式に準拠したオリジナル演習コンテンツです。英検®は公益財団法人日本英語検定協会の登録商標です。本教材の無断転載・複製・再配布を禁じます。
+  </div>
+</div>
+
+<!-- ===== リスニングページ ===== -->
+<div class="page" id="page-listening">
+  <button class="back-btn" onclick="goPage('home')">← ホームへ</button>
+  <div class="listening-banner">
+    <h2>🎧 リスニング 演習（全30問）</h2>
+  </div>
+
+  <!-- 部ナビタブ（筆記と同じ形式） -->
+  <div style="display:flex;gap:0;margin-bottom:1rem;border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none;">
+    <button id="lis-tab-all" onclick="startListening(0)" style="padding:11px 14px 10px;font-size:13px;font-weight:700;border:none;background:none;cursor:pointer;border-bottom:2px solid #1a4a8a;color:#1a4a8a;margin-bottom:-2px;white-space:nowrap;">▶ 全部</button>
+    <button id="lis-tab-1" onclick="startListening(1)" style="padding:11px 14px 10px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);margin-bottom:-2px;white-space:nowrap;">第1部</button>
+    <button id="lis-tab-2" onclick="startListening(2)" style="padding:11px 14px 10px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);margin-bottom:-2px;white-space:nowrap;">第2部</button>
+  </div>
+
+  <!-- スタート画面 -->
+  <div id="lis-start">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;">
+      <p style="font-size:14px;font-weight:700;color:#1a4a8a;margin-bottom:.75rem;">📋 試験構成</p>
+      <div class="section-scores">
+        <div class="ss-item"><div class="ss-l">第1部</div><div class="ss-v">15問</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px;">会話の内容一致選択</div></div>
+        <div class="ss-item"><div class="ss-l">第2部</div><div class="ss-v">15問</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px;">英文の内容一致選択</div></div>
+      </div>
+      <div style="background:#e8f5e9;border:1px solid #66bb6a;border-radius:8px;padding:.9rem 1rem;margin-top:.75rem;font-size:.82rem;color:#1b5e20;">
+        <strong>🎙️ 音声モードについて</strong><br>
+        各問題の ▶ ボタンで音声を再生できます。問題画面で2つのモードを切り替えられます：<br>
+        　🎙️ <strong>ネイティブ</strong>：講師が収録した本物の音声<br>
+        　🔊 <strong>TTS</strong>：AI（自動読み上げ）音声
+      </div>
+    </div>
+    <div id="lis-continue-btn" style="display:none;margin-bottom:.6rem;">
+      <button onclick="continueListening()" style="width:100%;padding:11px;background:var(--surface);color:#2563c0;border:2px solid #2563c0;border-radius:var(--rsm);font-size:.9rem;font-weight:700;cursor:pointer;">📂 途中から再開する（問<span id="lis-continue-no"></span>〜）</button>
+    </div>
+  </div>
+
+  <!-- クイズ画面 -->
+  <div id="lis-quiz" style="display:none;">
+    <div class="lis-prog-wrap"><div class="lis-prog-fill" id="lis-prog-fill" style="width:0%"></div></div>
+    <div class="lis-prog-label" id="lis-prog-label">0 / 30</div>
+    <div id="lis-part-banner"></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;margin-bottom:14px;" id="lis-card"></div>
+    <div class="lis-nav-row">
+      <button class="lis-nav-btn secondary" id="lis-prev-btn" onclick="lisPrev()">← 前へ</button>
+      <button class="lis-nav-btn primary" id="lis-next-btn" onclick="lisNext()">次へ →</button>
+    </div>
+  </div>
+
+  <!-- 結果画面（JSで動的生成） -->
+  <div id="lis-result" style="display:none;"></div>
+</div>
+
+<script>
+// ★ 問題データはGASから取得（getQuestions）
+let QD = {};
+let LIS_Q = [];
+let Q5_MODEL = '';
+let Q5_POINTS = [];
+let Q6_MODEL_YES = '';
+let Q6_MODEL_NO = '';
+let Q6_POINTS = [];
+const PART_LABELS_LIS = {1:"第1部：会話の内容一致選択",2:"第2部：英文の内容一致選択"};
+const PART_DESC_LIS = {
+  1:"会話と Question を聞いて、答えとして最も適切なものを選んでください。選択肢は画面に表示されます。",
+  2:"英文と Question を聞いて、答えとして最も適切なものを選んでください。選択肢は画面に表示されます。"
+};
+// 音声ファイルのベースURL（intro/ending/各問共通）。kj-eiken/eiken-pre2plus-audio1 は「オーナー名/リポジトリ名」
+const LIS_AUDIO_BASE='https://raw.githubusercontent.com/kj-eiken/eiken-pre2plus-audio1/main/Set1_';
+
+// =========================================================
+// ★ 大問1〜6 既存ロジック
+// =========================================================
+// ▼▼▼ CONTENT: 大問1(Q1_TEXTS)・大問3見出し(Q3A_DEF/Q3B_DEF) 差し替え範囲 ▼▼▼
+const Q1_TEXTS=["A: Did you find the café without any trouble?<br>B: Yes. The map was so clear that I found it (　).", "Mr. Suzuki's (　) at every club meeting was perfect. The teacher gave him a special award at the end of the year.", "Thanks to (　) production, the factory can make many T-shirts every day. As a result, it can sell them at very low prices.", "A: Don't forget to (　) your water bottle before we leave.<br>B: OK, I will take care of it at the sink.", "Listen carefully. The old clock in the town square will (　) twelve in a few minutes.", "Every morning, the shop owner stands at the door to (　) customers. She always says good morning with a big smile.", "The airline (　) passengers by e-mail that their flight would leave an hour late. Many of them decided to have lunch at the airport.", "A: Why do the workers at the building site wear helmets?<br>B: It's for their (　). Falling objects can be dangerous.", "A: Biting your nails is a bad (　), Lisa.<br>B: I know. I'm trying to stop.", "A (　) of three experts answered questions from the audience after the talk. The audience asked many questions about the future of robots.", "Mina felt dizzy after the long bus ride. She decided to (　) on the sofa for a while.", "A: Where did you put the flashlight (　)?<br>B: In the shoe cabinet by the door. If there is a power failure, we can grab it quickly.", "A: Anna is worried about her sister.<br>B: Then she should (　) tonight to ask how she is.", "A: Be careful with this old chair.<br>B: Why?<br>A: It (　) if you sit down too hard.", "Ryo is a strong-minded boy. He never (　), even when he loses many games in a row.", "A: May I borrow your dictionary for a minute?<br>B: (　). Here you are.", "Last night, Jun (　) his science experiment by adding too much salt. He had to start again from the beginning."];
+const Q1_LABELS=['(1)','(2)','(3)','(4)','(5)','(6)','(7)','(8)','(9)','(10)','(11)','(12)','(13)','(14)','(15)','(16)','(17)'];
+const Q1_IDS=['q1-1','q1-2','q1-3','q1-4','q1-5','q1-6','q1-7','q1-8','q1-9','q1-10','q1-11','q1-12','q1-13','q1-14','q1-15','q1-16','q1-17'];
+const Q2A_IDS=['q2-18','q2-19','q2-20'];
+const Q2A_LABELS=['(18)','(19)','(20)'];
+const Q2B_IDS=['q2-21','q2-22','q2-23'];
+const Q2B_LABELS=['(21)','(22)','(23)'];
+const Q3A_DEF=[{qid:'q3-24',label:'(24)',text:"Laura Mitchell told Ethan Brooks last week that"},{qid:'q3-25',label:'(25)',text:"What will happen on September 27?"},{qid:'q3-26',label:'(26)',text:"Laura asks Ethan if he could"}];
+const Q3B_DEF=[{qid:'q3-27',label:'(27)',text:"What is true about astrotourism?"},{qid:'q3-28',label:'(28)',text:"What is one effect that astrotourism brings?"},{qid:'q3-29',label:'(29)',text:"One of the reasons astrotourism is getting popular is that"},{qid:'q3-30',label:'(30)',text:"How is the recent situation of astrotourism?"},{qid:'q3-31',label:'(31)',text:"What do we learn from the passage?"}];
+// ▲▲▲ CONTENT差し替え範囲終了 ▲▲▲
+
+const sel={q1:{},q2:{},q3:{}};
+const submitted={q1:false,q2:false,q3:false,q5:false,q6:false};
+const scores={q1:0,q2:0,q3:0,q5:0,q6:0,listening:0};
+const sentScores={q1:false,q2:false,q3:false,q5:false,q6:false,lp1:false,lp2:false};
+
+// リスニング状態
+let lisIdx=0;
+const lisAnswered=new Array(30).fill(null);
+const lisPlayCount=new Array(30).fill(0);
+let lisAudioMode="native"; // "native" or "tts"
+
+// TTS音声リストを事前にロード（初回再生時の無音を防ぐ）
+let _ttsVoicesReady = false;
+function _loadTTSVoices(){
+  const v = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  if(v && v.length > 0){ _ttsVoicesReady = true; }
+}
+if(window.speechSynthesis){
+  _loadTTSVoices();
+  window.speechSynthesis.onvoiceschanged = function(){ _loadTTSVoices(); };
+  // DOMContentLoaded後にも再試行
+  window.addEventListener('load', ()=>{ _loadTTSVoices(); });
+}
+let lisSubmitted=false;
+let lisScores={p1:0,p2:0,total:0};
+let currentAudio=null;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+const shuffledChoices={};
+function mkChoices(qid,secKey){
+  const d=QD[qid];
+  const sh=shuffle([...d.choices]);
+  shuffledChoices[qid]=sh; // シャッフル順を保存
+  return sh.map((c,i)=>`<div class="choice" id="ch-${qid}-${c.n}" onclick="pick('${secKey}','${qid}',${c.n},this)"><span class="cn">${i+1}</span><span>${c.t}</span></div>`).join('');
+}
+function mkConv(conv){
+  return `<div class="conv-box">${conv.map(([w,l])=>`<div class="conv-line"><span class="conv-who">${w}:</span><span>${l}</span></div>`).join('')}</div>`;
+}
+function buildQ1(){let h='';Q1_IDS.forEach((qid,i)=>{h+=`<div class="q-block"><div class="q-label">${Q1_LABELS[i]}</div><div class="q-text">${Q1_TEXTS[i]}</div><div class="choices">${mkChoices(qid,'q1')}</div></div>`;if(i<Q1_IDS.length-1)h+='<div class="hr"></div>';});document.getElementById('q1-container').innerHTML=h;}
+function buildQ2(){let ha='';Q2A_IDS.forEach((qid,i)=>{ha+=`<div class="q-block"><div class="q-label">${Q2A_LABELS[i]}</div><div class="choices">${mkChoices(qid,'q2')}</div></div>`;if(i<Q2A_IDS.length-1)ha+='<div class="hr"></div>';});let hb='';Q2B_IDS.forEach((qid,i)=>{hb+=`<div class="q-block"><div class="q-label">${Q2B_LABELS[i]}</div><div class="choices">${mkChoices(qid,'q2')}</div></div>`;if(i<Q2B_IDS.length-1)hb+='<div class="hr"></div>';});document.getElementById('q2a-container').innerHTML=ha;document.getElementById('q2b-container').innerHTML=hb;}
+function buildQ3(){let ha='';Q3A_DEF.forEach((q,i)=>{ha+=`<div class="q-block"><div class="q-label">${q.label}</div><div class="q-text">${q.text}</div><div class="choices">${mkChoices(q.qid,'q3')}</div></div>`;if(i<Q3A_DEF.length-1)ha+='<div class="hr"></div>';});let hb='';Q3B_DEF.forEach((q,i)=>{hb+=`<div class="q-block"><div class="q-label">${q.label}</div><div class="q-text">${q.text}</div><div class="choices">${mkChoices(q.qid,'q3')}</div></div>`;if(i<Q3B_DEF.length-1)hb+='<div class="hr"></div>';});document.getElementById('q3a-container').innerHTML=ha;document.getElementById('q3b-container').innerHTML=hb;}
+function pick(secKey,qid,num,el){if(submitted[secKey])return;sel[secKey][qid]=num;el.closest('.choices').querySelectorAll('.choice').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');}
+function getAllQids(secKey){if(secKey==='q1')return Q1_IDS;if(secKey==='q2')return [...Q2A_IDS,...Q2B_IDS];if(secKey==='q3')return [...Q3A_DEF,...Q3B_DEF].map(q=>q.qid);}
+function getLabel(secKey,qid){if(secKey==='q1')return Q1_LABELS[Q1_IDS.indexOf(qid)];if(secKey==='q2'){let i=Q2A_IDS.indexOf(qid);if(i>=0)return Q2A_LABELS[i];i=Q2B_IDS.indexOf(qid);if(i>=0)return Q2B_LABELS[i];}if(secKey==='q3'){for(const q of [...Q3A_DEF,...Q3B_DEF])if(q.qid===qid)return q.label;}}
+
+
+function ar(text){return text;}
+
+function answerOnlyCardHtml(qid, label){
+  // 選択状態・正誤色なし。正解と解説だけを表示する印刷専用カード
+  const d = QD[qid];
+  let ch = '';
+  const choices = shuffledChoices[qid] || d.choices;
+  choices.forEach((c,i) => {
+    const isCorrect = c.n === d.correct;
+    const cls = isCorrect ? 'rc rc-ok' : 'rc rc-normal';
+    const icon = isCorrect ? '✓' : (i+1);
+    ch += `<div class="${cls}"><span class="rc-icon">${icon}</span><div class="rc-body"><div class="rc-en">${c.t}</div><div class="rc-ja">${ar(c.ja)}</div><div class="rc-reason">${ar(c.reason)}</div></div></div>`;
+  });
+  return `<div class="result-q"><div class="rq-header"><span class="rb rb-ok">正解：${d.correct}</span><span class="rq-label">${label}</span></div><div class="rq-choices">${ch}</div><div class="point-box">📌 ${ar(d.point)}</div></div>`;
+}
+
+function resultCardHtml(qid,ansNum,label){
+  const d=QD[qid];const ok=ansNum===d.correct;
+  let ch='';
+  const choices2 = shuffledChoices[qid] || d.choices;
+  let userDisplayNum=0, correctDisplayNum=0;
+  choices2.forEach((c,i)=>{const isC=c.n===d.correct,isU=c.n===ansNum;const cls=isC?'rc-ok':(isU&&!isC?'rc-ng':'rc-normal');const icon=isC?'✓':(isU&&!isC?'✗':(i+1));if(isC)correctDisplayNum=i+1;if(isU)userDisplayNum=i+1;ch+=`<div class="rc ${cls}"><span class="rc-icon">${icon}</span><div class="rc-body"><div class="rc-en">${c.t}</div><div class="rc-ja">${ar(c.ja)}</div><div class="rc-reason">${ar(c.reason)}</div></div></div>`;});
+  return `<div class="result-q"><div class="rq-header"><span class="rb ${ok?'rb-ok':'rb-ng'}">${ok?'✓ 正解':'✗ 不正解'}</span><span class="rq-label">${label}</span></div><div class="rq-ans">あなたの解答：<strong>${userDisplayNum}</strong>　→　正解：<strong>${correctDisplayNum}</strong></div><div class="rq-choices">${ch}</div><div class="point-box">📌 ${ar(d.point)}</div></div>`;
+}
+
+function checkSection(secKey){
+  const all=getAllQids(secKey);
+  if(Object.keys(sel[secKey]).length<all.length){alert(all.length+'問すべて解答してから「解答する」を押してください。');return;}
+  submitted[secKey]=true;
+  // 解答後：下部送信ボタンを表示
+  const bottomSend=document.getElementById(secKey+'-send-bottom');
+  if(bottomSend)bottomSend.style.display='block';document.getElementById(secKey+'-submit').disabled=true;
+  let correct=0;all.forEach(qid=>{const ans=sel[secKey][qid],d=QD[qid];if(ans===d.correct)correct++;document.getElementById('ch-'+qid+'-'+d.correct)?.classList.add('show-ans');if(ans!==d.correct)document.getElementById('ch-'+qid+'-'+ans)?.classList.add('wrong');});
+  scores[secKey]=correct;
+  const pct=Math.round(correct/all.length*100);const bc=pct===100?'perfect':pct>=60?'partial':'low';
+  const msg=pct===100?`全問正解！素晴らしい！`:`${correct}/${all.length}問正解。解説を確認しよう。`;
+  let html=`<div class="score-banner ${bc}">${msg}</div>`;
+  all.forEach(qid=>{html+=resultCardHtml(qid,sel[secKey][qid],getLabel(secKey,qid));});
+  const ra=document.getElementById(secKey+'-result');ra.innerHTML=html;ra.classList.add('show');ra.scrollIntoView({behavior:'smooth',block:'start'});
+  updateScore();saveState();
+}
+
+function resetSection(secKey){
+  if(!confirm('学習中のデータがリセットされます。よろしいですか？')){return;}
+  submitted[secKey]=false;
+  sentScores[secKey]=false;
+  scores[secKey]=0;
+  sel[secKey]={};
+  const bottomSend=document.getElementById(secKey+'-send-bottom');
+  if(bottomSend)bottomSend.style.display='none';
+  const sb=document.getElementById(secKey+'-submit');
+  if(sb)sb.disabled=false;
+  const ra=document.getElementById(secKey+'-result');
+  if(ra){ra.classList.remove('show');ra.innerHTML='';}
+  ({q1:buildQ1,q2:buildQ2,q3:buildQ3})[secKey]();
+  updateScore();saveState();
+}
+
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const target = document.getElementById('page-'+id);
+  if(target) target.classList.add('active');
+  window.scrollTo(0,0);
+  // ホームに戻っても解答解説は保持する（大問ページに戻ったとき表示されるよう）
+  // メインタブ・サブタブの更新
+  updateNavTabs(id);
+  // 管理ページ表示時に自動ロード
+  if(id === 'admin' && window._isAdmin){
+    adminShowList();
+    adminLoad();
+  }
+}
+
+function updateNavTabs(id){
+  const writingPages = ['q1','q2','q3','q5','q6'];
+  const listeningPages = ['listening'];
+  // メインタブのactive
+  document.getElementById('maintab-home').classList.toggle('active', id==='home'||id==='admin');
+  document.getElementById('maintab-writing').classList.toggle('active', writingPages.includes(id));
+  document.getElementById('maintab-listening').classList.toggle('active', listeningPages.includes(id));
+  // サブタブの表示切り替え
+  document.getElementById('subtabs-writing').classList.toggle('hidden', !writingPages.includes(id));
+  document.getElementById('subtabs-listening').classList.toggle('hidden', !listeningPages.includes(id));
+  // サブタブのactive
+  document.querySelectorAll('.nav-subtab').forEach(t=>t.classList.remove('active'));
+  const sub = document.getElementById('subtab-'+id);
+  if(sub) sub.classList.add('active');
+}
+
+function showWritingSubtabs(){
+  // 筆記タブを押したら大問1へ
+  goPage('q1');
+}
+
+function showListeningSubtabs(){
+  // リスニングタブを押したらリスニングページへ
+  goPage('listening');
+}
+
+function updateScore(){
+  const wScore=(submitted.q1?scores.q1:0)+(submitted.q2?scores.q2:0)+(submitted.q3?scores.q3:0);
+  const lScore=lisSubmitted?lisScores.total:0;
+  const total=wScore+lScore;
+  document.getElementById('nav-score').innerHTML=total+' / 61問';
+  document.getElementById('total-bar').style.width=Math.round(total/61*100)+'%';
+  document.getElementById('total-label').innerHTML=total+' / 61 問完了';
+
+  // ホーム画面スコア更新（送信済みのもののみ表示）
+  function setHomeScore(id, val, max, sent){
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(sent){
+      const p=max>0?Math.round(val/max*100):0;
+      el.textContent=val+'/'+max+'（'+p+'%）';
+      el.className='sc-score done';
+    }else{
+      el.innerHTML='📩 送信するとスコアが表示されます';
+      el.className='sc-score not-done';
+    }
+  }
+  setHomeScore('home-score-q1',scores.q1,17,sentScores.q1);
+  setHomeScore('home-score-q2',scores.q2,6,sentScores.q2);
+  setHomeScore('home-score-q3',scores.q3,8,sentScores.q3);
+  // 大問4（英文要約）・5（意見文）
+  const el5=document.getElementById('home-score-q5');
+  if(el5){if(sentScores.q5){el5.innerHTML='提出済み';el5.className='sc-score done';}else{el5.innerHTML='📩 送信すると提出済みになります';el5.className='sc-score not-done';}}
+  const el6=document.getElementById('home-score-q6');
+  if(el6){if(sentScores.q6){el6.innerHTML='提出済み';el6.className='sc-score done';}else{el6.innerHTML='📩 送信すると提出済みになります';el6.className='sc-score not-done';}}
+  // リスニング部ごと（第1部・第2部、各15問）
+  for(const [id,key,v,m] of [
+    ['home-score-lp1','lp1',lisScores.p1,15],
+    ['home-score-lp2','lp2',lisScores.p2,15]
+  ]){
+    const el=document.getElementById(id);
+    if(!el)continue;
+    if(sentScores[key]){const p=Math.round(v/m*100);el.textContent=v+'/'+m+'（'+p+'%）';el.className='sc-score done';}
+    else{el.innerHTML='📩 送信するとスコアが表示されます';el.className='sc-score not-done';}
+  }
+}
+
+// Writing
+function switchTab(tab){document.getElementById('panel-type').style.display=tab==='type'?'block':'none';document.getElementById('panel-photo').style.display=tab==='photo'?'block':'none';document.getElementById('tab-type').style.borderBottomColor=tab==='type'?'var(--accent)':'transparent';document.getElementById('tab-type').style.color=tab==='type'?'var(--accent)':'var(--muted)';document.getElementById('tab-photo').style.borderBottomColor=tab==='photo'?'var(--accent)':'transparent';document.getElementById('tab-photo').style.color=tab==='photo'?'var(--accent)':'var(--muted)';}
+function switchTab6(tab){document.getElementById('panel6-type').style.display=tab==='type'?'block':'none';document.getElementById('panel6-photo').style.display=tab==='photo'?'block':'none';document.getElementById('tab6-type').style.borderBottomColor=tab==='type'?'var(--accent)':'transparent';document.getElementById('tab6-type').style.color=tab==='type'?'var(--accent)':'var(--muted)';document.getElementById('tab6-photo').style.borderBottomColor=tab==='photo'?'var(--accent)':'transparent';document.getElementById('tab6-photo').style.color=tab==='photo'?'var(--accent)':'var(--muted)';}
+document.addEventListener('input',function(e){
+  if(e.target.id==='q5-textarea'){const n=e.target.value.trim().split(/\s+/).filter(w=>w.length>0).length;const el=document.getElementById('q5-wordcount');el.innerHTML='語数：'+n+'語';el.style.color=(n>=25&&n<=35)?'#0f6e56':(n>35?'#993c1d':'#9b9890');}
+  if(e.target.id==='q6-textarea'){const n=e.target.value.trim().split(/\s+/).filter(w=>w.length>0).length;const el=document.getElementById('q6-wordcount');el.innerHTML='語数：'+n+'語';el.style.color=(n>=50&&n<=60)?'#0f6e56':(n>60?'#993c1d':'#9b9890');}
+});
+
+function checkQ5(){if(submitted.q5)return;const text=document.getElementById('q5-textarea').value.trim();if(!text){alert('要約を入力してください。');return;}submitted.q5=true;document.getElementById('q5-submit').disabled=true;scores.q5=1;const n=text.split(/\s+/).filter(w=>w.length>0).length;const inRange=n>=25&&n<=35;let html=`<div class="score-banner ${inRange?'perfect':'partial'}">${inRange?'語数OK！（'+n+'語）':'語数：'+n+'語（目安：25〜35語）'}</div>`;html+=`<div class="result-q"><div class="rq-header"><span class="rb rb-ok">採点ポイント</span></div><div style="margin-bottom:.75rem"><p style="font-size:13px;color:#6b6960;margin-bottom:.6rem">以下のポイントを自己チェックしてください：</p>${Q5_POINTS.map(p=>`<p style="font-size:13px;margin-bottom:.4rem">${p}</p>`).join('')}</div><div class="point-box" style="margin-bottom:.75rem">📝 <strong>模範解答例</strong><br><span style="font-size:13px;line-height:1.8;white-space:pre-wrap">${Q5_MODEL}</span></div><div style="font-size:12px;color:#6b6960">※模範解答はあくまで一例です。</div></div>`;const ra=document.getElementById('q5-result');ra.innerHTML=html;ra.classList.add('show');ra.scrollIntoView({behavior:'smooth',block:'start'});updateScore();saveState();}
+function resetQ5(){submitted.q5=false;scores.q5=0;document.getElementById('q5-submit').disabled=false;document.getElementById('q5-textarea').value='';document.getElementById('q5-wordcount').innerHTML='語数：0語';document.getElementById('q5-wordcount').style.color='#9b9890';const ra=document.getElementById('q5-result');ra.classList.remove('show');ra.innerHTML='';updateScore();saveState();}
+function checkQ6(){if(submitted.q6)return;const text=document.getElementById('q6-textarea').value.trim();if(!text){alert('英作文を入力してください。');return;}submitted.q6=true;document.getElementById('q6-submit').disabled=true;scores.q6=1;const n=text.split(/\s+/).filter(w=>w.length>0).length;const inRange=n>=50&&n<=60;let html=`<div class="score-banner ${inRange?'perfect':'partial'}">${inRange?'語数OK！（'+n+'語）':'語数：'+n+'語（目安：50〜60語）'}</div>`;html+=`<div class="result-q"><div class="rq-header"><span class="rb rb-ok">採点ポイント</span></div><div style="margin-bottom:.75rem">${Q6_POINTS.map(p=>`<p style="font-size:13px;margin-bottom:.4rem">${p}</p>`).join('')}</div><div class="point-box" style="margin-bottom:.75rem">📝 <strong>模範（Yes）</strong><br><span style="font-size:13px;line-height:1.8">${Q6_MODEL_YES}</span></div><div class="point-box" style="margin-bottom:.75rem">📝 <strong>模範（No）</strong><br><span style="font-size:13px;line-height:1.8">${Q6_MODEL_NO}</span></div></div>`;const ra=document.getElementById('q6-result');ra.innerHTML=html;ra.classList.add('show');ra.scrollIntoView({behavior:'smooth',block:'start'});updateScore();saveState();}
+function resetQ6(){submitted.q6=false;scores.q6=0;document.getElementById('q6-submit').disabled=false;document.getElementById('q6-textarea').value='';document.getElementById('q6-wordcount').innerHTML='語数：0語';document.getElementById('q6-wordcount').style.color='#9b9890';const ra=document.getElementById('q6-result');ra.classList.remove('show');ra.innerHTML='';updateScore();saveState();}
+
+// =========================================================
+// ★ リスニング ロジック
+// =========================================================
+let lisMode=0; // 0=全部, 1=第1部, 2=第2部
+let lisRange=[0,29]; // 現在の演習範囲
+const LIS_PART_SENT={1:'lp1',2:'lp2'};
+function getPartRange(part){
+  if(part===1)return[0,14];
+  if(part===2)return[15,29];
+  return[0,29];
+}
+function playLisIntro(part){
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+  if(window.speechSynthesis)speechSynthesis.cancel();
+  if(part!==1&&part!==2)return;
+  const a=new Audio(LIS_AUDIO_BASE+'P'+part+'_intro.mp3');
+  a.play().catch(()=>{});
+  a.onended=()=>{currentAudio=null;};
+  currentAudio=a;
+}
+
+function startListening(part){
+  part=part||0;
+  // 解答解説表示中（全部完了済み）：リセットせず結果を再表示
+  if(lisSubmitted){
+    showLisAllResult();
+    document.getElementById('lis-quiz').style.display='none';
+    document.getElementById('lis-start').style.display='none';
+    return;
+  }
+  // 遷移先の部が送信済み：確認なしで解答解説を再表示
+  if(part>0 && sentScores[LIS_PART_SENT[part]]){
+    lisMode=part;
+    lisRange=getPartRange(part);
+    showLisPartResultForPart(part);
+    document.getElementById('lis-quiz').style.display='none';
+    document.getElementById('lis-start').style.display='none';
+    saveState();
+    return;
+  }
+  // 現在進行中の部に未送信の解答がある場合のみ確認
+  if(part!==lisMode){
+    const curRange=getPartRange(lisMode);
+    const curSent=lisMode>0&&!!sentScores[LIS_PART_SENT[lisMode]];
+    const curAnswered=lisAnswered.slice(curRange[0],curRange[1]+1).filter(a=>a!==null).length;
+    if(curAnswered>0&&!curSent){
+      if(!confirm('学習中のデータがリセットされます。よろしいですか？')){return;}
+    }
+  }
+  lisMode=part;
+  lisRange=getPartRange(part);
+  lisIdx=lisRange[0];
+  lisSubmitted=false;
+  lisScores={p1:0,p2:0,total:0};
+  // 開始する範囲の解答のみクリア（他の部は保持）
+  for(let i=lisRange[0];i<=lisRange[1];i++){lisAnswered[i]=null;lisPlayCount[i]=0;}
+  document.getElementById('lis-start').style.display='none';
+  document.getElementById('lis-quiz').style.display='block';
+  document.getElementById('lis-result').style.display='none';
+  playLisIntro(part===0?1:part);
+  renderLisQ();
+  saveState();
+}
+function goListening(part){
+  goPage('listening');
+  setTimeout(()=>startListening(part),50);
+}
+function continueListening(){
+  document.getElementById('lis-start').style.display='none';
+  document.getElementById('lis-quiz').style.display='block';
+  document.getElementById('lis-result').style.display='none';
+  renderLisQ();
+}
+function resetListeningPart(){
+  // 現在の部だけリセットしてやり直す（確認なし）
+  const range=getPartRange(lisMode);
+  for(let i=range[0];i<=range[1];i++){lisAnswered[i]=null;lisPlayCount[i]=0;}
+  const sentKey=LIS_PART_SENT[lisMode];
+  if(sentKey)sentScores[sentKey]=false;
+  if(lisMode===1)lisScores.p1=0;
+  else if(lisMode===2)lisScores.p2=0;
+  lisScores.total=lisScores.p1+lisScores.p2;
+  lisSubmitted=false;
+  document.getElementById('lis-result').style.display='none';
+  lisRange=getPartRange(lisMode);
+  lisIdx=lisRange[0];
+  document.getElementById('lis-quiz').style.display='block';
+  renderLisQ();window.scrollTo(0,0);
+  updateScore();saveState();
+}
+
+function restartListening(){
+  if(!confirm('学習中のデータがリセットされます。よろしいですか？')){return;}
+  lisSubmitted=false;
+  lisScores={p1:0,p2:0,total:0};
+  for(let i=0;i<30;i++){lisAnswered[i]=null;lisPlayCount[i]=0;}
+  document.getElementById('lis-result').style.display='none';
+  document.getElementById('lis-quiz').style.display='none';
+  document.getElementById('lis-start').style.display='block';
+  const rl=document.getElementById('lis-review-list');if(rl)rl.style.display='none';
+  updateScore();saveState();
+}
+
+function renderLisQ(){
+  const q=LIS_Q[lisIdx];
+  const total=lisRange[1]-lisRange[0]+1;
+  const done=lisAnswered.slice(lisRange[0],lisRange[1]+1).filter(a=>a!==null).length;
+  document.getElementById('lis-prog-fill').style.width=(done/total*100)+'%';
+  document.getElementById('lis-prog-label').innerHTML=(lisIdx-lisRange[0]+1)+' / '+total+'問目';
+
+  // Part banner
+  const prevPart=lisIdx>lisRange[0]?LIS_Q[lisIdx-1].part:null;
+  const pb=document.getElementById('lis-part-banner');
+  if(q.part!==prevPart||lisIdx===lisRange[0]){
+    pb.innerHTML=`<div class="part-banner"><h3>${PART_LABELS_LIS[q.part]}</h3><p>${PART_DESC_LIS[q.part]}</p></div>`;
+  }else{pb.innerHTML='';}
+
+  // スクリプト：会話・英文＋Question（選択肢は画面表示のためスクリプトに含めない）
+  const rawScript = q.script || '';
+  const scriptFormatted = rawScript.replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
+  let scriptInner = `<div style="line-height:1.9;white-space:pre-wrap">${scriptFormatted}</div>`;
+  if(q.question){
+    scriptInner += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #c8daf5;font-size:.78rem;color:#1a4a8a;font-weight:700;">${q.question}</div>`;
+  }
+  const scriptHTML=`
+    <button class="script-toggle-btn" onclick="toggleScript(this)">
+      📄 スクリプトを見る
+    </button>
+    <div class="script-box" style="display:none">
+      <div style="font-size:.72rem;color:#2563c0;font-weight:700;margin-bottom:6px;">📝 音声スクリプト</div>
+      ${scriptInner}
+    </div>
+  `;
+
+  // 選択肢：両部とも番号＋文字を画面表示（読み上げなし）
+  const chHTML=q.choices.map((c,i)=>{
+    let cls='lis-choice';
+    if(lisAnswered[lisIdx]!==null && i===lisAnswered[lisIdx]){cls+=' selected';}
+    return `<div class="${cls}" onclick="lisSelect(${i})"><span class="lis-cn">${i+1}</span><span>${c}</span></div>`;
+  }).join('');
+
+  // Feedback（部の途中では表示しない）
+  let fbHTML='';
+
+  const pc=lisPlayCount[lisIdx];
+  document.getElementById('lis-card').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <span style="background:#2563c0;color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:20px;">No. ${q.no}</span>
+      <span style="font-size:.74rem;color:var(--muted)">${PART_LABELS_LIS[q.part]}</span>
+    </div>
+    <div class="audio-mode-toggle">
+      <button class="audio-mode-btn ${lisAudioMode==='native'?'active':''}" onclick="setAudioMode('native')">🎙️ ネイティブ</button>
+      <button class="audio-mode-btn ${lisAudioMode==='tts'?'active':''}" onclick="setAudioMode('tts')">🔊 TTS</button>
+    </div>
+    <div class="audio-section">
+      <button class="audio-btn" id="lis-audio-btn" onclick="lisPlayAudio(${lisIdx},1.0)">
+        <div class="audio-icon" id="lis-audio-icon">▶</div>
+        <div class="audio-info">
+          <div class="audio-title">${q.audioLabel}</div>
+          <div class="audio-hint">${q.part===2?'英文をよく聞いてください':'会話をよく聞いてください'}</div>
+        </div>
+        ${pc>0?`<span class="play-count-badge">${pc}回再生</span>`:''}
+        <div class="waveform hidden" id="lis-wave"><span></span><span></span><span></span><span></span><span></span></div>
+      </button>
+      <div class="speed-row">
+        <span style="font-size:.74rem;color:var(--muted);line-height:1;padding-top:6px;">速度：</span>
+        <button class="speed-btn" onclick="lisPlayAudio(${lisIdx},0.5)" id="spd-0.5">0.5倍速</button>
+        <button class="speed-btn" onclick="lisPlayAudio(${lisIdx},0.75)" id="spd-0.75">0.75倍速</button>
+        <button class="speed-btn active" onclick="lisPlayAudio(${lisIdx},1.0)" id="spd-1.0">通常</button>
+      </div>
+    </div>
+    ${scriptHTML}
+    <div>${chHTML}</div>
+    ${fbHTML}
+  `;
+
+  // Nav buttons
+  document.getElementById('lis-prev-btn').disabled=lisIdx===lisRange[0];
+  const nb=document.getElementById('lis-next-btn');
+  nb.innerHTML=lisIdx===lisRange[1]?'結果を見る →':'次へ →';
+  saveState();
+}
+
+function lisSelect(choiceIdx){
+  lisAnswered[lisIdx]=choiceIdx;
+  renderLisQ();
+}
+
+function lisNext(){
+  if(lisIdx<lisRange[1]){
+    lisIdx++;renderLisQ();window.scrollTo(0,0);
+  } else {
+    // 第2部（最終部）の最後（No.30）→ endingアナウンス再生してから結果画面へ
+    const isLastPart=(lisRange[1]===LIS_Q.length-1);
+    if(isLastPart){
+      if(currentAudio){currentAudio.pause();currentAudio=null;}
+      const endingAudio=new Audio(LIS_AUDIO_BASE+'ending.mp3');
+      endingAudio.play().catch(()=>{});
+      endingAudio.onended=()=>{currentAudio=null; showLisPartResult();};
+      currentAudio=endingAudio;
+    } else {
+      showLisPartResult();
+    }
+  }
+}
+function lisPrev(){if(lisIdx>lisRange[0]){lisIdx--;renderLisQ();window.scrollTo(0,0);}}
+
+// 部ごとの解答確認画面
+// 送信済みの部を解答解説として再表示する関数
+function lisPartCalc(part){
+  const r=getPartRange(part);let c=0;
+  for(let i=r[0];i<=r[1];i++){if(lisAnswered[i]===LIS_Q[i].answer)c++;}
+  return c;
+}
+function lisMsgOf(correct,total){
+  const pct=Math.round(correct/total*100);
+  return pct>=80?'🎉 よくできました！':pct>=60?'👍 もう少し！復習しましょう。':'📚 音声をくり返し聴いて復習しましょう。';
+}
+function lisReviewHTML(part){
+  const r=getPartRange(part);let h='';
+  for(let i=r[0];i<=r[1];i++){
+    const q=LIS_Q[i];
+    const ans=lisAnswered[i];
+    const ok=ans===q.answer;
+    const rawScript=q.script||'';
+    const scriptFormatted=rawScript.replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
+    const questionLine=q.question?`<div style="margin-top:6px;padding-top:6px;border-top:1px solid #c8daf5;font-size:.76rem;color:#1a4a8a;font-weight:700;">${q.question}</div>`:'';
+    h+=`<div class="lis-review-item ${ok?'ok':'ng'}" style="margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:4px;">
+        <span style="color:var(--muted)">No. ${q.no}</span>
+        <span style="padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:${ok?'#d1fae5':'#fee2e2'};color:${ok?'var(--green)':'var(--red)'}">${ok?'✅ 正解':'❌ 不正解'}</span>
+      </div>
+      <div style="background:#f0f6ff;border-radius:4px;padding:7px 10px;margin-bottom:6px;font-size:.76rem;color:#1a3a6e;line-height:1.8;">
+        <div style="font-size:.72rem;color:#2563c0;font-weight:700;margin-bottom:4px;">📝 スクリプト</div>
+        <div style="white-space:pre-wrap">${scriptFormatted}</div>
+        ${questionLine}
+      </div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:2px"><strong>正解：</strong>${q.choices[q.answer]}</p>
+      ${!ok?`<p style="font-size:.82rem;color:var(--muted);margin-bottom:2px"><strong>あなたの答え：</strong>${ans!==null?q.choices[ans]:'未回答'}</p>`:''}
+      <div style="margin:6px 0 4px;">
+        ${q.choices.map((c,ci)=>{
+          let bg='#fafaf8';let border='#cccac3';let fw='400';
+          if(ci===q.answer){bg='#e1f5ee';border='#0f6e56';fw='700';}
+          else if(ci===ans&&!ok){bg='#faece7';border='#993c1d';}
+          return `<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 10px;margin-bottom:4px;border:1px solid ${border};border-radius:4px;background:${bg};font-size:.78rem;font-weight:${fw};">
+            <span style="flex-shrink:0;font-weight:700;">${ci+1}.</span><span>${c}</span>
+          </div>`;
+        }).join('')}
+      </div>
+      <p style="font-size:.76rem;color:var(--hint)">${q.explanation}</p>
+    </div>`;
+  }
+  return h;
+}
+const LIS_BTN_MAIN='width:100%;padding:13px;background:linear-gradient(135deg,#1a4a8a,#2563c0);color:#fff;border:none;border-radius:var(--rsm);font-size:.95rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(37,99,192,.35);margin-bottom:.6rem;';
+const LIS_BTN_SUB='width:100%;padding:13px;background:var(--surface);color:#1a4a8a;border:2px solid #2563c0;border-radius:var(--rsm);font-size:.95rem;font-weight:700;cursor:pointer;margin-bottom:.6rem;';
+const LIS_BTN_RESET='width:100%;padding:10px;background:var(--surface);color:var(--muted);border:1px solid var(--border2);border-radius:var(--rsm);font-size:.85rem;cursor:pointer;margin-top:.4rem;';
+function lisResultCardHTML(part,correct){
+  return `<div class="lis-result-card">
+      <p style="text-align:center;font-size:1rem;font-weight:700;color:#1a4a8a;margin-bottom:12px;">📊 ${PART_LABELS_LIS[part]} 結果</p>
+      <div class="score-circle"><span class="sc-n">${correct}</span><span class="sc-d">/ 15</span></div>
+      <p style="text-align:center;font-size:.88rem;color:var(--muted);margin-bottom:1rem;">${lisMsgOf(correct,15)}</p>
+      <div style="margin-top:1rem;">${lisReviewHTML(part)}</div>
+    </div>`;
+}
+// 送信済みの部を解答解説として再表示する関数
+function showLisPartResultForPart(part){
+  lisRange=getPartRange(part);
+  lisMode=part;
+  const correct=lisPartCalc(part);
+  const isLast=(part===2);
+  document.getElementById('lis-quiz').style.display='none';
+  const result=document.getElementById('lis-result');
+  result.style.display='block';
+  result.innerHTML=lisResultCardHTML(part,correct)+
+    (!isLast?`<button onclick="startListening(2)" style="${sentScores.lp2?LIS_BTN_SUB:LIS_BTN_MAIN}">${sentScores.lp2?'第2部の結果を見る →':'第2部へ進む →'}</button>`:'')+
+    (isLast?`<button onclick="showLisAllResult()" style="${LIS_BTN_MAIN}">🏆 全体の結果を見る</button>`:'')+
+    `<button onclick="resetListeningPart()" style="${LIS_BTN_RESET}">🔄 もう一度</button>`;
+}
+
+function showLisPartResult(){
+  // 全部モード：両部を採点して全体結果へ
+  if(lisMode===0){
+    lisScores.p1=lisPartCalc(1);lisScores.p2=lisPartCalc(2);
+    lisScores.total=lisScores.p1+lisScores.p2;
+    showLisAllResult();
+    return;
+  }
+  const part=lisMode;
+  const correct=lisPartCalc(part);
+  if(part===1)lisScores.p1=correct;else lisScores.p2=correct;
+  lisScores.total=lisScores.p1+lisScores.p2;
+  const isLast=(part===2);
+  document.getElementById('lis-quiz').style.display='none';
+  const result=document.getElementById('lis-result');
+  result.style.display='block';
+  result.innerHTML=lisResultCardHTML(part,correct)+
+    `<button onclick="sendResults('${part===1?'listening-p1':'listening-p2'}')" class="send-btn-blue">📩 第${part}部の結果を送信する</button>`+
+    (!isLast?`<button onclick="startNextPart(1)" style="${LIS_BTN_MAIN}">第2部へ進む →</button>`:'')+
+    (isLast?`<button onclick="showLisAllResult()" style="${LIS_BTN_MAIN}">🏆 全体の結果を見る</button>`:'')+
+    `<button onclick="resetListeningPart()" style="${LIS_BTN_RESET}">🔄 もう一度</button>`;
+  updateScore();saveState();
+}
+
+
+// 全部終了後の全体結果
+function showLisAllResult(){
+  lisSubmitted=true;
+  const result=document.getElementById('lis-result');
+  const total=lisScores.p1+lisScores.p2;
+  lisScores.total=total;
+  const pct=Math.round(total/30*100);
+  let msg='';
+  if(pct>=80)msg='🎉 素晴らしい成績です！合格ラインを十分クリアしています。';
+  else if(pct>=60)msg='👍 もう少しで合格ライン！苦手な問題を復習しましょう。';
+  else msg='📚 復習が大切です。音声をくり返し聴いてみましょう。';
+  result.innerHTML=`
+    <div class="lis-result-card">
+      <p style="text-align:center;font-size:1.1rem;font-weight:700;color:#1a4a8a;margin-bottom:14px;">🏆 リスニング 全体結果</p>
+      <div class="score-circle"><span class="sc-n">${total}</span><span class="sc-d">/ 30</span></div>
+      <div class="section-scores">
+        <div class="ss-item"><div class="ss-l">第1部</div><div class="ss-v">${lisScores.p1}/15</div></div>
+        <div class="ss-item"><div class="ss-l">第2部</div><div class="ss-v">${lisScores.p2}/15</div></div>
+      </div>
+      <p style="text-align:center;font-size:.88rem;color:var(--muted);line-height:1.7;">${msg}</p>
+    </div>
+    <button onclick="sendResults('listening')" class="send-btn-blue">📩 リスニング全体の結果を送信する</button>
+    <button onclick="restartListening()" style="width:100%;padding:10px;background:var(--surface);color:var(--muted);border:1px solid var(--border2);border-radius:var(--rsm);font-size:.85rem;cursor:pointer;">🔄 もう一度挑戦する</button>
+  `;
+  updateScore();saveState();
+}
+
+// 次の部へ進む
+function startNextPart(currentPart){
+  const nextPart=currentPart+1;
+  if(nextPart>2)return;
+  lisMode=nextPart;
+  lisRange=getPartRange(nextPart);
+  lisIdx=lisRange[0];
+  document.getElementById('lis-result').style.display='none';
+  document.getElementById('lis-quiz').style.display='block';
+  playLisIntro(nextPart);
+  renderLisQ();window.scrollTo(0,0);
+  saveState();
+}
+
+// TTS用テキスト（録音スクリプトと完全一致）。行頭タグ＝読み手：M=男性／F=女性／B=女性B（Question読み手）
+// 選択肢は読み上げない（画面表示のみ）。No.の読み上げは省略（ネイティブ音声のみ）
+const TTS_TEXT = {
+  0:"F: Do you have any plans for this weekend, Ken?\nM: I was going to go hiking with my brother, but it's going to rain all day.\nF: That's too bad. You could come bowling with us instead.\nM: Thanks, but I think I'll just stay home and rest. I've been so tired this week.\nB: Question: What will the boy probably do this weekend?",
+  1:"M: Hello. I'd like to send this box to my aunt in Canada.\nF: Certainly. Would you like to send it by air or by ship?\nM: By air, please. Her birthday is next week, so it has to arrive quickly.\nF: OK. I'll weigh the box, and then you can pay at the counter.\nB: Question: What does the man want to do?",
+  2:"M: Green Dental Clinic. How may I help you?\nF: Hi. I have an appointment tomorrow at ten, but I have to attend a meeting at work.\nM: I see. We have an opening on Thursday morning or Friday afternoon.\nF: Thursday morning would be perfect. Thank you.\nB: Question: What does the woman want to do?",
+  3:"F: Have you been to the new city library, Tom? I heard it opened last month.\nM: Yes, I went there yesterday. It has comfortable chairs, and it's very quiet.\nF: Is it far from the station? I don't want to walk too far.\nM: Not at all. It's only five minutes on foot, and it's open until nine every night.\nB: Question: What does the man say about the new library?",
+  4:"F: Excuse me. I think I left my umbrella on the train this morning.\nM: What does it look like?\nF: It's dark blue with a white handle. I was on the 8:10 train from Greenville.\nM: Please fill out this form. We'll call you if we find it.\nB: Question: What will the woman do next?",
+  5:"M: Hello. This is Paul Wilson. I have a room reserved for tonight, but my flight was delayed.\nF: I see, Mr. Wilson. When do you think you'll arrive?\nM: Probably around midnight. Will the front desk still be open?\nF: Yes, we're open all night, so you can check in at any time.\nB: Question: Why is the man calling the hotel?",
+  6:"F: The living room looks great after we painted it, doesn't it?\nM: Yes, but the walls are bare now. We should hang something.\nF: I have the photos from our trip to Hawaii. Let's put them in frames.\nM: Good idea. Let's go to the store and pick some out right now.\nB: Question: What will the man and woman do next?",
+  7:"M: I'm worried about the math test on Monday. The last chapter was really hard.\nF: Me too. Why don't we study together tomorrow afternoon?\nM: That would help a lot. I'll bring my notes.\nF: Great. I'll make some practice problems for us to try.\nB: Question: What does the girl suggest?",
+  8:"M: Mom, I have great news. Coach Davis chose me to be the captain of our basketball team.\nF: That's wonderful, Jim! Did you expect it?\nM: Not at all. I thought Sam would be chosen because he's the best player.\nF: Well, the coach must think you're a good leader. Let's celebrate tonight.\nB: Question: Why is the boy happy?",
+  9:"F: Green Garden Restaurant. May I help you?\nM: Yes, I want to book a table for six this Saturday at seven.\nF: I'm sorry, but we have no tables at seven. We have one at eight thirty.\nM: Hmm. Then I'll take that one. It's for my daughter's birthday.\nB: Question: What does the man decide to do?",
+  10:"M: Honey, the car is making a strange noise again.\nF: Maybe we should have it checked. Can you take it to Mike's Garage tomorrow?\nM: I have a meeting in the morning, but I can go in the afternoon.\nF: OK. And please ask them to look at the tires, too.\nB: Question: What will the man do tomorrow afternoon?",
+  11:"F: Dad, I'm going to the drugstore to get a new toothbrush. Do you need anything?\nM: Yes. We're out of shampoo, so could you get some?\nF: Sure. How about soap?\nM: No, we still have plenty of soap. Here's some money for the shampoo and your toothbrush.\nB: Question: Why is the girl going to the drugstore?",
+  12:"M: Hi. I'm a new student, and I'd like to join a club. Are there any swimming clubs?\nF: Yes. The swimming club meets on Tuesdays and Thursdays at the school pool.\nM: Great. Do I need to bring anything?\nF: Just a towel and a swimsuit. You can sign up here today.\nB: Question: What does the man want to do?",
+  13:"F: Ben, you look tired. Did you stay up late?\nM: Yes, I was finishing my science report, and I still need to draw a graph.\nF: I'm good at that. I can help you with the graph if you want.\nM: Really? That would be great. Thanks, Mia.\nB: Question: What does the girl offer to do for the boy?",
+  14:"M: I saw you walking a puppy yesterday, Linda. Is it yours?\nF: Yes, we got him last week. His name is Max. He wakes me up at six every morning.\nM: Wow, that's early. Do you walk him before work?\nF: Yes, for about thirty minutes. It's good exercise for me, too.\nB: Question: What is one thing the woman says?",
+  15:"M: Attention, library users. This is an announcement from Greenfield Library. Tomorrow, we will hold a used book sale in the entrance hall from ten o'clock until three o'clock. All books will be one dollar each. Please bring your own bag, because we do not have any bags to give out. The reading rooms will be open as usual. Thank you.\nB: Question: What is one thing the announcement says?",
+  16:"F: Attention, students. Next Wednesday, we will clean the beach near our school. We will walk there after morning classes and work for about ninety minutes. Because the sand and rocks can be sharp, please bring a pair of work gloves. You should also wear your gym clothes. If you forget your gloves, please ask your teacher.\nB: Question: What does the speaker ask students to do?",
+  17:"M: Henry lives about eight kilometers from his office and goes to work by train every day. The train is always crowded, and the trip takes more than an hour. Last week, a coworker told him that riding a bike takes only forty minutes. Henry likes the idea because he can get some exercise, too. Now he is thinking about buying a bike.\nB: Question: What does Henry want to do?",
+  18:"F: Nina is a college student, and she started a part-time job at a bookstore in April. She works there on Saturdays and Sundays for five hours each day. At first, the work was hard because she had to carry heavy boxes. Now, however, she is glad she took the job because she can read new books before they go on sale.\nB: Question: Why is Nina glad she took the part-time job?",
+  19:"F: Mark wants to buy a new guitar, but it costs two hundred dollars. He has saved only fifty dollars so far. His parents will not give him any money, so he has decided to earn it himself. Every weekend, he will wash cars in his neighborhood and charge five dollars for each one. He hopes to have enough money in two months.\nB: Question: How does Mark plan to get money for the guitar?",
+  20:"M: Nancy goes to high school, and she loves animals. This summer, she will spend two weeks at her uncle's farm in Hokkaido. She has done farm work before, so she is not worried about feeding the cows. What she is looking forward to most is riding a horse for the first time.\nB: Question: What is Nancy looking forward to?",
+  21:"M: The Oakwood Science Center in Canada recently started a night program for families. On the center's observation deck, families can look at the moon and stars through large telescopes. An astronomer explains what they are seeing, and children may ask questions. The program takes two hours, and hot chocolate is sold at the entrance.\nB: Question: What is one thing families can do at the Oakwood Science Center?",
+  22:"F: Jessica planned to go camping with her friends this weekend. However, on Thursday, she heard the weather news. A big storm is coming, and it will bring strong wind and heavy rain on Saturday. Her friends decided to cancel the trip, so Jessica will stay home and watch movies instead.\nB: Question: Why is Jessica unable to go camping this weekend?",
+  23:"M: Ken has played badminton for six years, but this spring his knee started to hurt. The doctor told him to stop playing for three months. Ken was sad, but he did not want to leave the team. He has decided to keep score at games and carry water to the players during practice.\nB: Question: What has Ken decided to do?",
+  24:"F: Lisa had a bad cold last week, so she stayed in bed for two days. Her grandmother heard the news and took a train from another town to see her. She did not bring any presents. Instead, she cooked a big pot of chicken soup with her own recipe, and Lisa felt much better after eating it.\nB: Question: What did Lisa's grandmother do for her?",
+  25:"M: Yuta bought a pair of shoes online last week. When the shoes arrived, he found that they were one size too small. He sent an e-mail to the store, and the store said it would send a larger size in a week. Yuta was disappointed because he wanted to wear the shoes at a school event on Saturday.\nB: Question: What problem did Yuta have?",
+  26:"F: Emily's family is going to have a barbecue in their garden on Sunday. Her father will cook meat and vegetables on the grill, and her mother will make a large salad. Emily has promised to bring some chairs from the garage. If it rains, they will eat inside the house.\nB: Question: What is one thing Emily will do on Sunday?",
+  27:"M: Mika has been busy with school events for the last two months. Next Sunday, however, she has no plans, so she is going to take her younger sister to an aquarium. They will watch the dolphin show and have lunch there. Mika wants to spend a relaxing day with her sister.\nB: Question: What is Mika going to do next Sunday?",
+  28:"M: Attention, visitors. Thank you for coming to the Sakura Festival. Today, you can get a free cup of tea at the tea tent. First, take a stamp card from the information desk. Then, collect three stamps from the food stalls. When your card is full, bring it to the tea tent.\nB: Question: How can visitors get a free cup of tea?",
+  29:"F: Aya never cared about plants until her classmate gave her a small cactus for her birthday. At first, she often forgot to water it, but one day it grew a beautiful flower. She was so surprised that she searched the Internet to learn how to care for plants. Now she has twelve plants in her room.\nB: Question: How did Aya become interested in plants?"
+};
+let currentUtterance=null;
+// ブラウザによってはvoicesが非同期で読み込まれるため事前にロードしておく
+if(window.speechSynthesis){
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+}
+
+function setAudioMode(mode){
+  lisAudioMode=mode;
+  // 再生中の音声を停止
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+  if(window.speechSynthesis)speechSynthesis.cancel();
+  // ボタン表示を更新
+  document.querySelectorAll('.audio-mode-btn').forEach(b=>{
+    b.classList.toggle('active',b.textContent.includes(mode==='native'?'ネイティブ':'TTS'));
+  });
+  const icon=document.getElementById('lis-audio-icon');
+  if(icon)icon.textContent='▶';
+  const btn=document.getElementById('lis-audio-btn');
+  if(btn)btn.classList.remove('playing');
+  const wave=document.getElementById('lis-wave');
+  if(wave)wave.classList.add('hidden');
+}
+
+function lisPlayAudio(idx,speed){
+  speed=speed||1.0;
+  const q=LIS_Q[idx];
+  const waveform=document.getElementById('lis-wave');
+  const audioBtn=document.getElementById('lis-audio-btn');
+  const audioIcon=document.getElementById('lis-audio-icon');
+  // 速度ボタンのactive切替
+  ['0.5','0.75','1.0'].forEach(s=>{
+    const b=document.getElementById('spd-'+s);
+    if(b)b.classList.toggle('active',parseFloat(s)===speed);
+  });
+
+  function onStart(){
+    if(audioBtn)audioBtn.classList.add('playing');
+    if(audioIcon)audioIcon.textContent='⏸';
+    if(waveform)waveform.classList.remove('hidden');
+    lisPlayCount[idx]++;
+    const badge=audioBtn?audioBtn.querySelector('.play-count-badge'):null;
+    if(badge)badge.innerHTML=lisPlayCount[idx]+'回再生';
+    else if(audioBtn){const s=document.createElement('span');s.className='play-count-badge';s.innerHTML=lisPlayCount[idx]+'回再生';audioBtn.insertBefore(s,waveform);}
+  }
+  function onEnd(){
+    if(audioBtn)audioBtn.classList.remove('playing');
+    if(audioIcon)audioIcon.textContent='▶';
+    if(waveform)waveform.classList.add('hidden');
+    window._ttsStopped=false;
+  }
+
+  // ① ネイティブモード かつ MP3がある場合 → 実音声再生
+  if(lisAudioMode==='native' && q.audioSrc){
+    if(currentUtterance){speechSynthesis.cancel();currentUtterance=null;}
+    // 同じ問題・同じ速度で再生中なら一時停止、停止中なら再開
+    if(currentAudio && currentAudio._srcIdx===idx && currentAudio._speed===speed){
+      if(!currentAudio.paused){
+        // 再生中 → 一時停止
+        currentAudio.pause();
+        if(audioIcon)audioIcon.textContent='▶';
+        if(audioBtn)audioBtn.classList.remove('playing');
+        if(waveform)waveform.classList.add('hidden');
+        return;
+      } else {
+        // 一時停止中 → 再開
+        currentAudio.play().then(()=>{}).catch(()=>{});
+        if(audioIcon)audioIcon.textContent='⏸';
+        if(audioBtn)audioBtn.classList.add('playing');
+        if(waveform)waveform.classList.remove('hidden');
+        return;
+      }
+    }
+    // 別の問題 or 速度変更 → 最初から再生
+    if(currentAudio){currentAudio.pause();currentAudio.currentTime=0;}
+    const a=new Audio(q.audioSrc);
+    a._srcIdx=idx;
+    a._speed=speed;
+    currentAudio=a;
+    a.playbackRate=speed;
+    onStart();
+    a.play().then(()=>{}).catch(()=>{});
+    a.onended=onEnd;
+    return;
+  }
+
+  // ② TTSモード または MP3なし → Web Speech API（TTS）で読み上げ
+  if(!window.speechSynthesis){alert('このブラウザはTTSに対応していません。');return;}
+
+  // TTS再生中（かつ手動停止でない）なら停止
+  if(window.speechSynthesis.speaking && !window._ttsStopped){
+    window.speechSynthesis.cancel();
+    window._ttsStopped=true;
+    if(audioIcon)audioIcon.textContent='▶';
+    if(audioBtn)audioBtn.classList.remove('playing');
+    if(waveform)waveform.classList.add('hidden');
+    return;
+  }
+
+  // 停止済みまたは未再生 → 新規再生
+  window._ttsStopped=false;
+  speechSynthesis.cancel();
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+
+  // getVoices()が初回空の場合、ポーリングでリトライ（最大2秒）
+  let voices=speechSynthesis.getVoices();
+  if(!voices || voices.length===0){
+    let retryCount=0;
+    const retryTimer=setInterval(()=>{
+      voices=speechSynthesis.getVoices();
+      retryCount++;
+      if(voices && voices.length>0){
+        clearInterval(retryTimer);
+        lisPlayAudio(idx,speed);
+      } else if(retryCount>=20){
+        clearInterval(retryTimer);
+        onEnd(); // タイムアウト
+      }
+    },100);
+    return;
+  }
+  // 男声・女声を選ぶ（en-US優先）
+  const enVoices=voices.filter(v=>v.lang==='en-US'||v.lang.startsWith('en'));
+  // 女声：名前にFemale/Samantha/Victoria/Karen/Moira/Tessa/Allisonを含むもの優先
+  const femaleVoice=enVoices.find(v=>/female|samantha|victoria|karen|moira|tessa|allison/i.test(v.name))
+    ||enVoices.find(v=>/zira|susan|hazel/i.test(v.name))
+    ||enVoices[1]||enVoices[0]||null;
+  // 男声：名前にMale/Daniel/David/Alex/Ricky/Thomasを含むもの優先
+  const maleVoice=enVoices.find(v=>/male|daniel|david|alex|ricky|thomas|fred/i.test(v.name))
+    ||enVoices.find(v=>v!==femaleVoice)
+    ||enVoices[0]||null;
+
+  // TTS_TEXT（録音スクリプト準拠）を行ごとに読む：M:=男声 / F:=女声 / B:=女声B（Question）
+  const srcTxt=TTS_TEXT[idx]||'';
+  const lines=srcTxt.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
+  if(!lines.length){onEnd();return;}
+  let lineIdx=0;
+  function speakNextLine(){
+    if(window._ttsStopped||lineIdx>=lines.length){onEnd();return;}
+    const m=lines[lineIdx].match(/^([MFB]):\s*(.*)$/);
+    const tag=m?m[1]:'F';
+    const text=m?m[2]:lines[lineIdx];
+    const utter=new SpeechSynthesisUtterance(text);
+    currentUtterance=utter;
+    utter.lang='en-US';
+    utter.rate=speed;
+    if(tag==='M'&&maleVoice){utter.voice=maleVoice;utter.pitch=0.85;}
+    else if(femaleVoice){utter.voice=femaleVoice;utter.pitch=tag==='B'?1.0:1.15;}
+    lineIdx++;
+    utter.onend=speakNextLine;
+    utter.onerror=onEnd;
+    speechSynthesis.speak(utter);
+  }
+  onStart();
+  speakNextLine();
+}
+
+function toggleScript(btn){
+  const box=btn.nextElementSibling;
+  const showing=box.style.display!=='none';
+  box.style.display=showing?'none':'block';
+  btn.innerHTML=showing
+    ?'📄 スクリプトを見る'
+    :'📄 スクリプトを閉じる';
+}
+
+function showLisResult(){
+  lisSubmitted=true;
+  let p1=0,p2=0;
+  LIS_Q.forEach((q,i)=>{
+    const ans=lisAnswered[i];
+    if(ans===q.answer){if(q.part===1)p1++;else p2++;}
+  });
+  lisScores={p1,p2,total:p1+p2};
+  scores.listening=p1+p2;
+  document.getElementById('lis-quiz').style.display='none';
+  document.getElementById('lis-result').style.display='block';
+  document.getElementById('lis-total-score').textContent=p1+p2;
+  document.getElementById('lis-s1').textContent=p1+'/15';
+  document.getElementById('lis-s2').textContent=p2+'/15';
+  const pct=Math.round((p1+p2)/30*100);
+  let msg='';
+  if(pct>=80)msg='🎉 素晴らしい成績です！合格ラインを十分クリアしています。';
+  else if(pct>=60)msg='👍 もう少しで合格ライン！苦手な問題を復習しましょう。';
+  else msg='📚 復習が大切です。音声をくり返し聴いてみましょう。';
+  document.getElementById('lis-grade-msg').innerHTML=msg;
+  document.getElementById('lis-review-list').style.display='none';
+  updateScore();saveState();
+}
+
+function showLisReview(){
+  const rl=document.getElementById('lis-review-list');
+  rl.style.display='block';
+  rl.innerHTML='<h3 style="font-size:1rem;color:#1a4a8a;margin-bottom:12px;text-align:center;">📝 問題の復習</h3>'+
+    LIS_Q.map((q,i)=>{
+      const ok=lisAnswered[i]===q.answer;
+      const userAns=lisAnswered[i]!==null?q.choices[lisAnswered[i]]:'未回答';
+      return `<div class="lis-review-item ${ok?'ok':'ng'}">
+        <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:5px;">
+          <span style="color:var(--muted)">No. ${q.no} ／ ${PART_LABELS_LIS[q.part]}</span>
+          <span style="padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:${ok?'#d1fae5':'#fee2e2'};color:${ok?'var(--green)':'var(--red)'}">${ok?'✅ 正解':'❌ 不正解'}</span>
+        </div>
+        <p style="font-size:.83rem;color:var(--muted);margin-bottom:4px"><strong>正解：</strong>${q.choices[q.answer]}</p>
+        ${!ok?`<p style="font-size:.83rem;color:var(--muted);margin-bottom:4px"><strong>あなたの答え：</strong>${userAns}</p>`:''}
+        <p style="font-size:.78rem;color:var(--hint)">${q.explanation}</p>
+      </div>`;
+    }).join('');
+  rl.scrollIntoView({behavior:'smooth'});
+}
+
+// =========================================================
+// ★ 保存・復元・送信
+// =========================================================
+const LS_KEY='eiken_pre2plus_set1_v1'; // 例: eiken_pre2_set3_v2
+
+function saveState(){
+  try{
+    const q5t=document.getElementById('q5-textarea');
+    const q6t=document.getElementById('q6-textarea');
+    const state={
+      studentId:document.getElementById('student-id').value,
+      studentName:document.getElementById('student-name').value,
+      studentEmail:document.getElementById('student-email').value,
+      sentScores:sentScores,
+      sel,submitted,scores,
+      q5text:q5t?q5t.value:'',q6text:q6t?q6t.value:'',
+      lisAnswered:[...lisAnswered],lisPlayCount:[...lisPlayCount],
+      lisIdx,lisSubmitted,lisScores,lisMode,
+      savedAt:new Date().toISOString()
+    };
+    localStorage.setItem(LS_KEY,JSON.stringify(state));
+  }catch(e){}
+}
+
+function loadState(){
+  try{
+    const raw=localStorage.getItem(LS_KEY);if(!raw)return;
+    const state=JSON.parse(raw);
+    if(state.studentId)document.getElementById('student-id').value=state.studentId;
+    if(state.studentName)document.getElementById('student-name').value=state.studentName;
+    if(state.studentEmail)document.getElementById('student-email').value=state.studentEmail;
+    if(state.sentScores)Object.assign(sentScores,state.sentScores);
+    if(state.sel)Object.assign(sel,state.sel);
+    if(state.submitted)Object.assign(submitted,state.submitted);
+    if(state.scores)Object.assign(scores,state.scores);
+    const q5t=document.getElementById('q5-textarea');const q6t=document.getElementById('q6-textarea');
+    if(state.q5text&&q5t)q5t.value=state.q5text;
+    if(state.q6text&&q6t)q6t.value=state.q6text;
+    if(state.lisAnswered){state.lisAnswered.forEach((v,i)=>{lisAnswered[i]=v;});}
+    if(state.lisPlayCount){state.lisPlayCount.forEach((v,i)=>{lisPlayCount[i]=v;});}
+    if(state.lisIdx!==undefined)lisIdx=state.lisIdx;
+    if(state.lisSubmitted!==undefined)lisSubmitted=state.lisSubmitted;
+    if(state.lisScores)Object.assign(lisScores,state.lisScores);
+    if(state.lisMode!==undefined)lisMode=state.lisMode;
+    // リスニング全体結果を復元
+    if(lisSubmitted){
+      const result=document.getElementById('lis-result');
+      const total=lisScores.p1+lisScores.p2;
+      const pct=Math.round(total/30*100);
+      let msg='';
+      if(pct>=80)msg='🎉 素晴らしい成績です！合格ラインを十分クリアしています。';
+      else if(pct>=60)msg='👍 もう少しで合格ライン！苦手な問題を復習しましょう。';
+      else msg='📚 復習が大切です。音声をくり返し聴いてみましょう。';
+      result.innerHTML=`
+        <div class="lis-result-card">
+          <p style="text-align:center;font-size:1.1rem;font-weight:700;color:#1a4a8a;margin-bottom:14px;">🏆 リスニング 全体結果</p>
+          <div class="score-circle"><span class="sc-n">${total}</span><span class="sc-d">/ 30</span></div>
+          <div class="section-scores">
+            <div class="ss-item"><div class="ss-l">第1部</div><div class="ss-v">${lisScores.p1}/15</div></div>
+            <div class="ss-item"><div class="ss-l">第2部</div><div class="ss-v">${lisScores.p2}/15</div></div>
+          </div>
+          <p style="text-align:center;font-size:.88rem;color:var(--muted);line-height:1.7;">${msg}</p>
+        </div>
+        <button onclick="sendResults('listening')" class="send-btn-blue">📩 リスニング全体の結果を送信する</button>
+        <button onclick="restartListening()" style="width:100%;padding:10px;background:var(--surface);color:var(--muted);border:1px solid var(--border2);border-radius:var(--rsm);font-size:.85rem;cursor:pointer;">🔄 もう一度挑戦する</button>
+      `;
+      result.style.display='block';
+      document.getElementById('lis-quiz').style.display='none';
+      document.getElementById('lis-start').style.display='none';
+    }
+
+    // 送信済みの部がある場合はその結果画面を復元、それ以外は途中再開ボタンを表示
+    if(!lisSubmitted){
+      const partSentMap2=LIS_PART_SENT;
+      const curSentKey=partSentMap2[lisMode];
+      if(lisMode>0 && sentScores[curSentKey]){
+        showLisPartResultForPart(lisMode);
+      } else {
+        const curRange=lisMode>0?getPartRange(lisMode):[0,29];
+        const curAnswered=lisAnswered.slice(curRange[0],curRange[1]+1).filter(a=>a!==null).length;
+        if(curAnswered>0){
+          document.getElementById('lis-continue-btn').style.display='block';
+          document.getElementById('lis-continue-no').textContent=(lisIdx+1);
+        }
+      }
+    }
+
+    ['q1','q2','q3'].forEach(sk=>{
+      if(!submitted[sk])return;
+      const btn=document.getElementById(sk+'-submit');if(btn)btn.disabled=true;
+      const bottomSend=document.getElementById(sk+'-send-bottom');if(bottomSend)bottomSend.style.display='block';
+      getAllQids(sk).forEach(qid=>{
+        const d=QD[qid];const ans=(sel[sk]||{})[qid];
+        const cel=document.getElementById('ch-'+qid+'-'+d.correct);if(cel)cel.classList.add('show-ans');
+        if(ans&&ans!==d.correct){const wel=document.getElementById('ch-'+qid+'-'+ans);if(wel)wel.classList.add('wrong');}
+      });
+      // 解答解説カードを復元
+      const all=getAllQids(sk);
+      let correct=0;all.forEach(qid=>{const ans=(sel[sk]||{})[qid],d=QD[qid];if(ans===d.correct)correct++;});
+      const pct=Math.round(correct/all.length*100);const bc=pct===100?'perfect':pct>=60?'partial':'low';
+      const msg=pct===100?`全問正解！素晴らしい！`:`${correct}/${all.length}問正解。解説を確認しよう。`;
+      let rhtml=`<div class="score-banner ${bc}">${msg}</div>`;
+      all.forEach(qid=>{rhtml+=resultCardHtml(qid,(sel[sk]||{})[qid],getLabel(sk,qid));});
+      const ra=document.getElementById(sk+'-result');if(ra){ra.innerHTML=rhtml;ra.classList.add('show');}
+    });
+    if(submitted.q5){
+      const b=document.getElementById('q5-submit');if(b)b.disabled=true;
+      const pb=document.getElementById('q5-photo-submit');if(pb){pb.disabled=true;pb.style.opacity='0.5';}
+      const pd=document.getElementById('q5-photo-done');if(pd&&!state.q5text)pd.style.display='block';
+    }
+    if(submitted.q6){
+      const b=document.getElementById('q6-submit');if(b)b.disabled=true;
+      const pb=document.getElementById('q6-photo-submit');if(pb){pb.disabled=true;pb.style.opacity='0.5';}
+      const pd=document.getElementById('q6-photo-done');if(pd&&!state.q6text)pd.style.display='block';
+    }
+    updateScore();
+    if(state.savedAt){
+      const d=new Date(state.savedAt);
+      const el=document.getElementById('restore-msg');
+      if(el){el.innerHTML='📂 前回学習時刻：'+d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日 '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');el.style.display='block';}
+    }
+  }catch(e){}
+}
+
+function clearState(){
+  if(!confirm('保存されたデータをリセットしますか？\n（すべての解答・スコアが消えます）'))return;
+  // 1. localStorageを先に削除
+  localStorage.removeItem(LS_KEY);
+  // 2. 全変数をリセット
+  Object.assign(scores,{q1:0,q2:0,q3:0,q5:0,q6:0});
+  Object.assign(submitted,{q1:false,q2:false,q3:false,q5:false,q6:false});
+  Object.assign(sel,{q1:{},q2:{},q3:{}});
+  Object.keys(sentScores).forEach(k=>sentScores[k]=false);
+  lisSubmitted=false;
+  Object.assign(lisScores,{p1:0,p2:0,total:0});
+  for(let i=0;i<30;i++){lisAnswered[i]=null;lisPlayCount[i]=0;}
+  lisMode=0; lisIdx=0;
+  // 3. 大問1〜3のUI更新
+  ['q1','q2','q3'].forEach(sec=>{
+    const ra=document.getElementById(sec+'-result');
+    if(ra){ra.classList.remove('show');ra.innerHTML='';}
+    const sb=document.getElementById(sec+'-submit');if(sb)sb.disabled=false;
+    const bb=document.getElementById(sec+'-send-bottom');if(bb)bb.style.display='none';
+  });
+  buildQ1();buildQ2();buildQ3();
+  // 4. 大問5・6のUI更新
+  const q5sb=document.getElementById('q5-submit');if(q5sb)q5sb.disabled=false;
+  const q5ta=document.getElementById('q5-textarea');if(q5ta)q5ta.value='';
+  const q5wc=document.getElementById('q5-wordcount');if(q5wc){q5wc.innerHTML='語数：0語';q5wc.style.color='#9b9890';}
+  const q5ra=document.getElementById('q5-result');if(q5ra){q5ra.classList.remove('show');q5ra.innerHTML='';}
+  const q6sb=document.getElementById('q6-submit');if(q6sb)q6sb.disabled=false;
+  const q6ta=document.getElementById('q6-textarea');if(q6ta)q6ta.value='';
+  const q6wc=document.getElementById('q6-wordcount');if(q6wc){q6wc.innerHTML='語数：0語';q6wc.style.color='#9b9890';}
+  const q6ra=document.getElementById('q6-result');if(q6ra){q6ra.classList.remove('show');q6ra.innerHTML='';}
+  // 5. リスニングUI更新
+  const lr=document.getElementById('lis-result');if(lr){lr.style.display='none';lr.innerHTML='';}
+  const lq=document.getElementById('lis-quiz');if(lq)lq.style.display='none';
+  const ls=document.getElementById('lis-start');if(ls)ls.style.display='block';
+  const rl=document.getElementById('lis-review-list');if(rl)rl.style.display='none';
+  // 6. スコア表示更新 → 保存（リセット済み状態を保存）
+  updateScore();
+  saveState();
+  goPage('home');
+}
+
+async function sendResults(mode){
+  const studentId=document.getElementById('student-id').value.trim();
+  const name=document.getElementById('student-name').value.trim();
+  if(!studentId){alert('ログインしなおしてください。');return;}
+  if(!name){alert('ログインしなおしてください。');return;}
+
+  const q5text=(document.getElementById('q5-textarea')||{}).value||'';
+  const q6text=(document.getElementById('q6-textarea')||{}).value||'';
+
+  const pct=(v,m)=>Math.round(v/m*100)+'%';
+  const s1=submitted.q1?scores.q1+'/17（'+pct(scores.q1,17)+'）':'未解答';
+  const s2=submitted.q2?scores.q2+'/6（'+pct(scores.q2,6)+'）':'未解答';
+  const s3=submitted.q3?scores.q3+'/8（'+pct(scores.q3,8)+'）':'未解答';
+  const s5=submitted.q5?(q5text?'提出済み（タイプ）':'提出済み（写メ）'):'未提出';
+  const s6=submitted.q6?(q6text?'提出済み（タイプ）':'提出済み（写メ）'):'未提出';
+  const sl=lisSubmitted?lisScores.total+'/30（'+pct(lisScores.total,30)+'） 第1部:'+lisScores.p1+'/15（'+pct(lisScores.p1,15)+'） 第2部:'+lisScores.p2+'/15（'+pct(lisScores.p2,15)+'）':'未受験';
+  const writingTotal=(submitted.q1?scores.q1:0)+(submitted.q2?scores.q2:0)+(submitted.q3?scores.q3:0);
+  const writingPct=pct(writingTotal,31);
+  const now=new Date();
+  const dateStr=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+
+  let subject,body;
+  if(mode==='all'){
+    subject=`【Set1 全結果】${studentId} ${name}`;
+    body=`【英検準2級プラス Set1 学習結果（全大問＋リスニング）】
+
+生徒番号：${studentId}
+氏名　　：${name}
+送信日時：${dateStr}
+
+━━━━━━━━━━━━━━━━━━
+■ 筆記（大問1〜3）
+━━━━━━━━━━━━━━━━━━
+大問1（語彙・熟語）　　　：${s1}
+大問2（長文空所補充）　　：${s2}
+大問3（長文読解）　　　　：${s3}
+─────────────────
+筆記合計（大問1〜3）　　：${writingTotal} / 31（${writingPct}）
+━━━━━━━━━━━━━━━━━━
+■ ライティング
+━━━━━━━━━━━━━━━━━━
+大問4（英文要約）　：${s5}${q5text?'\n【大問4 解答本文】\n'+q5text:''}
+大問5（意見文）　　：${s6}${q6text?'\n【大問5 解答本文】\n'+q6text:''}
+━━━━━━━━━━━━━━━━━━
+■ リスニング
+━━━━━━━━━━━━━━━━━━
+第1部（会話の内容）　：${lisSubmitted?lisScores.p1+'/15':'未受験'}
+第2部（英文の内容）　：${lisSubmitted?lisScores.p2+'/15':'未受験'}
+─────────────────
+リスニング合計　　：${lisSubmitted?lisScores.total+'/30':'未受験'}
+━━━━━━━━━━━━━━━━━━
+${(!q5text||!q6text)?'※手書き写メは別途メールで送付してください。':''}`;
+
+  }else if(mode==='listening'){
+    if(!lisSubmitted){alert('リスニングをすべて解答してから送信してください。');return;}
+    subject=`【Set1 リスニング全体結果】${studentId} ${name}`;
+    body=`【英検準2級プラス Set1 リスニング結果】
+
+生徒番号：${studentId}
+氏名　　：${name}
+送信日時：${dateStr}
+
+━━━━━━━━━━━━━━━━━━
+■ リスニング（全30問）
+━━━━━━━━━━━━━━━━━━
+第1部（会話の内容）：${lisScores.p1} / 15
+第2部（英文の内容）：${lisScores.p2} / 15
+─────────────────
+合計　　　　　　　：${lisScores.total} / 30
+━━━━━━━━━━━━━━━━━━`;
+
+  }else if(mode==='listening-p1'||mode==='listening-p2'){
+    const pNum=mode==='listening-p1'?1:2;
+    const pLabel=['','第1部（会話の内容）','第2部（英文の内容）'][pNum];
+    const pScore=[0,lisScores.p1,lisScores.p2][pNum];
+    subject=`【Set1 リスニング${pLabel}】${studentId} ${name}`;
+    body=`【英検準2級プラス Set1 リスニング結果】
+
+生徒番号：${studentId}
+氏名　　：${name}
+送信日時：${dateStr}
+
+━━━━━━━━━━━━━━━━━━
+■ リスニング ${pLabel}
+━━━━━━━━━━━━━━━━━━
+スコア　：${pScore} / 15
+━━━━━━━━━━━━━━━━━━`;
+
+  }else if(mode==='q5'){
+    if(!submitted.q5){alert('先に「解答する」ボタンを押してください。');return;}
+    subject=`【Set1 大問4（英文要約）】${studentId} ${name}`;
+    body=`【英検準2級プラス Set1 大問4（英文要約）】
+
+生徒番号：${studentId}
+氏名　　：${name}
+送信日時：${dateStr}
+
+━━━━━━━━━━━━━━━━━━
+■ 大問4（英文要約）　${s5}
+━━━━━━━━━━━━━━━━━━
+${q5text?'【解答本文】\n'+q5text:'※手書き写メは別途メールで送付してください。'}`;
+
+  }else if(mode==='q6'){
+    if(!submitted.q6){alert('先に「解答する」ボタンを押してください。');return;}
+    subject=`【Set1 大問5（意見文）】${studentId} ${name}`;
+    body=`【英検準2級プラス Set1 大問5（意見文）】
+
+生徒番号：${studentId}
+氏名　　：${name}
+送信日時：${dateStr}
+
+━━━━━━━━━━━━━━━━━━
+■ 大問5（意見文）　${s6}
+━━━━━━━━━━━━━━━━━━
+${q6text?'【解答本文】\n'+q6text:'※手書き写メは別途メールで送付してください。'}`;
+
+  }else{
+    const labelMap={q1:'大問1（語彙・熟語）',q2:'大問2（長文空所補充）',q3:'大問3（長文読解）'};
+    const scoreMap={q1:s1,q2:s2,q3:s3};
+    if(!submitted[mode]){alert('先に解答して「解答する」ボタンを押してください。');return;}
+    subject=`【Set1 ${labelMap[mode]}】${studentId} ${name}`;
+    body=`【英検準2級プラス Set1 学習結果】\n\n生徒番号：${studentId}\n氏名　　：${name}\n送信日時：${dateStr}\n\n━━━━━━━━━━━━━━\n■ ${labelMap[mode]}\nスコア：${scoreMap[mode]}\n━━━━━━━━━━━━━━`;
+  }
+  // GAS経由でメール送信
+  const studentEmail=(document.getElementById('student-email')||{}).value||'';
+  let sendBtnEl=null;
+  try{sendBtnEl=document.activeElement;}catch(e){}
+  if(sendBtnEl&&sendBtnEl.tagName==='BUTTON'){
+    sendBtnEl.disabled=true;
+    sendBtnEl._origHTML=sendBtnEl.innerHTML;
+    sendBtnEl.innerHTML='送信中…';
+  }
+
+  function sendDone(ok, msg){
+    if(ok){
+      // 送信済みフラグを更新
+      if(mode==='q1'||mode==='q2'||mode==='q3'){sentScores[mode]=true;}
+      else if(mode==='q5'){sentScores.q5=true;}
+      else if(mode==='q6'){sentScores.q6=true;}
+      else if(mode==='listening-p1'){sentScores.lp1=true;}
+      else if(mode==='listening-p2'){sentScores.lp2=true;}
+      else if(mode==='listening'){sentScores.lp1=true;sentScores.lp2=true;}
+      else if(mode==='all'){sentScores.q1=true;sentScores.q2=true;sentScores.q3=true;sentScores.q5=true;sentScores.q6=true;sentScores.lp1=true;sentScores.lp2=true;}
+      saveState();updateScore();
+      alert('✅ 送信しました！スコアがホーム画面に表示されました。');
+    }else{
+      alert('送信に失敗しました：'+(msg||'不明なエラー'));
+    }
+    if(sendBtnEl&&sendBtnEl.tagName==='BUTTON'){
+      sendBtnEl.disabled=false;
+      sendBtnEl.innerHTML=sendBtnEl._origHTML||'📩 送信する';
+    }
+  }
+
+  // スコアデータを整形
+  const gasPayload={
+    action:'send',
+    studentId:studentId,name:name,email:studentEmail,
+    subject:subject,body:body,mode:mode,
+    scoreQ1:submitted.q1?scores.q1+'/17':'',
+    scoreQ2:submitted.q2?scores.q2+'/6':'',
+    scoreQ3:submitted.q3?scores.q3+'/8':'',
+    scoreQ1to3:submitted.q1||submitted.q2||submitted.q3?
+      ((submitted.q1?scores.q1:0)+(submitted.q2?scores.q2:0)+(submitted.q3?scores.q3:0))+'/31':'',
+    scoreQ5:submitted.q5?(q5text?'提出済み（タイプ）':'提出済み（写メ）'):'',
+    answerQ5:q5text||'',
+    scoreQ6:submitted.q6?(q6text?'提出済み（タイプ）':'提出済み（写メ）'):'',
+    answerQ6:q6text||'',
+    scoreLP1:lisScores?lisScores.p1+'/15':'',
+    scoreLP2:lisScores?lisScores.p2+'/15':'',
+    scoreLis:lisSubmitted?lisScores.total+'/30':''
+  };
+
+  // まずfetchで試みる
+  try{
+    const res=await fetch(GAS_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify(gasPayload)
+    });
+    const data=await res.json();
+    sendDone(data.ok, data.error);
+    return;
+  }catch(e){
+    // fetchが失敗した場合はJSONPにフォールバック
+  }
+
+  // JSONPフォールバック
+  const cbName2='_gasSendCb_'+Date.now();
+  const sendTimer=setTimeout(()=>{
+    cleanupSend();
+    sendDone(false,'通信タイムアウトです。時間をおいて再度お試しください。');
+  },20000);
+  window[cbName2]=function(data){
+    cleanupSend();
+    sendDone(data.ok, data.error);
+  };
+  const sendScript=document.createElement('script');
+  const sendParamsObj=Object.assign({},gasPayload,{callback:cbName2});
+  const sendParams=new URLSearchParams(sendParamsObj);
+  sendScript.src=GAS_URL+'?'+sendParams.toString();
+  sendScript.onerror=()=>{
+    cleanupSend();
+    sendDone(false,'通信エラーが発生しました。');
+  };
+  function cleanupSend(){
+    clearTimeout(sendTimer);delete window[cbName2];
+    if(sendScript.parentNode)sendScript.parentNode.removeChild(sendScript);
+  }
+  document.head.appendChild(sendScript);
+}
+
+// =========================================================
+// ★ 印刷機能
+// =========================================================
+function printSection(section, mode){
+  const pages = document.querySelectorAll('.page');
+  const targetPage = document.getElementById('page-' + section);
+  const resultArea = document.getElementById(section + '-result');
+
+  // 解答・解説モード：常に解説を印刷（解答済みかどうか問わない）
+  if(mode === 'answer'){
+    try{
+      if(['q1','q2','q3'].includes(section)){
+        const all = getAllQids(section);
+        let html = '<div class="score-banner partial">解答・解説</div>';
+        all.forEach(qid => {
+          html += answerOnlyCardHtml(qid, getLabel(section, qid));
+        });
+        resultArea.innerHTML = html;
+      } else if(section === 'q5'){
+        const pts = Array.isArray(Q5_POINTS) ? Q5_POINTS : [];
+        const model = Q5_MODEL || '（模範解答データが見つかりません）';
+        let html = '<div class="score-banner partial">模範解答</div>';
+        html += '<div class="result-q"><div class="rq-header"><span class="rb rb-ok">採点ポイント</span></div>'
+              + '<div style="margin-bottom:.75rem"><p style="font-size:13px;color:#6b6960;margin-bottom:.6rem">以下のポイントを自己チェックしてください：</p>'
+              + pts.map(p=>'<p style="font-size:13px;margin-bottom:.4rem">'+p+'</p>').join('')
+              + '</div><div class="point-box" style="margin-bottom:.75rem">📝 <strong>模範解答例</strong><br>'
+              + '<span style="font-size:13px;line-height:1.8;white-space:pre-wrap">' + model + '</span></div>'
+              + '<div style="font-size:12px;color:#6b6960">※模範解答はあくまで一例です。</div></div>';
+        resultArea.innerHTML = html;
+      } else if(section === 'q6'){
+        const pts = Array.isArray(Q6_POINTS) ? Q6_POINTS : [];
+        const modelYes = Q6_MODEL_YES || '（模範解答データが見つかりません）';
+        const modelNo = Q6_MODEL_NO || '（模範解答データが見つかりません）';
+        let html = '<div class="score-banner partial">模範解答</div>';
+        html += '<div class="result-q"><div class="rq-header"><span class="rb rb-ok">採点ポイント</span></div>'
+              + '<div style="margin-bottom:.75rem">' + pts.map(p=>'<p style="font-size:13px;margin-bottom:.4rem">'+p+'</p>').join('') + '</div>'
+              + '<div class="point-box" style="margin-bottom:.75rem">📝 <strong>模範（Yes）</strong><br><span style="font-size:13px;line-height:1.8">' + modelYes + '</span></div>'
+              + '<div class="point-box" style="margin-bottom:.75rem">📝 <strong>模範（No）</strong><br><span style="font-size:13px;line-height:1.8">' + modelNo + '</span></div></div>';
+        resultArea.innerHTML = html;
+      }
+    }catch(err){
+      resultArea.innerHTML = '<div class="score-banner partial">エラー: ' + err.message + '</div>';
+      console.error('printSection answer mode error:', err);
+    }
+    if(resultArea && !resultArea.classList.contains('show')){
+      resultArea.classList.add('show');
+    }
+  }
+
+  // 問題用紙モード：result-area を一時非表示
+  let resultWasShown = false;
+  if(mode === 'question' && resultArea){
+    if(resultArea.classList.contains('show')){
+      resultArea.classList.remove('show');
+      resultWasShown = true;
+    }
+  }
+
+  // 問題用紙モード：q5/q6のテキストエリアを一時的に空にする（解答済みでも空欄で印刷）
+  let savedTextareaValue = null;
+  let savedTextareaEl = null;
+  if(mode === 'question' && (section === 'q5' || section === 'q6')){
+    savedTextareaEl = document.getElementById(section + '-textarea');
+    if(savedTextareaEl){
+      savedTextareaValue = savedTextareaEl.value;
+      savedTextareaEl.value = '';
+      savedTextareaEl.textContent = '';
+      savedTextareaEl.setAttribute('value', '');
+      // 強制的に再レイアウトさせる
+      void savedTextareaEl.offsetHeight;
+    }
+  }
+
+  // 対象外ページを隠す・対象ページを表示
+  const prevActive = [];
+  pages.forEach(p => {
+    if(p !== targetPage){
+      p.setAttribute('data-print-hide','1');
+      if(p.classList.contains('active')){
+        prevActive.push(p);
+        p.classList.remove('active');
+      }
+    }
+  });
+  targetPage.classList.add('active');
+
+  // タイトル設定
+  const origTitle = document.title;
+  const labelMap = {q1:'大問1',q2:'大問2',q3:'大問3',q5:'大問4',q6:'大問5'};
+  const modeLabel = mode === 'answer' ? '解答解説' : '問題用紙';
+  document.title = '英検準2級プラス Set1 ' + (labelMap[section]||section) + ' ' + modeLabel;
+
+  // 解答・解説モードのとき body にクラスを付けて問題部分を非表示
+  let savedPanelChildrenDisplay = [];
+  try {
+    if(mode === 'answer'){
+      document.body.classList.add('print-answer-only');
+      // CSS優先順位に依存せず、JSで直接表示を強制
+      if(resultArea) resultArea.style.setProperty('display', 'block', 'important');
+      // result-areaの親パネル（panel-type/panel6-type）はdisplay:blockにするが、
+      // その兄弟要素（テキストエリア・action-rowなど、result-area以外）は個別に非表示にする
+      if(section === 'q5' || section === 'q6'){
+        const panelId = section === 'q5' ? 'panel-type' : 'panel6-type';
+        const panelEl = document.getElementById(panelId);
+        if(panelEl){
+          panelEl.style.setProperty('display', 'block', 'important');
+          Array.from(panelEl.children).forEach(child => {
+            if(child.id !== (section + '-result')){
+              savedPanelChildrenDisplay.push({el: child, prev: child.style.display});
+              child.style.setProperty('display', 'none', 'important');
+            }
+          });
+        }
+      }
+    } else {
+      // ①問題用紙モード
+      document.body.classList.add('print-question-only');
+    }
+
+    window.print();
+  } finally {
+    // 印刷ダイアログがキャンセルされた場合や例外が起きた場合でも、
+    // 必ず元の表示状態に復元する（このブロックは確実に実行される）
+    document.body.classList.remove('print-answer-only');
+    document.body.classList.remove('print-question-only');
+    document.title = origTitle;
+    pages.forEach(p => p.removeAttribute('data-print-hide'));
+    prevActive.forEach(p => p.classList.add('active'));
+    targetPage.classList.remove('active');
+    if(resultArea) resultArea.style.removeProperty('display');
+    if(resultWasShown && resultArea) resultArea.classList.add('show');
+    if(savedTextareaEl) savedTextareaEl.value = savedTextareaValue;
+    if(section === 'q5' || section === 'q6'){
+      const panelId = section === 'q5' ? 'panel-type' : 'panel6-type';
+      const panelEl = document.getElementById(panelId);
+      if(panelEl) panelEl.style.removeProperty('display');
+    }
+    savedPanelChildrenDisplay.forEach(item => {
+      item.el.style.removeProperty('display');
+      if(item.prev) item.el.style.display = item.prev;
+    });
+  }
+}
+
+// =========================================================
+// ★ 初期化
+// =========================================================
+
+// ===== ログイン =====
+const GAS_URL='https://script.google.com/macros/s/AKfycbx-KJnDKJeK00qv1xs7t4Vp6uCPATX2ujTg2hHS1wSVtEyMJlKxq4hKlbkI-BViw-k/exec'; // set3用に新規デプロイしたGASのWebアプリURLを設定
+
+async function doLogin(){
+  const id=document.getElementById('login-id').value.trim();
+  const name=document.getElementById('login-name').value.trim();
+  if(!id||!name){
+    const err=document.getElementById('login-error');
+    err.innerHTML='生徒番号と氏名を入力してください。';
+    err.style.display='block';
+    setTimeout(()=>err.style.display='none',3000);
+    return;
+  }
+  const btn=document.querySelector('.login-btn');
+  const origHTML=btn.innerHTML;
+  btn.disabled=true;
+  btn.innerHTML='確認中…';
+
+  function loginSuccess(email, isAdmin){
+    document.getElementById('login-overlay').style.display='none';
+      document.body.classList.add('logged-in');
+    const sid=document.getElementById('student-id');
+    const sname=document.getElementById('student-name');
+    const semail=document.getElementById('student-email');
+    if(sid)sid.value=id;
+    if(sname)sname.value=name;
+    if(semail)semail.value=email||'';
+    // 管理者タブ表示
+    const adminTab=document.getElementById('nav-tab-admin');
+    if(isAdmin && adminTab){
+      adminTab.style.display = 'block';
+      window._isAdmin = true;
+      window._adminStudentId = id;
+    }
+    // ★ GASから問題データを取得してアプリを初期化
+    fetchQuestions(id);
+  }
+
+  // GASから問題データを取得する関数
+  async function fetchQuestions(studentId) {
+    // ローディング表示
+    const loadingEl = document.getElementById('questions-loading');
+    if(loadingEl) loadingEl.style.display = 'flex';
+    try {
+      const res = await fetch(GAS_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'text/plain'},
+        body: JSON.stringify({action:'getQuestions', studentId: studentId})
+      });
+      const data = await res.json();
+      if(data.ok) {
+        applyQuestions(data);
+      } else {
+        // fetchが失敗した場合はJSONPにフォールバック
+        fetchQuestionsJSONP(studentId);
+      }
+    } catch(e) {
+      fetchQuestionsJSONP(studentId);
+    }
+  }
+
+  function fetchQuestionsJSONP(studentId) {
+    const cbName = '_getQCb_' + Date.now();
+    const timer = setTimeout(() => {
+      cleanup();
+      alert('問題データの読み込みに失敗しました。ページを再読み込みしてください。');
+    }, 20000);
+    window[cbName] = function(data) {
+      cleanup();
+      if(data.ok) { applyQuestions(data); }
+      else { alert('問題データを取得できませんでした：' + (data.error||'')); }
+    };
+    const script = document.createElement('script');
+    const params = new URLSearchParams({action:'getQuestions', studentId: studentId, callback: cbName});
+    script.src = GAS_URL + '?' + params.toString();
+    script.onerror = () => { cleanup(); alert('通信エラーが発生しました。'); };
+    function cleanup() {
+      clearTimeout(timer); delete window[cbName];
+      if(script.parentNode) script.parentNode.removeChild(script);
+    }
+    document.head.appendChild(script);
+  }
+
+  function applyQuestions(data) {
+    // グローバル変数にデータをセット
+    QD          = data.QD          || {};
+    LIS_Q       = data.LIS_Q       || [];
+    Q5_MODEL    = data.Q5_MODEL    || '';
+    Q5_POINTS   = data.Q5_POINTS   || [];
+    Q6_MODEL_YES = data.Q6_MODEL_YES || '';
+    Q6_MODEL_NO  = data.Q6_MODEL_NO  || '';
+    Q6_POINTS   = data.Q6_POINTS   || [];
+    // ローディング非表示
+    const loadingEl = document.getElementById('questions-loading');
+    if(loadingEl) loadingEl.style.display = 'none';
+    // 問題を描画してから状態復元
+    buildQ1(); buildQ2(); buildQ3();
+    loadState();
+    updateScore();
+  }
+  function loginError(msg){
+    const err=document.getElementById('login-error');
+    err.innerHTML=msg||'生徒番号または氏名が一致しません。';
+    err.style.display='block';
+    setTimeout(()=>err.style.display='none',4000);
+    btn.disabled=false;
+    btn.innerHTML=origHTML;
+  }
+
+  // まずfetchで試みる
+  try{
+    const res=await fetch(GAS_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'login',studentId:id,name:name})
+    });
+    const data=await res.json();
+    if(data.ok){loginSuccess(data.email, data.isAdmin);}
+    else{loginError(data.error);}
+    return;
+  }catch(e){
+    // fetchが失敗した場合はJSONPにフォールバック
+  }
+
+  // JSONPフォールバック
+  const cbName='_gasCallback_'+Date.now();
+  const timer=setTimeout(()=>{
+    cleanup();
+    loginError('通信タイムアウトです。時間をおいて再度お試しください。');
+  },15000);
+  window[cbName]=function(data){
+    cleanup();
+    if(data.ok){loginSuccess(data.email, data.isAdmin);}
+    else{loginError(data.error);}
+  };
+  const script=document.createElement('script');
+  const params=new URLSearchParams({action:'login',studentId:id,name:name,callback:cbName});
+  script.src=GAS_URL+'?'+params.toString();
+  script.onerror=()=>{cleanup();loginError('通信エラーが発生しました。');};
+  function cleanup(){
+    clearTimeout(timer);delete window[cbName];
+    if(script.parentNode)script.parentNode.removeChild(script);
+  }
+  document.head.appendChild(script);
+}
+
+// =========================================================
+// ★ アクセス期限チェック（クライアント側）
+// =========================================================
+(function checkDeadline() {
+  // 2027-01-25 00:00:00 JST
+  const DEADLINE = new Date('2027-01-25T00:00:00+09:00');
+  if (new Date() >= DEADLINE) {
+    // ログインフォームを隠して期限切れメッセージを表示
+    const formBody = document.getElementById('login-form-body');
+    const expiredBox = document.getElementById('login-expired');
+    if (formBody)   formBody.style.display = 'none';
+    if (expiredBox) expiredBox.style.display = 'block';
+    // ログインオーバーレイを強制表示（念のため）
+    const overlay = document.getElementById('login-overlay');
+    if (overlay) overlay.style.display = 'flex';
+  }
+})();
+
+// =========================================================
+// ★ アイドルタイムアウト（15分 = 900,000ms）
+// =========================================================
+(function setupIdleTimeout() {
+  const IDLE_MS = 15 * 60 * 1000; // 15分
+  let idleTimer = null;
+
+  function isLoggedIn() {
+    const overlay = document.getElementById('login-overlay');
+    return overlay && overlay.style.display === 'none';
+  }
+
+  function resetTimer() {
+    if (!isLoggedIn()) return; // 未ログイン時は監視不要
+    if (window._isAdmin) return; // 管理者はタイムアウトなし
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(showIdleModal, IDLE_MS);
+  }
+
+  function showIdleModal() {
+    if (!isLoggedIn()) return;
+    document.getElementById('idle-modal').classList.add('show');
+  }
+
+  // ユーザー操作を検知するイベント
+  const events = ['mousemove','mousedown','keydown','touchstart','touchmove','scroll','click'];
+  events.forEach(ev => document.addEventListener(ev, resetTimer, {passive:true}));
+
+  // ログイン成功時にタイマーを開始するためのオブザーバー
+  const overlay = document.getElementById('login-overlay');
+  if (overlay) {
+    new MutationObserver(function() {
+      if (overlay.style.display === 'none') {
+        document.body.classList.add('logged-in');
+        resetTimer(); // ログイン直後にタイマースタート
+      }
+    }).observe(overlay, {attributes:true, attributeFilter:['style']});
+  }
+})();
+
+function doLogout() {
+  if(!confirm('ログアウトしますか？')) return;
+  // ログイン画面に戻す
+  const overlay = document.getElementById('login-overlay');
+  if(overlay) overlay.style.display = 'flex';
+  // 管理タブを非表示
+  const adminTab = document.getElementById('nav-tab-admin');
+  if(adminTab) adminTab.style.display = 'none';
+  window._isAdmin = false;
+  window._adminStudentId = '';
+  // 入力フィールドをクリア
+  const idInput = document.getElementById('login-id');
+  const nameInput = document.getElementById('login-name');
+  if(idInput) idInput.value = '';
+  if(nameInput) nameInput.value = '';
+}
+
+function doIdleLogout() {
+  // モーダルを閉じてログイン画面に戻す
+  document.getElementById('idle-modal').classList.remove('show');
+  const overlay = document.getElementById('login-overlay');
+  if (overlay) overlay.style.display = 'flex';
+  // 入力フィールドをクリア
+  const idInput = document.getElementById('login-id');
+  const nameInput = document.getElementById('login-name');
+  if (idInput)   idInput.value = '';
+  if (nameInput) nameInput.value = '';
+}
+
+
+// =========================================================
+// ★ 管理ダッシュボード
+// =========================================================
+let adminData = []; // 結果集計の全行
+
+// ===== 管理画面：期間フィルター =====
+let adminFilteredRows = [];
+
+function adminGetPeriodOptions() {
+  if (!adminData.length) return { weeks: [], months: [] };
+  const dates = adminData.map(r => new Date(r.date)).filter(d => !isNaN(d));
+  if (!dates.length) return { weeks: [], months: [] };
+  const minDate = new Date(Math.min(...dates));
+  const maxDate = new Date(Math.max(...dates));
+
+  // 週単位（月曜始まり）
+  const weeks = [];
+  const startMon = new Date(minDate);
+  startMon.setDate(minDate.getDate() - ((minDate.getDay()+6)%7));
+  startMon.setHours(0,0,0,0);
+  let cur = new Date(startMon);
+  while (cur <= maxDate) {
+    const end = new Date(cur); end.setDate(cur.getDate()+6);
+    weeks.push({ label: fmtDateShort(cur) + '〜' + fmtDateShort(end), start: new Date(cur), end: new Date(end.setHours(23,59,59,999)) });
+    cur.setDate(cur.getDate()+7);
+  }
+
+  // 月単位
+  const months = [];
+  let y = minDate.getFullYear(), m = minDate.getMonth();
+  while (y < maxDate.getFullYear() || (y === maxDate.getFullYear() && m <= maxDate.getMonth())) {
+    const start = new Date(y, m, 1);
+    const end = new Date(y, m+1, 0, 23, 59, 59, 999);
+    months.push({ label: y + '年' + (m+1) + '月', start, end });
+    m++; if (m > 11) { m = 0; y++; }
+  }
+  return { weeks, months };
+}
+
+function fmtDateShort(d) {
+  return (d.getMonth()+1) + '/' + d.getDate();
+}
+
+function adminBuildFilter() {
+  const { weeks, months } = adminGetPeriodOptions();
+
+  // 単位選択
+  const unitEl = document.getElementById('admin-filter-unit');
+  // 開始・終了プルダウンを更新
+  function updateRangeOptions() {
+    const unit = unitEl.value;
+    const items = unit === 'week' ? weeks : months;
+    const startEl = document.getElementById('admin-filter-start');
+    const endEl = document.getElementById('admin-filter-end');
+    startEl.innerHTML = items.map((it,i) => '<option value="'+i+'">'+it.label+'</option>').join('');
+    endEl.innerHTML = items.map((it,i) => '<option value="'+i+'">'+it.label+'</option>').join('');
+    endEl.selectedIndex = items.length - 1;
+  }
+  unitEl.onchange = updateRangeOptions;
+  updateRangeOptions();
+}
+
+function adminApplyFilter() {
+  const unit = document.getElementById('admin-filter-unit').value;
+  const { weeks, months } = adminGetPeriodOptions();
+  const items = unit === 'week' ? weeks : months;
+  const si = parseInt(document.getElementById('admin-filter-start').value);
+  const ei = parseInt(document.getElementById('admin-filter-end').value);
+  if (si > ei) { alert('開始は終了より前を選んでください。'); return; }
+  const start = items[si].start;
+  const end = items[ei].end;
+  adminFilteredRows = adminData.filter(r => {
+    const d = new Date(r.date);
+    return d >= start && d <= end;
+  });
+  const label = items[si].label + (si===ei ? '' : ' 〜 ' + items[ei].label);
+  document.getElementById('admin-period-label').textContent = '📅 ' + label;
+  document.getElementById('admin-period-label').style.display = '';
+  renderAdminTable(adminFilteredRows, items, si, ei, unit);
+}
+
+function adminResetFilter() {
+  adminFilteredRows = adminData;
+  document.getElementById('admin-period-label').style.display = 'none';
+  document.getElementById('admin-filter-unit').value = 'week';
+  adminBuildFilter();
+  renderAdminTable(adminData);
+}
+
+// ===== 推移グラフ描画 =====
+function renderTrendChart(allRows, items, si, ei, unit) {
+  const wrap = document.getElementById('admin-trend-wrap');
+  if (!items || items.length === 0) { wrap.style.display='none'; return; }
+  wrap.style.display = '';
+  const chart = document.getElementById('admin-trend-chart');
+  chart.innerHTML = '';
+
+  // 各期間ごとの平均スコアを計算
+  const periodData = items.slice(si, ei+1).map(it => {
+    const pRows = allRows.filter(r => { const d=new Date(r.date); return d>=it.start&&d<=it.end; });
+    let wSum=0,wCnt=0,lSum=0,lCnt=0;
+    pRows.forEach(r => {
+      const w=parseInt(r.q1to3); if(!isNaN(w)){wSum+=w;wCnt++;}
+      const l=parseInt(r.lis);   if(!isNaN(l)){lSum+=l;lCnt++;}
+    });
+    return {
+      label: unit==='week' ? it.label.split('〜')[0] : it.label.replace('年','年\n'),
+      wAvg: wCnt ? wSum/wCnt : null,
+      lAvg: lCnt ? lSum/lCnt : null,
+      count: pRows.length
+    };
+  });
+
+  const maxH = 100; // px
+  periodData.forEach(pd => {
+    const wPct = pd.wAvg !== null ? pd.wAvg/31 : 0;
+    const lPct = pd.lAvg !== null ? pd.lAvg/30 : 0;
+    const wrap2 = document.createElement('div');
+    wrap2.className = 'admin-trend-bar-wrap';
+    wrap2.innerHTML =
+      '<div class="admin-trend-val" style="color:var(--accent);font-size:9px">' + (pd.wAvg!==null?pd.wAvg.toFixed(1):'—') + '</div>' +
+      '<div class="admin-trend-bar write" style="height:'+Math.round(wPct*maxH)+'px;margin-bottom:2px"></div>' +
+      '<div class="admin-trend-val" style="color:#0f6e56;font-size:9px">' + (pd.lAvg!==null?pd.lAvg.toFixed(1):'—') + '</div>' +
+      '<div class="admin-trend-bar lis" style="height:'+Math.round(lPct*maxH)+'px"></div>' +
+      '<div class="admin-trend-label">' + pd.label + '<br><span style="color:#9b9890">'+pd.count+'件</span></div>';
+    chart.appendChild(wrap2);
+  });
+}
+
+// ===== 生徒別推移グラフ =====
+function renderStudentTrend(rows) {
+  const el = document.getElementById('admin-student-trend');
+  if (rows.length < 2) { el.style.display='none'; return; }
+  el.style.display = '';
+  const chart = document.getElementById('admin-mini-chart');
+  chart.innerHTML = '';
+  const maxH = 70;
+  rows.forEach((row, i) => {
+    const w = parseInt(row.q1to3); const l = parseInt(row.lis);
+    const wPct = !isNaN(w) ? w/31 : 0;
+    const lPct = !isNaN(l) ? l/30 : 0;
+    const wrap2 = document.createElement('div');
+    wrap2.className = 'admin-mini-bar-wrap';
+    wrap2.innerHTML =
+      '<div class="admin-mini-bar write" style="height:'+Math.round(wPct*maxH)+'px;margin-bottom:1px"></div>' +
+      '<div class="admin-mini-bar lis" style="height:'+Math.round(lPct*maxH)+'px"></div>' +
+      '<div class="admin-mini-label">#'+(i+1)+'</div>';
+    chart.appendChild(wrap2);
+  });
+}
+
+// ===== 差分ハイライト =====
+function diffHighlight(prev, curr) {
+  if (!prev || !curr) return curr || '';
+  // 文単位で新規追加部分を黄色ハイライト
+  const prevWords = new Set(prev.split(/\s+/));
+  return curr.split(/\s+/).map(w => prevWords.has(w) ? w : '<span class="diff-new">'+w+'</span>').join(' ');
+}
+
+function adminShowList() {
+  document.getElementById('admin-list-view').style.display = 'block';
+  document.getElementById('admin-detail-view').style.display = 'none';
+}
+
+function adminShowDetail(studentId) {
+  const sourceRows = adminFilteredRows.length ? adminFilteredRows : adminData;
+  const rows = sourceRows.filter(r => r.studentId === studentId);
+  if (!rows.length) return;
+
+  // 最新順に並べる
+  const sorted = rows.slice().sort((a,b) => new Date(b.date)-new Date(a.date));
+  const latest = sorted[0];
+
+  document.getElementById('admin-list-view').style.display = 'none';
+  document.getElementById('admin-detail-view').style.display = 'block';
+  document.getElementById('admin-detail-name').textContent = latest.name + '（' + latest.studentId + '）';
+  document.getElementById('admin-detail-sub').textContent =
+    '提出回数：' + rows.length + '回　最終送信：' + latest.date;
+
+  // スコアグリッド（2行：筆記・リスニング）
+  const writeItems = [
+    { label:'大問1-3<br>合計', val:latest.q1to3, max:31, total:true },
+    { label:'大問1', val:latest.q1, max:17 },
+    { label:'大問2', val:latest.q2, max:6 },
+    { label:'大問3', val:latest.q3, max:8 },
+  ];
+  const lisItems = [
+    { label:'リスニング<br>合計', val:latest.lis, max:30, total:true },
+    { label:'第1部', val:latest.lp1, max:15 },
+    { label:'第2部', val:latest.lp2, max:15 },
+  ];
+
+  function renderScoreItem(item) {
+    const numVal = parseInt(item.val);
+    const hasVal = !isNaN(numVal) && item.val !== '';
+    const pct = hasVal ? Math.round(numVal / item.max * 100) : null;
+    const pctColor = pct === null ? '#9b9890' : pct >= 70 ? '#065f46' : pct >= 50 ? '#92400e' : '#991b1b';
+    return '<div class="admin-score-item' + (item.total?' total':'') + '">' +
+      '<div class="asi-label">' + item.label + '</div>' +
+      '<div class="asi-val" style="color:' + pctColor + '">' + (hasVal ? numVal : '—') + '</div>' +
+      '<div class="asi-max">/ ' + item.max + '</div>' +
+      (pct !== null ? '<div class="asi-pct" style="color:' + pctColor + '">' + pct + '%</div>' : '') +
+      '</div>';
+  }
+
+  function renderScoreRow(items) {
+    return '<div class="admin-score-row">' +
+      items.map((item, i) =>
+        (i > 0 ? '<span class="admin-score-arrow">→</span>' : '') + renderScoreItem(item)
+      ).join('') +
+      '</div>';
+  }
+
+  const grid = document.getElementById('admin-score-grid');
+  grid.innerHTML = renderScoreRow(writeItems) + renderScoreRow(lisItems);
+
+  // 大問5・6テキスト表示（最新）
+  const writingEl = document.getElementById('admin-detail-writing');
+  const wLines = [];
+  if (latest.q5status || latest.q5answer) {
+    wLines.push('<div style="font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:4px">大問4（英文要約）</div>');
+    if (latest.q5status) wLines.push('<div style="font-size:12px;color:var(--muted);margin-bottom:4px">状況：'+latest.q5status+'</div>');
+    if (latest.q5answer) wLines.push('<div class="admin-writing-box">'+latest.q5answer+'</div>');
+  }
+  if (latest.q6status || latest.q6answer) {
+    wLines.push('<div style="font-size:13px;font-weight:700;color:#1a3a6e;margin:12px 0 4px">大問5（意見文）</div>');
+    if (latest.q6status) wLines.push('<div style="font-size:12px;color:var(--muted);margin-bottom:4px">状況：'+latest.q6status+'</div>');
+    if (latest.q6answer) wLines.push('<div class="admin-writing-box">'+latest.q6answer+'</div>');
+  }
+  writingEl.innerHTML = wLines.length ? wLines.join('') : '<div style="font-size:13px;color:var(--muted)">大問4・5の提出なし</div>';
+
+  // 生徒別推移グラフ（時系列順）
+  const chronoRows = rows.slice().sort((a,b) => new Date(a.date)-new Date(b.date));
+  renderStudentTrend(chronoRows);
+
+  // 送信履歴（最新順・差分ハイライト付き）
+  const recEl = document.getElementById('admin-detail-records');
+  recEl.innerHTML = '';
+  sorted.forEach((row, idx) => {
+    const recNo = sorted.length - idx;
+    const prevRow = sorted[idx+1] || null;
+    const card = document.createElement('div');
+    card.className = 'admin-record-card';
+    const isNew = idx === 0;
+    card.innerHTML = '<div class="admin-record-head">' +
+      '<span>送信 #' + recNo + (isNew?' <span style="font-size:11px;background:#dbeafe;color:#1a4a8a;border-radius:8px;padding:1px 7px">最新</span>':'') + '</span>' +
+      '<span style="font-weight:400;color:#6b6960">' + row.date + '</span></div>';
+
+    const body = document.createElement('div');
+    body.className = 'admin-record-body';
+    const lines = [];
+    lines.push('【大問1-3】　大問1:' + fmtScore(row.q1,17) + '　大問2:' + fmtScore(row.q2,6) + '　大問3:' + fmtScore(row.q3,8) + '　合計:' + fmtScore(row.q1to3,31));
+    lines.push('【リスニング】　合計:' + fmtScore(row.lis,30) + '　第1部:' + fmtScore(row.lp1,15) + '　第2部:' + fmtScore(row.lp2,15));
+    body.textContent = lines.join('\n');
+    card.appendChild(body);
+
+    // 大問5・6（差分ハイライト）
+    if (row.q5answer || row.q6answer) {
+      const wBox = document.createElement('div');
+      wBox.style.cssText = 'padding:.6rem 1.1rem;border-top:1px solid var(--border);';
+      if (row.q5answer) {
+        const prev5 = prevRow ? prevRow.q5answer : '';
+        wBox.innerHTML += '<div style="font-size:12px;font-weight:700;color:#1a3a6e;margin-bottom:3px">大問4</div>' +
+          '<div class="admin-writing-box">' + diffHighlight(prev5, row.q5answer) + '</div>';
+      }
+      if (row.q6answer) {
+        const prev6 = prevRow ? prevRow.q6answer : '';
+        wBox.innerHTML += '<div style="font-size:12px;font-weight:700;color:#1a3a6e;margin:8px 0 3px">大問5</div>' +
+          '<div class="admin-writing-box">' + diffHighlight(prev6, row.q6answer) + '</div>';
+      }
+      card.appendChild(wBox);
+    }
+    recEl.appendChild(card);
+  });
+
+  window.scrollTo(0, 0);
+}
+
+function fmtScore(val, max) {
+  const n = parseInt(val);
+  if (isNaN(n) || val === '') return '未提出';
+  return n + '/' + max + '（' + Math.round(n / max * 100) + '%）';
+}
+
+function adminLoad() {
+  document.getElementById('admin-tbody').innerHTML =
+    '<tr><td colspan="8" class="admin-loading">データを読み込んでいます…</td></tr>';
+  document.getElementById('admin-error').style.display = 'none';
+  document.getElementById('admin-last-updated').innerHTML = '読み込み中…';
+
+  const cbName = '_adminCb_' + Date.now();
+  const timer = setTimeout(() => {
+    cleanup();
+    showAdminError('タイムアウトしました。再度お試しください。');
+  }, 20000);
+
+  window[cbName] = function(data) {
+    cleanup();
+    if (data.ok) {
+      adminData = data.rows || [];
+      adminFilteredRows = adminData;
+      adminBuildFilter();
+      renderAdminTable(adminData);
+    } else {
+      showAdminError(data.error || 'データ取得に失敗しました。');
+    }
+  };
+
+  fetch(GAS_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify({action: 'getResults', studentId: window._adminStudentId || '00000000'})
+  }).then(r => r.json()).then(data => {
+    clearTimeout(timer);
+    delete window[cbName];
+    if (data.ok) {
+      adminData = data.rows || [];
+      adminFilteredRows = adminData;
+      adminBuildFilter();
+      renderAdminTable(adminData);
+    } else {
+      showAdminError(data.error || 'データ取得に失敗しました。');
+    }
+  }).catch(() => {
+    const script = document.createElement('script');
+    const params = new URLSearchParams({action: 'getResults', studentId: window._adminStudentId || '00000000', callback: cbName});
+    script.src = GAS_URL + '?' + params.toString();
+    script.onerror = () => { cleanup(); showAdminError('通信エラーが発生しました。'); };
+    document.head.appendChild(script);
+    function cleanup() {
+      clearTimeout(timer); delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+  });
+
+  function cleanup() {
+    clearTimeout(timer); delete window[cbName];
+  }
+}
+
+function showAdminError(msg) {
+  const el = document.getElementById('admin-error');
+  el.textContent = '⚠️ ' + msg;
+  el.style.display = 'block';
+  document.getElementById('admin-tbody').innerHTML =
+    '<tr><td colspan="8" style="text-align:center;color:#6b6960;padding:2rem;">データなし</td></tr>';
+}
+
+function renderAdminTable(rows, items, si, ei, unit) {
+  const byStudent = {};
+  rows.forEach(row => {
+    if (!byStudent[row.studentId]) byStudent[row.studentId] = [];
+    byStudent[row.studentId].push(row);
+  });
+
+  const students = Object.values(byStudent);
+  const totalSubmits = rows.length;
+  const totalStudents = students.length;
+
+  let writeSum=0, writeCount=0, lisSum=0, lisCount=0;
+  rows.forEach(r => {
+    const w = parseInt(r.q1to3); if (!isNaN(w)) { writeSum+=w; writeCount++; }
+    const l = parseInt(r.lis);   if (!isNaN(l)) { lisSum+=l;   lisCount++; }
+  });
+
+  document.getElementById('admin-stat-total').textContent = totalSubmits;
+  document.getElementById('admin-stat-students').textContent = totalStudents;
+  document.getElementById('admin-stat-avg-write').textContent = writeCount ? (writeSum/writeCount).toFixed(1) : '—';
+  document.getElementById('admin-stat-avg-lis').textContent = lisCount ? (lisSum/lisCount).toFixed(1) : '—';
+
+  const now = new Date();
+  document.getElementById('admin-last-updated').textContent =
+    '最終更新：' + now.getFullYear() + '/' + (now.getMonth()+1) + '/' + now.getDate() +
+    ' ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+
+  // 推移グラフ
+  if (items) renderTrendChart(rows, items, si, ei, unit);
+  else document.getElementById('admin-trend-wrap').style.display='none';
+
+  if (students.length === 0) {
+    document.getElementById('admin-tbody').innerHTML =
+      '<tr><td colspan="8" style="text-align:center;color:#6b6960;padding:2rem;">まだ提出データがありません</td></tr>';
+    return;
+  }
+
+  const tbody = document.getElementById('admin-tbody');
+  tbody.innerHTML = '';
+  students.forEach(sRows => {
+    const latest = sRows.slice().sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+    const count = sRows.length;
+    const tr = document.createElement('tr');
+    tr.onclick = (e) => { if (!e.target.closest('.proofread-cb-wrap')) adminShowDetail(latest.studentId); };
+
+    // 大問4・5の提出日を判定（タイプ送信 or 写メ）
+    function getSubmitDate(status, photoDate, rowDate) {
+      if (photoDate) return fmtDateOnly(photoDate);
+      if (status && status !== '未提出' && status !== '') return fmtDateOnly(rowDate);
+      return '<span style="color:#9b9890">未提出</span>';
+    }
+    const q5date = getSubmitDate(latest.q5status, latest.q5photoDate, latest.date);
+    const q6date = getSubmitDate(latest.q6status, latest.q6photoDate, latest.date);
+
+    // 添削済チェックボックス
+    function proofreadCell(q, proofreadDate, studentId) {
+      const checked = !!proofreadDate;
+      const label = proofreadDate ? fmtDateOnly(proofreadDate) : '—';
+      return '<div class="proofread-cb-wrap" style="display:flex;align-items:center;gap:5px;">' +
+        '<input type="checkbox" ' + (checked?'checked':'') +
+        ' onchange="adminToggleProofread(this,\'' + studentId + '\',\'' + q + '\')" style="cursor:pointer;width:15px;height:15px;">' +
+        '<span style="font-size:12px;color:' + (checked?'#065f46':'#9b9890') + '">' + label + '</span>' +
+        '</div>';
+    }
+
+    tr.innerHTML =
+      '<td style="font-weight:600">' + latest.studentId + '</td>' +
+      '<td>' + latest.name + '</td>' +
+      '<td style="color:#6b6960;font-size:12px">' + fmtDateJP(latest.date) + '</td>' +
+      '<td style="text-align:center"><span class="admin-submit-badge">' + count + '回</span></td>' +
+      '<td>' + scoreill_simple(latest.q1to3, 31) + '</td>' +
+      '<td>' + scoreill_simple(latest.lis, 30) + '</td>' +
+      '<td style="font-size:12px">' + q5date + '</td>' +
+      '<td>' + proofreadCell('q5', latest.q5proofread, latest.studentId) + '</td>' +
+      '<td style="font-size:12px">' + q6date + '</td>' +
+      '<td>' + proofreadCell('q6', latest.q6proofread, latest.studentId) + '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function fmtDateOnly(str) {
+  if (!str) return '—';
+  const d = new Date(str);
+  if (!isNaN(d)) return (d.getMonth()+1) + '/' + d.getDate();
+  const m = String(str).match(/(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+  if (m) return parseInt(m[2]) + '/' + parseInt(m[3]);
+  return str;
+}
+
+function fmtDateJP(str) {
+  if (!str) return '—';
+  const days = ['日','月','火','水','木','金','土'];
+  const d = new Date(str);
+  if (!isNaN(d)) {
+    return d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日(' + days[d.getDay()] + ')' +
+      String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  }
+  const m = String(str).match(/(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})[^\d](\d{1,2}):(\d{2})/);
+  if (!m) return str;
+  const d2 = new Date(parseInt(m[1]), parseInt(m[2])-1, parseInt(m[3]));
+  return m[1] + '年' + parseInt(m[2]) + '月' + parseInt(m[3]) + '日(' + days[d2.getDay()] + ')' + m[4] + ':' + m[5];
+}
+
+// 添削済チェックボックス操作
+function adminToggleProofread(checkbox, targetStudentId, question) {
+  const now = new Date();
+  const dateStr = now.getFullYear() + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' +
+    String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0');
+  const value = checkbox.checked ? dateStr : '';
+  const label = checkbox.nextElementSibling;
+  if (label) {
+    label.textContent = checkbox.checked ? fmtDateOnly(dateStr) : '—';
+    label.style.color = checkbox.checked ? '#065f46' : '#9b9890';
+  }
+
+  fetch(GAS_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify({
+      action: 'setProofread',
+      studentId: '00000000',
+      targetStudentId: targetStudentId,
+      question: question,
+      date: value
+    })
+  }).then(r => r.json()).then(data => {
+    if (!data.ok) { alert('保存に失敗しました：' + (data.error||'')); checkbox.checked = !checkbox.checked; }
+  }).catch(() => {
+    alert('通信エラーが発生しました。'); checkbox.checked = !checkbox.checked;
+  });
+}
+
+// スコアpill表示
+function scoreill_simple(val, max) {
+  const n = parseInt(val);
+  if (isNaN(n) || String(val) === '') return '<span class="admin-score-pill admin-score-none">未提出</span>';
+  const pct = Math.round(n / max * 100);
+  const cls = pct >= 70 ? 'admin-score-high' : pct >= 50 ? 'admin-score-mid' : 'admin-score-low';
+  return '<span class="admin-score-pill ' + cls + '">' + n + '/' + max + '（' + pct + '%）</span>';
+}
+function scorepill(val, pct, max) { return scoreill_simple(val, max); }
+function scorehill(val, pct2, max) { return scoreill_simple(val, max); }
+
+// ─── CSV / Excel ダウンロード ───
+function adminDownloadCSV() {
+  if (!adminData.length) { alert('データがありません。先に更新してください。'); return; }
+  const header = ['送信日時','生徒番号','氏名','大問1','大問2','大問3','筆記合計','リスニング','L第1部','L第2部','大問4状況','大問4回答','大問5状況','大問5回答'];
+  const rows = adminData.map(r => [
+    r.date, r.studentId, r.name,
+    r.q1, r.q2, r.q3, r.q1to3,
+    r.lis, r.lp1, r.lp2,
+    r.q5status, r.q5answer, r.q6status, r.q6answer
+  ].map(v => '"' + String(v||'').replace(/"/g,'""') + '"'));
+  const csv = '﻿' + [header, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = '英検準2級プラスSet1_結果_' + fmtDateFile() + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function adminDownloadExcel() {
+  if (!adminData.length) { alert('データがありません。先に更新してください。'); return; }
+  // TSV形式でExcelに貼れるデータ + xlsとして出力
+  const header = ['送信日時','生徒番号','氏名','大問1','大問2','大問3','筆記合計','リスニング','L第1部','L第2部','大問4状況','大問4回答','大問5状況','大問5回答'];
+  const rows = adminData.map(r => [
+    r.date, r.studentId, r.name,
+    r.q1, r.q2, r.q3, r.q1to3,
+    r.lis, r.lp1, r.lp2,
+    r.q5status, r.q5answer, r.q6status, r.q6answer
+  ]);
+  // HTML tableとしてxls出力（Excelで直接開ける）
+  let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
+  html += '<head><meta charset="UTF-8"><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>結果集計</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+  html += '<table><tr>' + header.map(h => '<th>' + h + '</th>').join('') + '</tr>';
+  rows.forEach(r => { html += '<tr>' + r.map(v => '<td>' + String(v||'') + '</td>').join('') + '</tr>'; });
+  html += '</table></body></html>';
+  const blob = new Blob(['﻿' + html], {type:'application/vnd.ms-excel;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = '英検準2級プラスSet1_結果_' + fmtDateFile() + '.xls';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function fmtDateFile() {
+  const d = new Date();
+  return d.getFullYear() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2);
+}
+
+// 管理ページ表示時に自動ロード（goPageはすでに定義済みのため直接呼び出し側で処理）
+
+// 写メ提出済みボタン
+function submitPhotoQ5(){
+  if(submitted.q5){
+    alert('すでに提出済みです。');
+    return;
+  }
+  if(!confirm('大問4（写メ）を提出済みとして記録しますか？\nメールで写真を送信してから押してください。')){return;}
+  submitted.q5=true;
+  scores.q5=1;
+  const btn=document.getElementById('q5-photo-submit');
+  if(btn){btn.disabled=true;btn.style.opacity='0.5';}
+  const done=document.getElementById('q5-photo-done');
+  if(done){done.style.display='block';}
+  updateScore();
+  saveState();
+  // GASに写メ提出日を送信
+  fetch(GAS_URL,{
+    method:'POST',headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({action:'submitPhoto',studentId:window._studentId||'',question:'q5'})
+  }).catch(()=>{});
+}
+
+function submitPhotoQ6(){
+  if(submitted.q6){
+    alert('すでに提出済みです。');
+    return;
+  }
+  if(!confirm('大問5（写メ）を提出済みとして記録しますか？\nメールで写真を送信してから押してください。')){return;}
+  submitted.q6=true;
+  scores.q6=1;
+  const btn=document.getElementById('q6-photo-submit');
+  if(btn){btn.disabled=true;btn.style.opacity='0.5';}
+  const done=document.getElementById('q6-photo-done');
+  if(done){done.style.display='block';}
+  updateScore();
+  saveState();
+  // GASに写メ提出日を送信
+  fetch(GAS_URL,{
+    method:'POST',headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({action:'submitPhoto',studentId:window._studentId||'',question:'q6'})
+  }).catch(()=>{});
+}
+
+// buildQ1〜loadState はログイン後にapplyQuestions()内で呼び出すため、ここでは呼ばない
+// buildQ1();buildQ2();buildQ3();loadState();updateScore();
+
+// ===== Ctrl+P / ブラウザ印刷の自動対応 =====
+window.addEventListener('beforeprint', function() {
+  // 現在activeなページを特定
+  const activePage = document.querySelector('.page.active');
+  if (!activePage) return;
+  const pageId = activePage.id; // 例: 'page-q1', 'page-listening'
+
+  if (pageId === 'page-listening') {
+    // リスニング：lis-result が表示中なら解答解説モード
+    const lisResult = document.getElementById('lis-result');
+    if (lisResult && lisResult.style.display !== 'none' && lisResult.innerHTML.trim() !== '') {
+      document.body.classList.add('print-answer-only');
+    }
+  } else if (pageId && pageId.startsWith('page-q')) {
+    // 大問1〜6：Ctrl+Pは問題＋解答解説をそのまま印刷（print-answer-onlyは付けない）
+    // ※ 印刷ボタンからの場合はprintSection()内でクラスを制御するため、ここでは何もしない
+  }
+  // ホーム・管理画面は何もしない（そのまま印刷）
+});
+
+window.addEventListener('afterprint', function() {
+  document.body.classList.remove('print-answer-only');
+});
+
+</script>
+
+<!-- ===== 管理ダッシュボード ===== -->
+<div class="page" id="page-admin">
+  <!-- 生徒一覧ビュー -->
+  <div id="admin-list-view">
+    <div class="admin-header">
+      <div class="admin-header-left">
+        <h2>📊 本部管理ダッシュボード</h2>
+        <p id="admin-last-updated">読み込み中…</p>
+      </div>
+      <div class="admin-header-right">
+        <button class="admin-refresh-btn" onclick="adminLoad()">🔄 更新</button>
+        <button class="admin-dl-btn csv" onclick="adminDownloadCSV()">⬇️ CSV</button>
+        <button class="admin-dl-btn excel" onclick="adminDownloadExcel()">⬇️ Excel</button>
+      </div>
+    </div>
+
+    <!-- 期間フィルター -->
+    <div class="admin-filter-bar">
+      <label>単位</label>
+      <select id="admin-filter-unit">
+        <option value="week">週単位</option>
+        <option value="month">月単位</option>
+      </select>
+      <label>開始</label>
+      <select id="admin-filter-start"></select>
+      <label>終了</label>
+      <select id="admin-filter-end"></select>
+      <button class="admin-filter-btn" onclick="adminApplyFilter()">絞り込む</button>
+      <button class="admin-filter-reset" onclick="adminResetFilter()">リセット</button>
+      <span id="admin-period-label" class="admin-period-label" style="display:none"></span>
+    </div>
+
+    <!-- サマリー -->
+    <div class="admin-stats">
+      <div class="admin-stat-card"><div class="admin-stat-num" id="admin-stat-total">—</div><div class="admin-stat-label">総提出件数</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-num" id="admin-stat-students">—</div><div class="admin-stat-label">提出生徒数</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-num" id="admin-stat-avg-write">—</div><div class="admin-stat-label">大問1-3平均（/31）</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-num" id="admin-stat-avg-lis">—</div><div class="admin-stat-label">リスニング平均（/30）</div></div>
+    </div>
+
+    <!-- 推移グラフ -->
+    <div class="admin-trend-wrap" id="admin-trend-wrap" style="display:none;">
+      <div class="admin-trend-title">📈 期間別スコア推移</div>
+      <div class="admin-trend-chart" id="admin-trend-chart"></div>
+      <div class="admin-trend-legend">
+        <span><i style="background:var(--accent)"></i>大問1-3平均</span>
+        <span><i style="background:#0f6e56"></i>リスニング平均</span>
+      </div>
+    </div>
+
+    <div id="admin-error" class="admin-error" style="display:none;"></div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>生徒番号</th>
+            <th>氏名</th>
+            <th>最終送信</th>
+            <th>提出回数</th>
+            <th>大問1-3</th>
+            <th>リスニング</th>
+            <th>大問4提出日</th>
+            <th>大問4添削済</th>
+            <th>大問5提出日</th>
+            <th>大問5添削済</th>
+          </tr>
+        </thead>
+        <tbody id="admin-tbody">
+          <tr><td colspan="10" class="admin-loading">データを読み込んでいます…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 生徒詳細ビュー -->
+  <div id="admin-detail-view" style="display:none;">
+    <div class="admin-detail-header">
+      <button class="admin-detail-back" onclick="adminShowList()">← 一覧に戻る</button>
+      <div>
+        <div class="admin-detail-title" id="admin-detail-name">—</div>
+        <div class="admin-detail-sub" id="admin-detail-sub">—</div>
+      </div>
+    </div>
+
+    <!-- スコアグリッド -->
+    <div class="admin-score-grid" id="admin-score-grid"></div>
+
+    <!-- 大問5・6テキスト -->
+    <div class="admin-record-card" style="margin-bottom:1rem;">
+      <div class="admin-record-head">✍️ ライティング提出内容（最新）</div>
+      <div style="padding:1rem 1.1rem;" id="admin-detail-writing"></div>
+    </div>
+
+    <!-- 生徒別推移グラフ -->
+    <div class="admin-student-trend" id="admin-student-trend" style="display:none;">
+      <div class="admin-student-trend-title">📈 この生徒のスコア推移（送信順）
+        <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:8px">青:大問1-3　緑:リスニング</span>
+      </div>
+      <div class="admin-mini-chart" id="admin-mini-chart"></div>
+    </div>
+
+    <!-- 送信履歴 -->
+    <div style="font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:.75rem;">📋 送信履歴（最新順）
+      <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:8px">黄色ハイライト＝前回から変更された箇所</span>
+    </div>
+    <div id="admin-detail-records"></div>
+  </div>
+</div>
+
+<!-- ===== 著作権・免責フッター ===== -->
+<footer class="site-footer">
+  <div class="footer-copy">© 2026 東進こども英語塾. All rights reserved.</div>
+  <div class="footer-disc">
+    <span>本教材は英検<sup>®</sup>準2級プラスの出題形式に準拠したオリジナル演習コンテンツです。</span>
+    <span>英検<sup>®</sup>は公益財団法人 日本英語検定協会の登録商標です。</span>
+    <span>本教材は同協会とは一切関係なく、公認・推薦を受けたものではありません。</span>
+    <span>本教材の無断転載・複製・再配布を禁じます。</span>
+    <span>本教材の制作にはAI技術を活用していますが、構成・内容・監修はすべて東進こども英語塾が行っています。</span>
+  </div>
+</footer>
+</body>
+</html>
