@@ -3,16 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>英検準2級プラス 演習アプリ Set1</title>
+<meta name="theme-color" content="#c9510c">
+<title>【準2級プラス】英検 演習アプリ Set1</title>
 <style>
 :root{
+  /* ★テーマ色（ここだけ変更すれば全体が変わる）準2級=ブルー／準2級プラス=オレンジ／2級=グリーン */
+  --brand-dark:#8a3a08;--brand-mid:#c9510c;--brand-deep:#5c2704;
+  --brand-light:#fde8d4;--brand-light2:#fbd9b8;--brand-pale:#fff6ee;--brand-pale2:#fffaf5;
+  --brand-border:#f3cfae;--brand-rgb:201,81,12;--brand-dark-rgb:138,58,8;
+  --accent:#d9600f;--accent-bg:#fff1e5;
   --bg:#f7f6f3;--surface:#fff;--border:#e2e0da;--border2:#cccac3;
   --text:#1a1a18;--muted:#6b6960;--hint:#9b9890;
-  --accent:#2563c4;--accent-bg:#eef3fc;
   --green:#0f6e56;--green-bg:#e1f5ee;
   --red:#993c1d;--red-bg:#faece7;
   --amber:#854f0b;--amber-bg:#faeeda;
-  --blue-dark:#1a4a8a;--blue-mid:#2563c0;--blue-light:#dbeafe;--blue-pale:#f0f6ff;
   --radius:10px;--rsm:6px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -33,16 +37,16 @@ button ruby rt{color:inherit}
 .nav-tab{padding:10px 12px 8px;font-size:13px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;transition:color .15s,border-color .15s}
 .nav-tab:hover{color:var(--text)}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
-.nav-tab.listening{color:#1a4a8a}
-.nav-tab.listening.active{color:#1a4a8a;border-bottom-color:#1a4a8a;font-weight:700}
+.nav-tab.listening{color:var(--brand-dark)}
+.nav-tab.listening.active{color:var(--brand-dark);border-bottom-color:var(--brand-dark);font-weight:700}
 /* サブタブ（大問1-6、第1-3部） */
 .nav-subtabs{display:flex;gap:0;background:#f7f6f3;border-bottom:1px solid var(--border);padding:0 1.25rem;overflow-x:auto;scrollbar-width:none;}
 .nav-subtabs::-webkit-scrollbar{display:none}
 .nav-subtab{padding:7px 10px 5px;font-size:12px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;transition:color .15s,border-color .15s;}
 .nav-subtab:hover{color:var(--text)}
 .nav-subtab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
-.nav-subtab.listening{color:#1a4a8a}
-.nav-subtab.listening.active{color:#1a4a8a;border-bottom-color:#1a4a8a;font-weight:700}
+.nav-subtab.listening{color:var(--brand-dark)}
+.nav-subtab.listening.active{color:var(--brand-dark);border-bottom-color:var(--brand-dark);font-weight:700}
 .nav-subtabs.hidden{display:none;}
 .nav-logout{margin-left:auto;padding:6px 12px;font-size:12px;font-weight:700;color:#993c1d;background:#faece7;border:1px solid #f5c6b8;border-radius:5px;cursor:pointer;white-space:nowrap;align-self:center;margin-left:8px;}
 .nav-logout:hover{background:#f5c6b8;}
@@ -62,13 +66,13 @@ button ruby rt{color:inherit}
 .sec-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:1.25rem}
 .sec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;cursor:pointer;transition:border-color .15s}
 .sec-card:hover{border-color:var(--accent)}
-.sec-card.listening-card{border-color:#b8d0f5;background:var(--blue-pale)}
-.sec-card.listening-card:hover{border-color:#1a4a8a;background:#e0ecff}
+.sec-card.listening-card{border-color:var(--brand-border);background:var(--brand-pale)}
+.sec-card.listening-card:hover{border-color:var(--brand-dark);background:var(--brand-light2)}
 .sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
 .sc-num{width:30px;height:30px;background:var(--text);color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
-.sc-num.listening-num{background:linear-gradient(135deg,#1a4a8a,#2563c0)}
+.sc-num.listening-num{background:linear-gradient(135deg,var(--brand-dark),var(--brand-mid))}
 .sc-badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--green-bg);color:var(--green);font-weight:600}
-.sc-badge.listening-badge{background:var(--blue-light);color:#1a4a8a}
+.sc-badge.listening-badge{background:var(--brand-light);color:var(--brand-dark)}
 .sc-title{font-size:14px;font-weight:600;margin-bottom:2px}
 .sc-sub{font-size:12px;color:var(--muted)}
 .sc-count{font-size:11px;color:var(--hint);margin-top:.5rem}
@@ -146,7 +150,7 @@ button ruby rt{color:inherit}
 .rc-en{font-weight:600;margin-bottom:1px}
 .rc-ja{font-size:12px;color:var(--muted);margin-bottom:2px}
 .rc-reason{font-size:12px;color:var(--muted);font-style:italic}
-.point-box{padding:.65rem .9rem;background:#eef3fc;border-left:3px solid var(--accent);border-radius:0 var(--rsm) var(--rsm) 0;font-size:13px;color:#1a3a6e;line-height:1.7}
+.point-box{padding:.65rem .9rem;background:var(--accent-bg);border-left:3px solid var(--accent);border-radius:0 var(--rsm) var(--rsm) 0;font-size:13px;color:var(--brand-deep);line-height:1.7}
 .sub-label{display:inline-flex;align-items:center;gap:8px;margin-bottom:1rem}
 .sub-main{width:32px;height:32px;background:var(--text);color:#fff;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
 .sub-sub{width:26px;height:26px;border:2px solid var(--text);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
@@ -158,14 +162,14 @@ button ruby rt{color:inherit}
 .photo-submit-steps li{font-size:13px;color:#5a4000;padding:.35rem 0;display:flex;align-items:flex-start;gap:8px;border-bottom:1px solid #f0e0a0}
 .photo-submit-steps li:last-child{border-bottom:none}
 .step-num{background:#854f0b;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
-.mail-addr{background:#fff;border:1px solid #f0c040;border-radius:var(--rsm);padding:.5rem 1rem;font-size:14px;font-weight:700;color:#2563c4;text-align:center;margin:.5rem 0;letter-spacing:.05em}
+.mail-addr{background:#fff;border:1px solid #f0c040;border-radius:var(--rsm);padding:.5rem 1rem;font-size:14px;font-weight:700;color:var(--accent);text-align:center;margin:.5rem 0;letter-spacing:.05em}
 
 /* ===== LISTENING SECTION ===== */
-.listening-banner{background:linear-gradient(135deg,#1a4a8a 0%,#2563c0 100%);color:#fff;padding:18px 20px 14px;text-align:center;border-radius:var(--radius);margin-bottom:1.5rem;box-shadow:0 3px 10px rgba(26,74,138,.2)}
+.listening-banner{background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand-mid) 100%);color:#fff;padding:18px 20px 14px;text-align:center;border-radius:var(--radius);margin-bottom:1.5rem;box-shadow:0 3px 10px rgba(var(--brand-dark-rgb),.2)}
 .listening-banner h2{font-size:1.1rem;font-weight:700;letter-spacing:.03em}
 .listening-banner p{font-size:.78rem;opacity:.85;margin-top:3px}
 
-.part-banner{background:linear-gradient(90deg,#1a4a8a,#2563c0);color:#fff;padding:12px 16px;border-radius:8px;text-align:center;margin-bottom:1.25rem}
+.part-banner{background:linear-gradient(90deg,var(--brand-dark),var(--brand-mid));color:#fff;padding:12px 16px;border-radius:8px;text-align:center;margin-bottom:1.25rem}
 .part-banner h3{font-size:.95rem;font-weight:700}
 .part-banner p{font-size:.78rem;opacity:.9;margin-top:2px}
 .part-banner ruby rt{color:rgba(255,255,255,.8)}
@@ -173,22 +177,22 @@ button ruby rt{color:inherit}
 
 /* Audio player */
 .audio-section{margin-bottom:14px}
-.audio-btn{display:flex;align-items:center;gap:10px;background:var(--blue-pale);border:2px solid var(--blue-light);border-radius:8px;padding:11px 14px;cursor:pointer;width:100%;transition:background .2s,border-color .2s;text-align:left}
-.audio-btn:hover{background:var(--blue-light);border-color:#2563c0}
-.audio-btn.playing{background:var(--blue-light);border-color:#2563c0}
+.audio-btn{display:flex;align-items:center;gap:10px;background:var(--brand-pale);border:2px solid var(--brand-light);border-radius:8px;padding:11px 14px;cursor:pointer;width:100%;transition:background .2s,border-color .2s;text-align:left}
+.audio-btn:hover{background:var(--brand-light);border-color:var(--brand-mid)}
+.audio-btn.playing{background:var(--brand-light);border-color:var(--brand-mid)}
 .audio-mode-toggle{display:flex;gap:6px;margin-bottom:8px;}
-.audio-mode-btn{flex:1;padding:6px 4px;font-size:.78rem;font-weight:700;border-radius:6px;border:2px solid #2563c0;cursor:pointer;transition:all .2s;}
-.audio-mode-btn.active{background:#2563c0;color:#fff;}
-.audio-mode-btn:not(.active){background:#fff;color:#2563c0;}
-.audio-icon{width:36px;height:36px;border-radius:50%;background:#2563c0;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.audio-mode-btn{flex:1;padding:6px 4px;font-size:.78rem;font-weight:700;border-radius:6px;border:2px solid var(--brand-mid);cursor:pointer;transition:all .2s;}
+.audio-mode-btn.active{background:var(--brand-mid);color:#fff;}
+.audio-mode-btn:not(.active){background:#fff;color:var(--brand-mid);}
+.audio-icon{width:36px;height:36px;border-radius:50%;background:var(--brand-mid);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
 .audio-info{text-align:left;flex:1}
-.audio-info .audio-title{font-size:.85rem;font-weight:600;color:#1a4a8a}
+.audio-info .audio-title{font-size:.85rem;font-weight:600;color:var(--brand-dark)}
 .audio-info .audio-hint{font-size:.72rem;color:var(--muted);margin-top:1px}
 .play-count-badge{font-size:.72rem;color:#e85d04;font-weight:600;white-space:nowrap}
 
 /* waveform */
 .waveform{display:flex;gap:3px;align-items:center;height:22px;flex-shrink:0}
-.waveform span{display:block;width:3px;background:#2563c0;border-radius:2px;animation:wave .8s infinite ease-in-out}
+.waveform span{display:block;width:3px;background:var(--brand-mid);border-radius:2px;animation:wave .8s infinite ease-in-out}
 .waveform span:nth-child(1){height:7px;animation-delay:0s}
 .waveform span:nth-child(2){height:16px;animation-delay:.15s}
 .waveform span:nth-child(3){height:11px;animation-delay:.3s}
@@ -198,19 +202,19 @@ button ruby rt{color:inherit}
 .waveform.hidden{display:none}
 
 /* Script box (Part 3) */
-.script-box{background:var(--bg);border-left:3px solid #2563c0;border-radius:0 6px 6px 0;padding:10px 14px;font-size:.83rem;color:var(--muted);line-height:1.7;margin-bottom:12px;display:none}
+.script-box{background:var(--bg);border-left:3px solid var(--brand-mid);border-radius:0 6px 6px 0;padding:10px 14px;font-size:.83rem;color:var(--muted);line-height:1.7;margin-bottom:12px;display:none}
 .script-box.show{display:block}
-.script-toggle-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:#fff;color:#2563c0;border:1.5px solid #2563c0;border-radius:20px;font-size:.78rem;font-weight:700;cursor:pointer;margin-bottom:8px;transition:background .15s}
-.script-toggle-btn:hover{background:var(--blue-pale)}
+.script-toggle-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:#fff;color:var(--brand-mid);border:1.5px solid var(--brand-mid);border-radius:20px;font-size:.78rem;font-weight:700;cursor:pointer;margin-bottom:8px;transition:background .15s}
+.script-toggle-btn:hover{background:var(--brand-pale)}
 .speed-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.speed-btn{padding:5px 12px;border-radius:20px;border:1.5px solid #2563c0;font-size:.78rem;font-weight:700;cursor:pointer;background:#fff;color:#2563c0;transition:all .15s}
-.speed-btn:hover{background:var(--blue-pale)}
-.speed-btn.active{background:#2563c0;color:#fff}
+.speed-btn{padding:5px 12px;border-radius:20px;border:1.5px solid var(--brand-mid);font-size:.78rem;font-weight:700;cursor:pointer;background:#fff;color:var(--brand-mid);transition:all .15s}
+.speed-btn:hover{background:var(--brand-pale)}
+.speed-btn.active{background:var(--brand-mid);color:#fff}
 
 /* Listening choices */
 .lis-choice{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--rsm);background:var(--surface);cursor:pointer;font-size:14px;line-height:1.5;transition:all .15s;margin-bottom:7px}
-.lis-choice:hover{border-color:#2563c0;background:var(--blue-pale)}
-.lis-choice.selected{border-color:#2563c0;background:var(--blue-pale)}
+.lis-choice:hover{border-color:var(--brand-mid);background:var(--brand-pale)}
+.lis-choice.selected{border-color:var(--brand-mid);background:var(--brand-pale)}
 .lis-choice.show-ans{border-color:var(--green);background:var(--green-bg)}
 .lis-choice.wrong{border-color:var(--red);background:var(--red-bg)}
 .lis-cn{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px}
@@ -223,33 +227,33 @@ button ruby rt{color:inherit}
 /* Listening nav */
 .lis-nav-row{display:flex;justify-content:space-between;align-items:center;padding:0;margin-top:8px}
 .lis-nav-btn{padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-size:.88rem;font-weight:700;transition:all .2s}
-.lis-nav-btn.primary{background:#2563c0;color:#fff;box-shadow:0 2px 8px rgba(37,99,192,.3)}
-.lis-nav-btn.primary:hover{background:#1a4a8a}
-.lis-nav-btn.secondary{background:var(--surface);color:#2563c0;border:2px solid #2563c0}
-.lis-nav-btn.secondary:hover{background:var(--blue-pale)}
+.lis-nav-btn.primary{background:var(--brand-mid);color:#fff;box-shadow:0 2px 8px rgba(var(--brand-rgb),.3)}
+.lis-nav-btn.primary:hover{background:var(--brand-dark)}
+.lis-nav-btn.secondary{background:var(--surface);color:var(--brand-mid);border:2px solid var(--brand-mid)}
+.lis-nav-btn.secondary:hover{background:var(--brand-pale)}
 .lis-nav-btn:disabled{opacity:.35;cursor:default}
 
 /* Listening progress */
 .lis-prog-wrap{background:var(--border);height:7px;border-radius:4px;margin-bottom:.4rem;overflow:hidden}
-.lis-prog-fill{height:100%;background:#2563c0;border-radius:4px;transition:width .4s ease}
+.lis-prog-fill{height:100%;background:var(--brand-mid);border-radius:4px;transition:width .4s ease}
 .lis-prog-label{font-size:.78rem;color:var(--muted);margin-bottom:1rem}
 
 /* Listening result */
-.lis-result-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:22px 20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(26,74,138,.08)}
-.score-circle{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#1a4a8a,#2563c0);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 4px 14px rgba(37,99,192,.3)}
+.lis-result-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:22px 20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(var(--brand-dark-rgb),.08)}
+.score-circle{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--brand-dark),var(--brand-mid));color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 4px 14px rgba(var(--brand-rgb),.3)}
 .score-circle .sc-n{font-size:2rem;font-weight:800;line-height:1}
 .score-circle .sc-d{font-size:.75rem;opacity:.85}
 .section-scores{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
-.ss-item{background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:8px;padding:10px 6px;text-align:center}
+.ss-item{background:var(--brand-pale);border:1px solid var(--brand-light);border-radius:8px;padding:10px 6px;text-align:center}
 .ss-item .ss-l{font-size:.7rem;color:var(--muted);margin-bottom:3px}
-.ss-item .ss-v{font-size:1.1rem;font-weight:800;color:#1a4a8a}
+.ss-item .ss-v{font-size:1.1rem;font-weight:800;color:var(--brand-dark)}
 .lis-review-item{background:var(--surface);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:4px solid var(--border)}
 .lis-review-item.ok{border-left-color:var(--green)}
 .lis-review-item.ng{border-left-color:var(--red)}
 
 /* Send button */
-.send-btn-blue{width:100%;padding:13px;background:#2563c0;color:#fff;border:none;border-radius:var(--rsm);font-size:.95rem;font-weight:700;cursor:pointer;letter-spacing:.03em;margin-bottom:.6rem}
-.send-btn-blue:hover{background:#1a4a8a}
+.send-btn-blue{width:100%;padding:13px;background:var(--brand-mid);color:#fff;border:none;border-radius:var(--rsm);font-size:.95rem;font-weight:700;cursor:pointer;letter-spacing:.03em;margin-bottom:.6rem}
+.send-btn-blue:hover{background:var(--brand-dark)}
 
 @media(max-width:480px){
   .home-title{font-size:22px}
@@ -336,7 +340,7 @@ button ruby rt{color:inherit}
   body:not(.print-question-only):not(.print-answer-only) .result-area.show{display:block!important;}
 
   /* 著作権ヘッダー・フッター（印刷時のみ表示） */
-  .print-header{display:block!important;border-bottom:2px solid #1a3a6e;padding-bottom:.4rem;margin-bottom:.8rem;}
+  .print-header{display:block!important;border-bottom:2px solid var(--brand-deep);padding-bottom:.4rem;margin-bottom:.8rem;}
   .print-footer{display:block!important;border-top:1px solid #ccc;padding-top:.4rem;margin-top:1rem;font-size:10px;color:#555;text-align:center;}
 
   /* 選択肢の色 */
@@ -357,13 +361,13 @@ button ruby rt{color:inherit}
 /* ===== LOGIN SCREEN ===== */
 .login-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#f7f6f3;z-index:9999;display:flex;align-items:center;justify-content:center;}
 .login-box{background:#fff;border:1px solid #e2e0da;border-radius:12px;padding:2.5rem 2rem;max-width:380px;width:90%;box-shadow:0 4px 20px rgba(0,0,0,.08);}
-.login-logo{text-align:center;font-size:22px;font-weight:700;color:#1a3a6e;margin-bottom:.4rem;}
+.login-logo{text-align:center;font-size:22px;font-weight:700;color:var(--brand-deep);margin-bottom:.4rem;}
 .login-sub{text-align:center;font-size:13px;color:#6b6960;margin-bottom:2rem;}
 .login-label{font-size:13px;font-weight:700;display:block;margin-bottom:.4rem;color:#1a1a18;}
 .login-input{width:100%;border:1px solid #cccac3;border-radius:6px;padding:.65rem .9rem;font-size:15px;font-family:inherit;outline:none;margin-bottom:1rem;box-sizing:border-box;}
-.login-input:focus{border-color:#2563c4;box-shadow:0 0 0 2px #eef3fc;}
-.login-btn{width:100%;padding:12px;background:#1a3a6e;color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.03em;}
-.login-btn:hover{background:#2563c4;}
+.login-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg);}
+.login-btn{width:100%;padding:12px;background:var(--brand-deep);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.03em;}
+.login-btn:hover{background:var(--accent);}
 .login-error{color:#993c1d;font-size:13px;text-align:center;margin-top:.75rem;display:none;}
 /* ===== DEADLINE EXPIRED / IDLE TIMEOUT ===== */
 .login-expired{background:#faece7;border:1px solid #e8b4a0;border-radius:8px;padding:1rem 1.1rem;margin-bottom:1.25rem;text-align:center;color:#993c1d;font-size:13px;line-height:1.7;}
@@ -373,13 +377,13 @@ button ruby rt{color:inherit}
 .idle-modal.show{display:flex;}
 .idle-modal-box{background:#fff;border-radius:12px;padding:2rem 1.75rem;max-width:340px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.18);}
 .idle-modal-icon{font-size:2.5rem;margin-bottom:.6rem;}
-.idle-modal-title{font-size:17px;font-weight:700;color:#1a3a6e;margin-bottom:.5rem;}
+.idle-modal-title{font-size:17px;font-weight:700;color:var(--brand-deep);margin-bottom:.5rem;}
 .idle-modal-msg{font-size:13px;color:#6b6960;line-height:1.7;margin-bottom:1.25rem;}
-.idle-modal-btn{width:100%;padding:11px;background:#1a3a6e;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;}
-.idle-modal-btn:hover{background:#2563c4;}
+.idle-modal-btn{width:100%;padding:11px;background:var(--brand-deep);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;}
+.idle-modal-btn:hover{background:var(--accent);}
 
 /* ===== ADMIN DASHBOARD ===== */
-.admin-header{background:linear-gradient(135deg,#1a3a6e 0%,#2563c4 100%);color:#fff;padding:1.5rem 1.75rem;border-radius:var(--radius);margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.admin-header{background:linear-gradient(135deg,var(--brand-deep) 0%,var(--accent) 100%);color:#fff;padding:1.5rem 1.75rem;border-radius:var(--radius);margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
 .admin-header h2{font-size:20px;font-weight:700;margin:0;}
 .admin-header p{font-size:13px;opacity:.85;margin-top:3px;}
 .admin-header-left{}
@@ -387,29 +391,29 @@ button ruby rt{color:inherit}
 .admin-dl-btn{padding:9px 16px;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;}
 .admin-dl-btn.csv{background:#e1f5ee;color:#0f6e56;}
 .admin-dl-btn.csv:hover{background:#c3edd8;}
-.admin-dl-btn.excel{background:#dbeafe;color:#1a4a8a;}
-.admin-dl-btn.excel:hover{background:#bfdbfe;}
+.admin-dl-btn.excel{background:var(--brand-light);color:var(--brand-dark);}
+.admin-dl-btn.excel:hover{background:var(--brand-light2);}
 .admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem;}
 .admin-stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;text-align:center;}
 .admin-stat-num{font-size:28px;font-weight:800;color:var(--accent);line-height:1;}
 .admin-stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
 .admin-table-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow-x:auto;margin-bottom:1.5rem;}
 .admin-table{width:100%;border-collapse:collapse;font-size:11px;}
-.admin-table th{background:#f0f4ff;color:#1a3a6e;font-weight:700;padding:7px 8px;text-align:left;border-bottom:2px solid #dbeafe;white-space:nowrap;}
+.admin-table th{background:var(--brand-pale);color:var(--brand-deep);font-weight:700;padding:7px 8px;text-align:left;border-bottom:2px solid var(--brand-light);white-space:nowrap;}
 .admin-table td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:middle;white-space:nowrap;}
 .admin-table tr:last-child td{border-bottom:none;}
-.admin-table tr:hover td{background:#fafbff;cursor:pointer;}
+.admin-table tr:hover td{background:var(--brand-pale2);cursor:pointer;}
 .admin-score-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;}
 .admin-score-high{background:#d1fae5;color:#065f46;}
 .admin-score-mid{background:#fef3c7;color:#92400e;}
 .admin-score-low{background:#fee2e2;color:#991b1b;}
 .admin-score-none{background:#f1f0ec;color:#9b9890;}
-.admin-submit-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:#dbeafe;color:#1a4a8a;}
+.admin-submit-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:var(--brand-light);color:var(--brand-dark);}
 /* 生徒詳細 */
 .admin-detail-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap;}
 .admin-detail-back{padding:8px 16px;background:#fff;border:1px solid var(--border2);border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;color:var(--muted);}
 .admin-detail-back:hover{background:var(--bg);}
-.admin-detail-title{font-size:20px;font-weight:700;color:#1a3a6e;}
+.admin-detail-title{font-size:20px;font-weight:700;color:var(--brand-deep);}
 .admin-detail-sub{font-size:13px;color:var(--muted);}
 .admin-score-grid{margin-bottom:1.5rem;}
 .admin-score-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;}
@@ -417,13 +421,13 @@ button ruby rt{color:inherit}
 .admin-score-row::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 .admin-score-arrow{color:var(--muted);font-size:14px;flex-shrink:0;}
 .admin-score-item{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1rem;text-align:center;flex-shrink:0;width:110px;}
-.admin-score-item.total{border-color:var(--accent);background:#eef3fc;width:120px;}
+.admin-score-item.total{border-color:var(--accent);background:var(--accent-bg);width:120px;}
 .admin-score-item .asi-label{font-size:12px;color:var(--muted);margin-bottom:4px;}
-.admin-score-item .asi-val{font-size:22px;font-weight:800;color:#1a3a6e;line-height:1;}
+.admin-score-item .asi-val{font-size:22px;font-weight:800;color:var(--brand-deep);line-height:1;}
 .admin-score-item .asi-max{font-size:11px;color:var(--hint);}
 .admin-score-item .asi-pct{font-size:13px;font-weight:600;margin-top:3px;}
 .admin-record-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;overflow:hidden;}
-.admin-record-head{background:#f5f4f1;padding:.75rem 1.1rem;font-size:13px;font-weight:700;color:#1a3a6e;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.admin-record-head{background:#f5f4f1;padding:.75rem 1.1rem;font-size:13px;font-weight:700;color:var(--brand-deep);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
 .admin-record-body{padding:1rem 1.1rem;font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap;word-break:break-all;}
 .admin-loading{text-align:center;padding:3rem;color:var(--muted);font-size:14px;}
 .admin-error{background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:1rem 1.1rem;color:#991b1b;font-size:13px;margin-bottom:1rem;}
@@ -434,13 +438,13 @@ button ruby rt{color:inherit}
 .admin-filter-bar label{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;}
 .admin-filter-bar select{padding:6px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;background:#fff;cursor:pointer;}
 .admin-filter-btn{padding:7px 14px;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff;}
-.admin-filter-btn:hover{background:#1a4a8a;}
+.admin-filter-btn:hover{background:var(--brand-dark);}
 .admin-filter-reset{padding:7px 14px;border:1.5px solid var(--border2);border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);}
 .admin-filter-reset:hover{background:var(--bg);}
-.admin-period-label{font-size:12px;color:var(--accent);font-weight:700;padding:4px 10px;background:#eef3fc;border-radius:10px;}
+.admin-period-label{font-size:12px;color:var(--accent);font-weight:700;padding:4px 10px;background:var(--accent-bg);border-radius:10px;}
 /* 推移グラフ */
 .admin-trend-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:1.25rem;}
-.admin-trend-title{font-size:14px;font-weight:700;color:#1a3a6e;margin-bottom:.75rem;}
+.admin-trend-title{font-size:14px;font-weight:700;color:var(--brand-deep);margin-bottom:.75rem;}
 .admin-trend-chart{display:flex;align-items:flex-end;gap:6px;height:120px;padding-bottom:24px;position:relative;}
 .admin-trend-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;}
 .admin-trend-bar{width:100%;border-radius:4px 4px 0 0;transition:height .3s;min-height:3px;position:relative;}
@@ -453,7 +457,7 @@ button ruby rt{color:inherit}
 .admin-trend-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;}
 /* 生徒別推移 */
 .admin-student-trend{background:#f8f7f4;border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1rem;}
-.admin-student-trend-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:.6rem;}
+.admin-student-trend-title{font-size:13px;font-weight:700;color:var(--brand-deep);margin-bottom:.6rem;}
 .admin-mini-chart{display:flex;align-items:flex-end;gap:4px;height:80px;padding-bottom:20px;}
 .admin-mini-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;}
 .admin-mini-bar{width:100%;border-radius:3px 3px 0 0;min-height:2px;}
@@ -467,6 +471,10 @@ button ruby rt{color:inherit}
 /* 管理タブ（通常時は非表示・JS制御） */
 .nav-tab-admin{display:none;}
 
+.lvl-badge{display:inline-block;background:var(--brand-mid);color:#fff;font-weight:700;border-radius:999px;padding:1px 9px;font-size:.85em;letter-spacing:.02em;vertical-align:middle}
+.nav{border-top:4px solid var(--brand-mid)}
+.login-box{border-top:5px solid var(--brand-mid)}
+.home-header{border-bottom:2px solid var(--brand-light)}
 </style>
 </head>
 <body>
@@ -474,9 +482,9 @@ button ruby rt{color:inherit}
 <!-- ===== 問題データ読み込み中オーバーレイ ===== -->
 <div id="questions-loading" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(247,246,243,0.92);z-index:9998;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
   <div style="font-size:2rem;">📚</div>
-  <div style="font-size:15px;font-weight:700;color:#1a3a6e;">問題データを読み込んでいます…</div>
+  <div style="font-size:15px;font-weight:700;color:var(--brand-deep);">問題データを読み込んでいます…</div>
   <div style="width:200px;height:6px;background:#e2e0da;border-radius:3px;overflow:hidden;">
-    <div style="height:100%;background:#2563c4;border-radius:3px;animation:loadbar 1.5s infinite ease-in-out;"></div>
+    <div style="height:100%;background:var(--accent);border-radius:3px;animation:loadbar 1.5s infinite ease-in-out;"></div>
   </div>
   <style>@keyframes loadbar{0%{width:0%}50%{width:80%}100%{width:100%}}</style>
 </div>
@@ -484,7 +492,7 @@ button ruby rt{color:inherit}
 <!-- ===== ログイン画面 ===== -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-box">
-    <div class="login-logo">🎧 英検<span style="color:#2563c4">準2級プラス</span> Set1</div>
+    <div class="login-logo">🎧 英検 <span class="lvl-badge">準2級プラス</span> Set1</div>
     <div class="login-sub">東進こども英語塾</div>
     <!-- 期限切れメッセージ（期限後に表示） -->
     <div class="login-expired" id="login-expired" style="display:none;">
@@ -520,9 +528,9 @@ button ruby rt{color:inherit}
   <div class="nav-inner">
     <!-- 上段：ロゴ・スコア・ログアウト・管理 -->
     <div class="nav-row1">
-      <div class="nav-logo">英検<span>準2級プラス</span> Set1</div>
+      <div class="nav-logo">英検 <span class="lvl-badge" style="color:#fff">準2級プラス</span> Set1</div>
       <div class="nav-score" id="nav-score">0 / 61問</div>
-      <button class="nav-tab-admin nav-logout" id="nav-tab-admin" onclick="goPage('admin')" style="display:none;margin-right:6px;color:#1a3a6e;background:#dbeafe;border:1px solid #b8d0f5;border-radius:5px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;">📊 管理</button>
+      <button class="nav-tab-admin nav-logout" id="nav-tab-admin" onclick="goPage('admin')" style="display:none;margin-right:6px;color:var(--brand-deep);background:var(--brand-light);border:1px solid var(--brand-border);border-radius:5px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;">📊 管理</button>
       <button class="nav-logout" onclick="doLogout()">ログアウト</button>
     </div>
     <!-- 下段：メインタブ -->
@@ -553,7 +561,7 @@ button ruby rt{color:inherit}
 <!-- ===== HOME ===== -->
 <div class="page active" id="page-home">
   <div class="home-header">
-    <div class="home-title">英検準2級プラス 演習アプリ</div>
+    <div class="home-title">英検 <span class="lvl-badge">準2級プラス</span> 演習アプリ</div>
     <div class="home-sub">Set1 ― 大問1〜5 ＋ リスニング</div>
   </div>
 
@@ -615,7 +623,7 @@ button ruby rt{color:inherit}
     </div>
   </div>
   <!-- 筆記合計バー -->
-  <div style="background:var(--accent-bg);border:1px solid #b8d0f5;border-radius:var(--rsm);padding:7px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+  <div style="background:var(--accent-bg);border:1px solid var(--brand-border);border-radius:var(--rsm);padding:7px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
     <span style="font-size:12px;color:var(--accent);font-weight:600;">筆記合計（大問1〜3・選択式）　17＋6＋8</span>
     <span style="font-size:16px;font-weight:800;color:var(--accent);">＝ 31問</span>
   </div>
@@ -631,25 +639,25 @@ button ruby rt{color:inherit}
       <div class="sc-sub">Set1</div>
       <!-- 部ごとのボックス -->
       <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:.6rem;">
-        <div style="background:#fff;border:1px solid var(--blue-light);border-radius:var(--rsm);padding:6px 4px;text-align:center;">
-          <div style="font-size:10px;color:#1a4a8a;font-weight:700;">第1部</div>
+        <div style="background:#fff;border:1px solid var(--brand-light);border-radius:var(--rsm);padding:6px 4px;text-align:center;">
+          <div style="font-size:10px;color:var(--brand-dark);font-weight:700;">第1部</div>
           <div style="font-size:11px;color:var(--muted);margin:2px 0;">対話の内容</div>
-          <div style="font-size:14px;font-weight:700;color:#1a4a8a;">15問</div>
+          <div style="font-size:14px;font-weight:700;color:var(--brand-dark);">15問</div>
           <div class="sc-score not-done" id="home-score-lp1" style="font-size:12px;">📩 送信するとスコアが表示されます</div>
         </div>
-        <div style="background:#fff;border:1px solid var(--blue-light);border-radius:var(--rsm);padding:6px 4px;text-align:center;">
-          <div style="font-size:10px;color:#1a4a8a;font-weight:700;">第2部</div>
+        <div style="background:#fff;border:1px solid var(--brand-light);border-radius:var(--rsm);padding:6px 4px;text-align:center;">
+          <div style="font-size:10px;color:var(--brand-dark);font-weight:700;">第2部</div>
           <div style="font-size:11px;color:var(--muted);margin:2px 0;">文の内容</div>
-          <div style="font-size:14px;font-weight:700;color:#1a4a8a;">15問</div>
+          <div style="font-size:14px;font-weight:700;color:var(--brand-dark);">15問</div>
           <div class="sc-score not-done" id="home-score-lp2" style="font-size:12px;">📩 送信するとスコアが表示されます</div>
         </div>
       </div>
     </div>
   </div>
   <!-- リスニング合計バー -->
-  <div style="background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--rsm);padding:7px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-    <span style="font-size:12px;color:#1a4a8a;font-weight:600;">リスニング合計（第1〜2部）　15＋15</span>
-    <span style="font-size:16px;font-weight:800;color:#1a4a8a;">＝ 30問</span>
+  <div style="background:var(--brand-pale);border:1px solid var(--brand-light);border-radius:var(--rsm);padding:7px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+    <span style="font-size:12px;color:var(--brand-dark);font-weight:600;">リスニング合計（第1〜2部）　15＋15</span>
+    <span style="font-size:16px;font-weight:800;color:var(--brand-dark);">＝ 30問</span>
   </div>
 
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;font-size:13px;color:var(--muted);text-align:center;margin-bottom:1rem">
@@ -705,7 +713,7 @@ button ruby rt{color:inherit}
   </div>
 
   <!-- 送信ボタン -->
-  <div style="background:#eef3fc;border:1px solid #b8d0f5;border-radius:var(--radius);padding:1.25rem 1.5rem;">
+  <div style="background:var(--accent-bg);border:1px solid var(--brand-border);border-radius:var(--radius);padding:1.25rem 1.5rem;">
     <p style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:.5rem;">📨 学習結果を本部に送信する</p>
     <p style="font-size:12px;color:var(--muted);margin-bottom:1rem;line-height:1.7;">大問ごとに送信することも、全部終わってから送信することもできます。</p>
     <button onclick="sendResults('all')" style="width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:var(--rsm);font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.03em;margin-bottom:.6rem;">📩 全大問＋リスニングの結果を送信する</button>
@@ -717,7 +725,7 @@ button ruby rt{color:inherit}
 <div class="page" id="page-q1">
   <div class="print-header">
     <div style="display:flex;justify-content:space-between;align-items:baseline;">
-      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問1</span>
+      <span style="font-size:13px;font-weight:700;color:var(--brand-deep);">英検準2級プラス 演習アプリ Set1 ― 大問1</span>
       <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
     </div>
   </div>
@@ -730,7 +738,7 @@ button ruby rt{color:inherit}
   <div class="action-row">
     <button class="submit-btn" id="q1-submit" onclick="checkSection('q1')">解答する</button>
     <button class="retry-btn" onclick="resetSection('q1')">もう一度</button>
-    <button class="retry-btn" onclick="sendResults('q1')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 この結果を送信</button>
+    <button class="retry-btn" onclick="sendResults('q1')" style="background:var(--accent-bg);color:var(--accent);border-color:var(--brand-border);">📩 この結果を送信</button>
   </div>
   <div class="result-area" id="q1-result"></div>
   <div id="q1-send-bottom" style="display:none;margin-top:1rem;">
@@ -745,7 +753,7 @@ button ruby rt{color:inherit}
 <div class="page" id="page-q2">
   <div class="print-header">
     <div style="display:flex;justify-content:space-between;align-items:baseline;">
-      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問2</span>
+      <span style="font-size:13px;font-weight:700;color:var(--brand-deep);">英検準2級プラス 演習アプリ Set1 ― 大問2</span>
       <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
     </div>
   </div>
@@ -782,7 +790,7 @@ button ruby rt{color:inherit}
   <div class="action-row">
     <button class="submit-btn" id="q2-submit" onclick="checkSection('q2')">解答する</button>
     <button class="retry-btn" onclick="resetSection('q2')">もう一度</button>
-    <button class="retry-btn" onclick="sendResults('q2')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 この結果を送信</button>
+    <button class="retry-btn" onclick="sendResults('q2')" style="background:var(--accent-bg);color:var(--accent);border-color:var(--brand-border);">📩 この結果を送信</button>
   </div>
   <div class="result-area" id="q2-result"></div>
   <div id="q2-send-bottom" style="display:none;margin-top:1rem;">
@@ -797,7 +805,7 @@ button ruby rt{color:inherit}
 <div class="page" id="page-q3">
   <div class="print-header">
     <div style="display:flex;justify-content:space-between;align-items:baseline;">
-      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問3</span>
+      <span style="font-size:13px;font-weight:700;color:var(--brand-deep);">英検準2級プラス 演習アプリ Set1 ― 大問3</span>
       <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
     </div>
   </div>
@@ -839,7 +847,7 @@ button ruby rt{color:inherit}
   <div class="action-row">
     <button class="submit-btn" id="q3-submit" onclick="checkSection('q3')">解答する</button>
     <button class="retry-btn" onclick="resetSection('q3')">もう一度</button>
-    <button class="retry-btn" onclick="sendResults('q3')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 この結果を送信</button>
+    <button class="retry-btn" onclick="sendResults('q3')" style="background:var(--accent-bg);color:var(--accent);border-color:var(--brand-border);">📩 この結果を送信</button>
   </div>
   <div class="result-area" id="q3-result"></div>
   <div id="q3-send-bottom" style="display:none;margin-top:1rem;">
@@ -854,7 +862,7 @@ button ruby rt{color:inherit}
 <div class="page" id="page-q5">
   <div class="print-header">
     <div style="display:flex;justify-content:space-between;align-items:baseline;">
-      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問4</span>
+      <span style="font-size:13px;font-weight:700;color:var(--brand-deep);">英検準2級プラス 演習アプリ Set1 ― 大問4</span>
       <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
     </div>
   </div>
@@ -888,7 +896,7 @@ button ruby rt{color:inherit}
     <div class="action-row">
       <button class="submit-btn" id="q5-submit" onclick="checkQ5()">解答する</button>
       <button class="retry-btn" onclick="resetQ5()">もう一度</button>
-      <button class="retry-btn" onclick="sendResults('q5')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 解答を送信</button>
+      <button class="retry-btn" onclick="sendResults('q5')" style="background:var(--accent-bg);color:var(--accent);border-color:var(--brand-border);">📩 解答を送信</button>
     </div>
     <div class="result-area" id="q5-result"></div>
   </div>
@@ -916,7 +924,7 @@ button ruby rt{color:inherit}
 <div class="page" id="page-q6">
   <div class="print-header">
     <div style="display:flex;justify-content:space-between;align-items:baseline;">
-      <span style="font-size:13px;font-weight:700;color:#1a3a6e;">英検準2級プラス 演習アプリ Set1 ― 大問5</span>
+      <span style="font-size:13px;font-weight:700;color:var(--brand-deep);">英検準2級プラス 演習アプリ Set1 ― 大問5</span>
       <span style="font-size:10px;color:#555;">© 2026 東進こども英語塾</span>
     </div>
   </div>
@@ -947,7 +955,7 @@ button ruby rt{color:inherit}
     <div class="action-row">
       <button class="submit-btn" id="q6-submit" onclick="checkQ6()">解答する</button>
       <button class="retry-btn" onclick="resetQ6()">もう一度</button>
-      <button class="retry-btn" onclick="sendResults('q6')" style="background:#eef3fc;color:var(--accent);border-color:#b8d0f5;">📩 解答を送信</button>
+      <button class="retry-btn" onclick="sendResults('q6')" style="background:var(--accent-bg);color:var(--accent);border-color:var(--brand-border);">📩 解答を送信</button>
     </div>
     <div class="result-area" id="q6-result"></div>
   </div>
@@ -981,7 +989,7 @@ button ruby rt{color:inherit}
 
   <!-- 部ナビタブ（筆記と同じ形式） -->
   <div style="display:flex;gap:0;margin-bottom:1rem;border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none;">
-    <button id="lis-tab-all" onclick="startListening(0)" style="padding:11px 14px 10px;font-size:13px;font-weight:700;border:none;background:none;cursor:pointer;border-bottom:2px solid #1a4a8a;color:#1a4a8a;margin-bottom:-2px;white-space:nowrap;">▶ 全部</button>
+    <button id="lis-tab-all" onclick="startListening(0)" style="padding:11px 14px 10px;font-size:13px;font-weight:700;border:none;background:none;cursor:pointer;border-bottom:2px solid var(--brand-dark);color:var(--brand-dark);margin-bottom:-2px;white-space:nowrap;">▶ 全部</button>
     <button id="lis-tab-1" onclick="startListening(1)" style="padding:11px 14px 10px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);margin-bottom:-2px;white-space:nowrap;">第1部</button>
     <button id="lis-tab-2" onclick="startListening(2)" style="padding:11px 14px 10px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);margin-bottom:-2px;white-space:nowrap;">第2部</button>
   </div>
@@ -989,7 +997,7 @@ button ruby rt{color:inherit}
   <!-- スタート画面 -->
   <div id="lis-start">
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;">
-      <p style="font-size:14px;font-weight:700;color:#1a4a8a;margin-bottom:.75rem;">📋 試験構成</p>
+      <p style="font-size:14px;font-weight:700;color:var(--brand-dark);margin-bottom:.75rem;">📋 試験構成</p>
       <div class="section-scores">
         <div class="ss-item"><div class="ss-l">第1部</div><div class="ss-v">15問</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px;">会話の内容一致選択</div></div>
         <div class="ss-item"><div class="ss-l">第2部</div><div class="ss-v">15問</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px;">英文の内容一致選択</div></div>
@@ -1002,7 +1010,7 @@ button ruby rt{color:inherit}
       </div>
     </div>
     <div id="lis-continue-btn" style="display:none;margin-bottom:.6rem;">
-      <button onclick="continueListening()" style="width:100%;padding:11px;background:var(--surface);color:#2563c0;border:2px solid #2563c0;border-radius:var(--rsm);font-size:.9rem;font-weight:700;cursor:pointer;">📂 途中から再開する（問<span id="lis-continue-no"></span>〜）</button>
+      <button onclick="continueListening()" style="width:100%;padding:11px;background:var(--surface);color:var(--brand-mid);border:2px solid var(--brand-mid);border-radius:var(--rsm);font-size:.9rem;font-weight:700;cursor:pointer;">📂 途中から再開する（問<span id="lis-continue-no"></span>〜）</button>
     </div>
   </div>
 
@@ -1376,14 +1384,14 @@ function renderLisQ(){
   const scriptFormatted = rawScript.replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
   let scriptInner = `<div style="line-height:1.9;white-space:pre-wrap">${scriptFormatted}</div>`;
   if(q.question){
-    scriptInner += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #c8daf5;font-size:.78rem;color:#1a4a8a;font-weight:700;">${q.question}</div>`;
+    scriptInner += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--brand-border);font-size:.78rem;color:var(--brand-dark);font-weight:700;">${q.question}</div>`;
   }
   const scriptHTML=`
     <button class="script-toggle-btn" onclick="toggleScript(this)">
       📄 スクリプトを見る
     </button>
     <div class="script-box" style="display:none">
-      <div style="font-size:.72rem;color:#2563c0;font-weight:700;margin-bottom:6px;">📝 音声スクリプト</div>
+      <div style="font-size:.72rem;color:var(--brand-mid);font-weight:700;margin-bottom:6px;">📝 音声スクリプト</div>
       ${scriptInner}
     </div>
   `;
@@ -1401,7 +1409,7 @@ function renderLisQ(){
   const pc=lisPlayCount[lisIdx];
   document.getElementById('lis-card').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <span style="background:#2563c0;color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:20px;">No. ${q.no}</span>
+      <span style="background:var(--brand-mid);color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:20px;">No. ${q.no}</span>
       <span style="font-size:.74rem;color:var(--muted)">${PART_LABELS_LIS[q.part]}</span>
     </div>
     <div class="audio-mode-toggle">
@@ -1480,14 +1488,14 @@ function lisReviewHTML(part){
     const ok=ans===q.answer;
     const rawScript=q.script||'';
     const scriptFormatted=rawScript.replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
-    const questionLine=q.question?`<div style="margin-top:6px;padding-top:6px;border-top:1px solid #c8daf5;font-size:.76rem;color:#1a4a8a;font-weight:700;">${q.question}</div>`:'';
+    const questionLine=q.question?`<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--brand-border);font-size:.76rem;color:var(--brand-dark);font-weight:700;">${q.question}</div>`:'';
     h+=`<div class="lis-review-item ${ok?'ok':'ng'}" style="margin-bottom:8px;">
       <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:4px;">
         <span style="color:var(--muted)">No. ${q.no}</span>
         <span style="padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:${ok?'#d1fae5':'#fee2e2'};color:${ok?'var(--green)':'var(--red)'}">${ok?'✅ 正解':'❌ 不正解'}</span>
       </div>
-      <div style="background:#f0f6ff;border-radius:4px;padding:7px 10px;margin-bottom:6px;font-size:.76rem;color:#1a3a6e;line-height:1.8;">
-        <div style="font-size:.72rem;color:#2563c0;font-weight:700;margin-bottom:4px;">📝 スクリプト</div>
+      <div style="background:var(--brand-pale);border-radius:4px;padding:7px 10px;margin-bottom:6px;font-size:.76rem;color:var(--brand-deep);line-height:1.8;">
+        <div style="font-size:.72rem;color:var(--brand-mid);font-weight:700;margin-bottom:4px;">📝 スクリプト</div>
         <div style="white-space:pre-wrap">${scriptFormatted}</div>
         ${questionLine}
       </div>
@@ -1508,12 +1516,12 @@ function lisReviewHTML(part){
   }
   return h;
 }
-const LIS_BTN_MAIN='width:100%;padding:13px;background:linear-gradient(135deg,#1a4a8a,#2563c0);color:#fff;border:none;border-radius:var(--rsm);font-size:.95rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(37,99,192,.35);margin-bottom:.6rem;';
-const LIS_BTN_SUB='width:100%;padding:13px;background:var(--surface);color:#1a4a8a;border:2px solid #2563c0;border-radius:var(--rsm);font-size:.95rem;font-weight:700;cursor:pointer;margin-bottom:.6rem;';
+const LIS_BTN_MAIN='width:100%;padding:13px;background:linear-gradient(135deg,var(--brand-dark),var(--brand-mid));color:#fff;border:none;border-radius:var(--rsm);font-size:.95rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(var(--brand-rgb),.35);margin-bottom:.6rem;';
+const LIS_BTN_SUB='width:100%;padding:13px;background:var(--surface);color:var(--brand-dark);border:2px solid var(--brand-mid);border-radius:var(--rsm);font-size:.95rem;font-weight:700;cursor:pointer;margin-bottom:.6rem;';
 const LIS_BTN_RESET='width:100%;padding:10px;background:var(--surface);color:var(--muted);border:1px solid var(--border2);border-radius:var(--rsm);font-size:.85rem;cursor:pointer;margin-top:.4rem;';
 function lisResultCardHTML(part,correct){
   return `<div class="lis-result-card">
-      <p style="text-align:center;font-size:1rem;font-weight:700;color:#1a4a8a;margin-bottom:12px;">📊 ${PART_LABELS_LIS[part]} 結果</p>
+      <p style="text-align:center;font-size:1rem;font-weight:700;color:var(--brand-dark);margin-bottom:12px;">📊 ${PART_LABELS_LIS[part]} 結果</p>
       <div class="score-circle"><span class="sc-n">${correct}</span><span class="sc-d">/ 15</span></div>
       <p style="text-align:center;font-size:.88rem;color:var(--muted);margin-bottom:1rem;">${lisMsgOf(correct,15)}</p>
       <div style="margin-top:1rem;">${lisReviewHTML(part)}</div>
@@ -1572,7 +1580,7 @@ function showLisAllResult(){
   else msg='📚 復習が大切です。音声をくり返し聴いてみましょう。';
   result.innerHTML=`
     <div class="lis-result-card">
-      <p style="text-align:center;font-size:1.1rem;font-weight:700;color:#1a4a8a;margin-bottom:14px;">🏆 リスニング 全体結果</p>
+      <p style="text-align:center;font-size:1.1rem;font-weight:700;color:var(--brand-dark);margin-bottom:14px;">🏆 リスニング 全体結果</p>
       <div class="score-circle"><span class="sc-n">${total}</span><span class="sc-d">/ 30</span></div>
       <div class="section-scores">
         <div class="ss-item"><div class="ss-l">第1部</div><div class="ss-v">${lisScores.p1}/15</div></div>
@@ -1827,7 +1835,7 @@ function showLisResult(){
 function showLisReview(){
   const rl=document.getElementById('lis-review-list');
   rl.style.display='block';
-  rl.innerHTML='<h3 style="font-size:1rem;color:#1a4a8a;margin-bottom:12px;text-align:center;">📝 問題の復習</h3>'+
+  rl.innerHTML='<h3 style="font-size:1rem;color:var(--brand-dark);margin-bottom:12px;text-align:center;">📝 問題の復習</h3>'+
     LIS_Q.map((q,i)=>{
       const ok=lisAnswered[i]===q.answer;
       const userAns=lisAnswered[i]!==null?q.choices[lisAnswered[i]]:'未回答';
@@ -1899,7 +1907,7 @@ function loadState(){
       else msg='📚 復習が大切です。音声をくり返し聴いてみましょう。';
       result.innerHTML=`
         <div class="lis-result-card">
-          <p style="text-align:center;font-size:1.1rem;font-weight:700;color:#1a4a8a;margin-bottom:14px;">🏆 リスニング 全体結果</p>
+          <p style="text-align:center;font-size:1.1rem;font-weight:700;color:var(--brand-dark);margin-bottom:14px;">🏆 リスニング 全体結果</p>
           <div class="score-circle"><span class="sc-n">${total}</span><span class="sc-d">/ 30</span></div>
           <div class="section-scores">
             <div class="ss-item"><div class="ss-l">第1部</div><div class="ss-v">${lisScores.p1}/15</div></div>
@@ -2823,12 +2831,12 @@ function adminShowDetail(studentId) {
   const writingEl = document.getElementById('admin-detail-writing');
   const wLines = [];
   if (latest.q5status || latest.q5answer) {
-    wLines.push('<div style="font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:4px">大問4（英文要約）</div>');
+    wLines.push('<div style="font-size:13px;font-weight:700;color:var(--brand-deep);margin-bottom:4px">大問4（英文要約）</div>');
     if (latest.q5status) wLines.push('<div style="font-size:12px;color:var(--muted);margin-bottom:4px">状況：'+latest.q5status+'</div>');
     if (latest.q5answer) wLines.push('<div class="admin-writing-box">'+latest.q5answer+'</div>');
   }
   if (latest.q6status || latest.q6answer) {
-    wLines.push('<div style="font-size:13px;font-weight:700;color:#1a3a6e;margin:12px 0 4px">大問5（意見文）</div>');
+    wLines.push('<div style="font-size:13px;font-weight:700;color:var(--brand-deep);margin:12px 0 4px">大問5（意見文）</div>');
     if (latest.q6status) wLines.push('<div style="font-size:12px;color:var(--muted);margin-bottom:4px">状況：'+latest.q6status+'</div>');
     if (latest.q6answer) wLines.push('<div class="admin-writing-box">'+latest.q6answer+'</div>');
   }
@@ -2848,7 +2856,7 @@ function adminShowDetail(studentId) {
     card.className = 'admin-record-card';
     const isNew = idx === 0;
     card.innerHTML = '<div class="admin-record-head">' +
-      '<span>送信 #' + recNo + (isNew?' <span style="font-size:11px;background:#dbeafe;color:#1a4a8a;border-radius:8px;padding:1px 7px">最新</span>':'') + '</span>' +
+      '<span>送信 #' + recNo + (isNew?' <span style="font-size:11px;background:var(--brand-light);color:var(--brand-dark);border-radius:8px;padding:1px 7px">最新</span>':'') + '</span>' +
       '<span style="font-weight:400;color:#6b6960">' + row.date + '</span></div>';
 
     const body = document.createElement('div');
@@ -2865,12 +2873,12 @@ function adminShowDetail(studentId) {
       wBox.style.cssText = 'padding:.6rem 1.1rem;border-top:1px solid var(--border);';
       if (row.q5answer) {
         const prev5 = prevRow ? prevRow.q5answer : '';
-        wBox.innerHTML += '<div style="font-size:12px;font-weight:700;color:#1a3a6e;margin-bottom:3px">大問4</div>' +
+        wBox.innerHTML += '<div style="font-size:12px;font-weight:700;color:var(--brand-deep);margin-bottom:3px">大問4</div>' +
           '<div class="admin-writing-box">' + diffHighlight(prev5, row.q5answer) + '</div>';
       }
       if (row.q6answer) {
         const prev6 = prevRow ? prevRow.q6answer : '';
-        wBox.innerHTML += '<div style="font-size:12px;font-weight:700;color:#1a3a6e;margin:8px 0 3px">大問5</div>' +
+        wBox.innerHTML += '<div style="font-size:12px;font-weight:700;color:var(--brand-deep);margin:8px 0 3px">大問5</div>' +
           '<div class="admin-writing-box">' + diffHighlight(prev6, row.q6answer) + '</div>';
       }
       card.appendChild(wBox);
@@ -3317,7 +3325,7 @@ window.addEventListener('afterprint', function() {
     </div>
 
     <!-- 送信履歴 -->
-    <div style="font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:.75rem;">📋 送信履歴（最新順）
+    <div style="font-size:13px;font-weight:700;color:var(--brand-deep);margin-bottom:.75rem;">📋 送信履歴（最新順）
       <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:8px">黄色ハイライト＝前回から変更された箇所</span>
     </div>
     <div id="admin-detail-records"></div>
