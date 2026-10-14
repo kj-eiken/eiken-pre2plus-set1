@@ -7,16 +7,16 @@
 <title>【準2級プラス】英検 演習アプリ Set1</title>
 <style>
 :root{
-  /* ★テーマ色（ここだけ変更すれば全体が変わる）準2級=ブルー／準2級プラス=オレンジ／2級=グリーン */
+  /* ★テーマ色（ここだけ変更すれば全体が変わる）準2級=ブルー／準2級プラス=オレンジ／2級=グリーン（正解=青・誤答=赤・注意=薄紫で区別） */
   --brand-dark:#8a3a08;--brand-mid:#c9510c;--brand-deep:#5c2704;
   --brand-light:#fde8d4;--brand-light2:#fbd9b8;--brand-pale:#fff6ee;--brand-pale2:#fffaf5;
   --brand-border:#f3cfae;--brand-rgb:201,81,12;--brand-dark-rgb:138,58,8;
   --accent:#d9600f;--accent-bg:#fff1e5;
   --bg:#f7f6f3;--surface:#fff;--border:#e2e0da;--border2:#cccac3;
   --text:#1a1a18;--muted:#6b6960;--hint:#9b9890;
-  --green:#0f6e56;--green-bg:#e1f5ee;
-  --red:#993c1d;--red-bg:#faece7;
-  --amber:#854f0b;--amber-bg:#faeeda;
+  --ok:#1d5fa8;--ok-bg:#e6f0fb;
+  --red:#b42318;--red-bg:#fdecea;
+  --amber:#6b3fa0;--amber-bg:#f1eafa;
   --radius:10px;--rsm:6px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -48,8 +48,8 @@ button ruby rt{color:inherit}
 .nav-subtab.listening{color:var(--brand-dark)}
 .nav-subtab.listening.active{color:var(--brand-dark);border-bottom-color:var(--brand-dark);font-weight:700}
 .nav-subtabs.hidden{display:none;}
-.nav-logout{margin-left:auto;padding:6px 12px;font-size:12px;font-weight:700;color:#993c1d;background:#faece7;border:1px solid #f5c6b8;border-radius:5px;cursor:pointer;white-space:nowrap;align-self:center;margin-left:8px;}
-.nav-logout:hover{background:#f5c6b8;}
+.nav-logout{margin-left:auto;padding:6px 12px;font-size:12px;font-weight:700;color:#b42318;background:#fdecea;border:1px solid #f5c2bd;border-radius:5px;cursor:pointer;white-space:nowrap;align-self:center;margin-left:8px;}
+.nav-logout:hover{background:#f5c2bd;}
 
 /* ===== PAGES ===== */
 .page{display:none;max-width:820px;margin:0 auto;padding:2rem 1.25rem 4rem}
@@ -71,7 +71,7 @@ button ruby rt{color:inherit}
 .sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
 .sc-num{width:30px;height:30px;background:var(--text);color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
 .sc-num.listening-num{background:linear-gradient(135deg,var(--brand-dark),var(--brand-mid))}
-.sc-badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--green-bg);color:var(--green);font-weight:600}
+.sc-badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--ok-bg);color:var(--ok);font-weight:600}
 .sc-badge.listening-badge{background:var(--brand-light);color:var(--brand-dark)}
 .sc-title{font-size:14px;font-weight:600;margin-bottom:2px}
 .sc-sub{font-size:12px;color:var(--muted)}
@@ -112,7 +112,7 @@ button ruby rt{color:inherit}
 .choice{display:flex;align-items:flex-start;gap:11px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--rsm);background:var(--surface);cursor:pointer;font-size:14px;line-height:1.5;transition:border-color .12s,background .12s}
 .choice:hover{border-color:var(--border2);background:#fafaf8}
 .choice.selected{border-color:var(--accent);background:var(--accent-bg)}
-.choice.show-ans{border-color:var(--green);background:var(--green-bg)}
+.choice.show-ans{border-color:var(--ok);background:var(--ok-bg)}
 .choice.wrong{border-color:var(--red);background:var(--red-bg)}
 .cn{width:22px;height:22px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px}
 .hr{border:none;border-top:1px solid var(--border);margin:1.1rem 0}
@@ -130,19 +130,19 @@ button ruby rt{color:inherit}
 .result-area{margin-top:1.5rem;display:none}
 .result-area.show{display:block}
 .score-banner{padding:1rem 1.25rem;border-radius:var(--radius);margin-bottom:1.2rem;font-weight:600;font-size:15px}
-.score-banner.perfect{background:var(--green-bg);color:var(--green)}
+.score-banner.perfect{background:var(--ok-bg);color:var(--ok)}
 .score-banner.partial{background:var(--amber-bg);color:var(--amber)}
 .score-banner.low{background:var(--red-bg);color:var(--red)}
 .result-q{border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:.9rem;background:var(--surface)}
 .rq-header{display:flex;align-items:center;gap:10px;margin-bottom:.6rem}
 .rb{padding:2px 9px;border-radius:4px;font-size:12px;font-weight:600;flex-shrink:0}
-.rb-ok{background:var(--green-bg);color:var(--green)}
+.rb-ok{background:var(--ok-bg);color:var(--ok)}
 .rb-ng{background:var(--red-bg);color:var(--red)}
 .rq-label{font-size:14px;font-weight:600}
 .rq-ans{font-size:13px;color:var(--muted);margin-bottom:.7rem}
 .rq-choices{display:flex;flex-direction:column;gap:6px;margin-bottom:.75rem}
 .rc{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:var(--rsm);font-size:13px;line-height:1.5;border:1px solid transparent}
-.rc.rc-ok{border-color:var(--green);background:var(--green-bg)}
+.rc.rc-ok{border-color:var(--ok);background:var(--ok-bg)}
 .rc.rc-ng{border-color:var(--red);background:var(--red-bg)}
 .rc.rc-normal{border-color:var(--border);background:#fafaf8}
 .rc-icon{font-weight:700;flex-shrink:0;min-width:18px}
@@ -156,13 +156,13 @@ button ruby rt{color:inherit}
 .sub-sub{width:26px;height:26px;border:2px solid var(--text);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
 
 /* ===== WRITING ===== */
-.photo-submit-box{background:#fff8e1;border:1px solid #f0c040;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-top:1.5rem}
-.photo-submit-box h3{font-size:14px;font-weight:700;color:#854f0b;margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
+.photo-submit-box{background:#f7f2fd;border:1px solid #c9b3e6;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-top:1.5rem}
+.photo-submit-box h3{font-size:14px;font-weight:700;color:#6b3fa0;margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
 .photo-submit-steps{list-style:none;padding:0;margin:0 0 1rem 0}
-.photo-submit-steps li{font-size:13px;color:#5a4000;padding:.35rem 0;display:flex;align-items:flex-start;gap:8px;border-bottom:1px solid #f0e0a0}
+.photo-submit-steps li{font-size:13px;color:#4a2f75;padding:.35rem 0;display:flex;align-items:flex-start;gap:8px;border-bottom:1px solid #e2d6f3}
 .photo-submit-steps li:last-child{border-bottom:none}
-.step-num{background:#854f0b;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
-.mail-addr{background:#fff;border:1px solid #f0c040;border-radius:var(--rsm);padding:.5rem 1rem;font-size:14px;font-weight:700;color:var(--accent);text-align:center;margin:.5rem 0;letter-spacing:.05em}
+.step-num{background:#6b3fa0;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.mail-addr{background:#fff;border:1px solid #c9b3e6;border-radius:var(--rsm);padding:.5rem 1rem;font-size:14px;font-weight:700;color:var(--accent);text-align:center;margin:.5rem 0;letter-spacing:.05em}
 
 /* ===== LISTENING SECTION ===== */
 .listening-banner{background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand-mid) 100%);color:#fff;padding:18px 20px 14px;text-align:center;border-radius:var(--radius);margin-bottom:1.5rem;box-shadow:0 3px 10px rgba(var(--brand-dark-rgb),.2)}
@@ -188,7 +188,7 @@ button ruby rt{color:inherit}
 .audio-info{text-align:left;flex:1}
 .audio-info .audio-title{font-size:.85rem;font-weight:600;color:var(--brand-dark)}
 .audio-info .audio-hint{font-size:.72rem;color:var(--muted);margin-top:1px}
-.play-count-badge{font-size:.72rem;color:#e85d04;font-weight:600;white-space:nowrap}
+.play-count-badge{font-size:.72rem;color:#7a4fb5;font-weight:600;white-space:nowrap}
 
 /* waveform */
 .waveform{display:flex;gap:3px;align-items:center;height:22px;flex-shrink:0}
@@ -215,13 +215,13 @@ button ruby rt{color:inherit}
 .lis-choice{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--rsm);background:var(--surface);cursor:pointer;font-size:14px;line-height:1.5;transition:all .15s;margin-bottom:7px}
 .lis-choice:hover{border-color:var(--brand-mid);background:var(--brand-pale)}
 .lis-choice.selected{border-color:var(--brand-mid);background:var(--brand-pale)}
-.lis-choice.show-ans{border-color:var(--green);background:var(--green-bg)}
+.lis-choice.show-ans{border-color:var(--ok);background:var(--ok-bg)}
 .lis-choice.wrong{border-color:var(--red);background:var(--red-bg)}
 .lis-cn{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px}
 
 /* Listening feedback */
 .lis-feedback{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.82rem;line-height:1.6;display:none}
-.lis-feedback.correct{background:var(--green-bg);border:1px solid #86efac;color:#166534;display:block}
+.lis-feedback.correct{background:var(--ok-bg);border:1px solid #93c0ee;color:#166534;display:block}
 .lis-feedback.wrong{background:var(--red-bg);border:1px solid #fca5a5;color:#991b1b;display:block}
 
 /* Listening nav */
@@ -248,7 +248,7 @@ button ruby rt{color:inherit}
 .ss-item .ss-l{font-size:.7rem;color:var(--muted);margin-bottom:3px}
 .ss-item .ss-v{font-size:1.1rem;font-weight:800;color:var(--brand-dark)}
 .lis-review-item{background:var(--surface);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:4px solid var(--border)}
-.lis-review-item.ok{border-left-color:var(--green)}
+.lis-review-item.ok{border-left-color:var(--ok)}
 .lis-review-item.ng{border-left-color:var(--red)}
 
 /* Send button */
@@ -270,14 +270,14 @@ button ruby rt{color:inherit}
 .site-footer .footer-disc span{display:block}
 
 /* ===== PRINT BUTTON AREA ===== */
-.print-section{background:#fff8e1;border:1px solid #f0c040;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;}
-.print-section h3{font-size:14px;font-weight:700;color:#854f0b;margin-bottom:.85rem;display:flex;align-items:center;gap:6px;}
+.print-section{background:#f7f2fd;border:1px solid #c9b3e6;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;}
+.print-section h3{font-size:14px;font-weight:700;color:#6b3fa0;margin-bottom:.85rem;display:flex;align-items:center;gap:6px;}
 .print-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
-.print-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 8px;background:#fff;border:1.5px solid #e0c050;border-radius:var(--rsm);cursor:pointer;font-size:12px;font-weight:700;color:#5a4000;transition:background .15s,border-color .15s;}
-.print-btn:hover{background:#fef9e7;border-color:#c89a00;}
+.print-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 8px;background:#fff;border:1.5px solid #c9b3e6;border-radius:var(--rsm);cursor:pointer;font-size:12px;font-weight:700;color:#4a2f75;transition:background .15s,border-color .15s;}
+.print-btn:hover{background:#f7f2fd;border-color:#8a63c4;}
 .print-btn .pb-icon{font-size:1.4rem;}
 .print-btn .pb-label{text-align:center;line-height:1.4;}
-.print-sep{width:100%;border:none;border-top:1px dashed #e0c050;margin:.65rem 0;}
+.print-sep{width:100%;border:none;border-top:1px dashed #c9b3e6;margin:.65rem 0;}
 
 /* ===== @media print ===== */
 @media print{
@@ -345,8 +345,8 @@ button ruby rt{color:inherit}
 
   /* 選択肢の色 */
   .choice,.lis-choice{border:1px solid #aaa;background:#fff!important;}
-  .choice.show-ans,.lis-choice.show-ans{background:#e1f5ee!important;border-color:#0f6e56!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-  .choice.wrong,.lis-choice.wrong{background:#faece7!important;border-color:#993c1d!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .choice.show-ans,.lis-choice.show-ans{background:#e6f0fb!important;border-color:#1d5fa8!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .choice.wrong,.lis-choice.wrong{background:#fdecea!important;border-color:#b42318!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
 
   /* ページ余白 */
   @page{margin:15mm 12mm;}
@@ -368,9 +368,9 @@ button ruby rt{color:inherit}
 .login-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg);}
 .login-btn{width:100%;padding:12px;background:var(--brand-deep);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.03em;}
 .login-btn:hover{background:var(--accent);}
-.login-error{color:#993c1d;font-size:13px;text-align:center;margin-top:.75rem;display:none;}
+.login-error{color:#b42318;font-size:13px;text-align:center;margin-top:.75rem;display:none;}
 /* ===== DEADLINE EXPIRED / IDLE TIMEOUT ===== */
-.login-expired{background:#faece7;border:1px solid #e8b4a0;border-radius:8px;padding:1rem 1.1rem;margin-bottom:1.25rem;text-align:center;color:#993c1d;font-size:13px;line-height:1.7;}
+.login-expired{background:#fdecea;border:1px solid #eeaaa4;border-radius:8px;padding:1rem 1.1rem;margin-bottom:1.25rem;text-align:center;color:#b42318;font-size:13px;line-height:1.7;}
 .login-expired strong{display:block;font-size:15px;margin-bottom:.3rem;}
 /* idle timeout modal overlay */
 .idle-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);z-index:99998;display:none;align-items:center;justify-content:center;}
@@ -389,8 +389,8 @@ button ruby rt{color:inherit}
 .admin-header-left{}
 .admin-header-right{display:flex;gap:8px;flex-wrap:wrap;}
 .admin-dl-btn{padding:9px 16px;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;}
-.admin-dl-btn.csv{background:#e1f5ee;color:#0f6e56;}
-.admin-dl-btn.csv:hover{background:#c3edd8;}
+.admin-dl-btn.csv{background:#e6f0fb;color:#1d5fa8;}
+.admin-dl-btn.csv:hover{background:#c5dcf5;}
 .admin-dl-btn.excel{background:var(--brand-light);color:var(--brand-dark);}
 .admin-dl-btn.excel:hover{background:var(--brand-light2);}
 .admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem;}
@@ -404,8 +404,8 @@ button ruby rt{color:inherit}
 .admin-table tr:last-child td{border-bottom:none;}
 .admin-table tr:hover td{background:var(--brand-pale2);cursor:pointer;}
 .admin-score-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;}
-.admin-score-high{background:#d1fae5;color:#065f46;}
-.admin-score-mid{background:#fef3c7;color:#92400e;}
+.admin-score-high{background:#dbe9fa;color:#174a85;}
+.admin-score-mid{background:#f1eafa;color:#6b3fa0;}
 .admin-score-low{background:#fee2e2;color:#991b1b;}
 .admin-score-none{background:#f1f0ec;color:#9b9890;}
 .admin-submit-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:var(--brand-light);color:var(--brand-dark);}
@@ -449,7 +449,7 @@ button ruby rt{color:inherit}
 .admin-trend-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;}
 .admin-trend-bar{width:100%;border-radius:4px 4px 0 0;transition:height .3s;min-height:3px;position:relative;}
 .admin-trend-bar.write{background:var(--accent);}
-.admin-trend-bar.lis{background:#0f6e56;}
+.admin-trend-bar.lis{background:#1d5fa8;}
 .admin-trend-label{font-size:10px;color:var(--muted);margin-top:4px;text-align:center;white-space:nowrap;}
 .admin-trend-val{font-size:10px;font-weight:700;text-align:center;margin-bottom:2px;}
 .admin-trend-legend{display:flex;gap:16px;margin-top:.5rem;font-size:12px;color:var(--muted);}
@@ -462,10 +462,10 @@ button ruby rt{color:inherit}
 .admin-mini-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;}
 .admin-mini-bar{width:100%;border-radius:3px 3px 0 0;min-height:2px;}
 .admin-mini-bar.write{background:var(--accent);opacity:.85;}
-.admin-mini-bar.lis{background:#0f6e56;opacity:.85;}
+.admin-mini-bar.lis{background:#1d5fa8;opacity:.85;}
 .admin-mini-label{font-size:9px;color:var(--muted);margin-top:3px;text-align:center;}
 /* 差分ハイライト */
-.diff-new{background:#fff3cd;border-radius:3px;padding:1px 2px;}
+.diff-new{background:#f1eafa;border-radius:3px;padding:1px 2px;}
 /* 大問5・6テキスト表示 */
 .admin-writing-box{background:#f8f7f4;border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;font-size:13px;line-height:1.8;white-space:pre-wrap;word-break:break-all;margin-top:.4rem;color:var(--text);}
 /* 管理タブ（通常時は非表示・JS制御） */
@@ -565,14 +565,14 @@ button ruby rt{color:inherit}
     <div class="home-sub">Set1 ― 大問1〜5 ＋ リスニング</div>
   </div>
 
-  <div id="restore-msg" style="display:none;background:#e1f5ee;border:1px solid #0f6e56;border-radius:var(--rsm);padding:.6rem 1rem;font-size:13px;color:#0f6e56;margin-bottom:1rem;"></div>
+  <div id="restore-msg" style="display:none;background:#e6f0fb;border:1px solid #1d5fa8;border-radius:var(--rsm);padding:.6rem 1rem;font-size:13px;color:#1d5fa8;margin-bottom:1rem;"></div>
 
-  <!-- 端末保存の注記 -->
+  <!-- 同期の注記 -->
   <div style="background:#fafaf8;border:1px solid var(--border);border-radius:var(--rsm);padding:.65rem 1rem;margin-bottom:1rem;font-size:12px;color:var(--muted);line-height:1.8;">
-    📱 <strong style="color:var(--text);">学習データはこの端末のブラウザにのみ保存されます</strong><br>
-    ・同じ端末なら、次回も続きから学習できます<br>
-    ・<strong>別の端末では続きができません</strong>（最初からになります）<br>
-    ・途中で端末を変えると、それぞれの端末に別々に保存されます
+    ☁️ <strong style="color:var(--text);">学習の進み具合は自動で保存され、別の端末でも続きから学習できます</strong><br>
+    ・ログインすると、前回の続きから始められます（保存には最大30秒ほどかかります）<br>
+    ・2つの端末で同時に使うと、あとから保存した内容が残ります<br>
+    ・通信できないときは端末に一時保存し、つながると自動で同期します
   </div>
 
   <input type="hidden" id="student-id">
@@ -667,7 +667,7 @@ button ruby rt{color:inherit}
   <!-- 印刷・PDF -->
   <div class="print-section">
     <h3>🖨️ 印刷・PDF出力</h3>
-    <p style="font-size:12px;color:#5a4000;margin-bottom:.9rem;line-height:1.7;">大問ごとに「問題用紙」または「解答・解説」を印刷できます。<br>ブラウザの印刷ダイアログで「PDFに保存」を選ぶとPDFになります。</p>
+    <p style="font-size:12px;color:#4a2f75;margin-bottom:.9rem;line-height:1.7;">大問ごとに「問題用紙」または「解答・解説」を印刷できます。<br>ブラウザの印刷ダイアログで「PDFに保存」を選ぶとPDFになります。</p>
     <div class="print-grid">
       <button class="print-btn" onclick="printSection('q1','question')">
         <span class="pb-icon">📄</span>
@@ -904,17 +904,17 @@ button ruby rt{color:inherit}
     <div class="photo-submit-box">
       <h3>📷 手書き写メ提出の手順</h3>
       <ol class="photo-submit-steps">
-        <li><span class="step-num">1</span><span><strong>解答を手書きで書く</strong>（25〜35語）<br><span style="font-size:12px;color:#6b4c00;line-height:1.8;">・自分のノートに書く、または問題用紙を印刷して書くことができます<br>・<strong>10行以内</strong>に収める・鉛筆HB/Bを使用・濃く大きめに書く</span></span></li>
-        <li><span class="step-num">2</span><span><strong>写真を撮影・確認する</strong><br><span style="font-size:12px;color:#6b4c00;line-height:1.8;">明るい場所で・真上から・ピント確認</span></span></li>
+        <li><span class="step-num">1</span><span><strong>解答を手書きで書く</strong>（25〜35語）<br><span style="font-size:12px;color:#5a3a8a;line-height:1.8;">・自分のノートに書く、または問題用紙を印刷して書くことができます<br>・<strong>10行以内</strong>に収める・鉛筆HB/Bを使用・濃く大きめに書く</span></span></li>
+        <li><span class="step-num">2</span><span><strong>写真を撮影・確認する</strong><br><span style="font-size:12px;color:#5a3a8a;line-height:1.8;">明るい場所で・真上から・ピント確認</span></span></li>
         <li><span class="step-num">3</span><span><strong>件名：「Set1 大問4　氏名」でメール送信</strong></span></li>
         <li><span class="step-num">4</span><span>先生からコメント入りの返信が届きます</span></li>
       </ol>
       <div class="mail-addr">✉️ online-eigojuku@toshin.com</div>
     </div>
     <div class="action-row" style="margin-top:1rem;">
-      <button class="submit-btn" id="q5-photo-submit" onclick="submitPhotoQ5()" style="background:#854f0b;">📷 メール送信しました（提出済みにする）</button>
+      <button class="submit-btn" id="q5-photo-submit" onclick="submitPhotoQ5()" style="background:#6b3fa0;">📷 メール送信しました（提出済みにする）</button>
     </div>
-    <div id="q5-photo-done" style="display:none;background:var(--green-bg);border:1px solid #86efac;border-radius:var(--rsm);padding:.75rem 1rem;margin-top:.75rem;font-size:13px;color:#065f46;font-weight:600;">✅ 大問4（写メ）提出済みとして記録しました。</div>
+    <div id="q5-photo-done" style="display:none;background:var(--ok-bg);border:1px solid #93c0ee;border-radius:var(--rsm);padding:.75rem 1rem;margin-top:.75rem;font-size:13px;color:#174a85;font-weight:600;">✅ 大問4（写メ）提出済みとして記録しました。</div>
   </div>
   <div class="print-footer">
     © 2026 東進こども英語塾 All rights reserved. 本教材は英検®準2級プラスの出題形式に準拠したオリジナル演習コンテンツです。英検®は公益財団法人日本英語検定協会の登録商標です。本教材の無断転載・複製・再配布を禁じます。
@@ -963,7 +963,7 @@ button ruby rt{color:inherit}
     <div class="photo-submit-box">
       <h3>📷 手書き写メ提出の手順</h3>
       <ol class="photo-submit-steps">
-        <li><span class="step-num">1</span><span><strong>解答を手書きで書く</strong>（50〜60語）<br><span style="font-size:12px;color:#6b4c00;line-height:1.8;">・自分のノートに書く、または問題用紙を印刷して書くことができます</span></span></li>
+        <li><span class="step-num">1</span><span><strong>解答を手書きで書く</strong>（50〜60語）<br><span style="font-size:12px;color:#5a3a8a;line-height:1.8;">・自分のノートに書く、または問題用紙を印刷して書くことができます</span></span></li>
         <li><span class="step-num">2</span><span><strong>写真を撮影・確認する</strong></span></li>
         <li><span class="step-num">3</span><span><strong>件名：「Set1 大問5　氏名」でメール送信</strong></span></li>
         <li><span class="step-num">4</span><span>先生からコメント入りの返信が届きます</span></li>
@@ -971,9 +971,9 @@ button ruby rt{color:inherit}
       <div class="mail-addr">✉️ online-eigojuku@toshin.com</div>
     </div>
     <div class="action-row" style="margin-top:1rem;">
-      <button class="submit-btn" id="q6-photo-submit" onclick="submitPhotoQ6()" style="background:#854f0b;">📷 メール送信しました（提出済みにする）</button>
+      <button class="submit-btn" id="q6-photo-submit" onclick="submitPhotoQ6()" style="background:#6b3fa0;">📷 メール送信しました（提出済みにする）</button>
     </div>
-    <div id="q6-photo-done" style="display:none;background:var(--green-bg);border:1px solid #86efac;border-radius:var(--rsm);padding:.75rem 1rem;margin-top:.75rem;font-size:13px;color:#065f46;font-weight:600;">✅ 大問5（写メ）提出済みとして記録しました。</div>
+    <div id="q6-photo-done" style="display:none;background:var(--ok-bg);border:1px solid #93c0ee;border-radius:var(--rsm);padding:.75rem 1rem;margin-top:.75rem;font-size:13px;color:#174a85;font-weight:600;">✅ 大問5（写メ）提出済みとして記録しました。</div>
   </div>
   <div class="print-footer">
     © 2026 東進こども英語塾 All rights reserved. 本教材は英検®準2級プラスの出題形式に準拠したオリジナル演習コンテンツです。英検®は公益財団法人日本英語検定協会の登録商標です。本教材の無断転載・複製・再配布を禁じます。
@@ -1002,7 +1002,7 @@ button ruby rt{color:inherit}
         <div class="ss-item"><div class="ss-l">第1部</div><div class="ss-v">15問</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px;">会話の内容一致選択</div></div>
         <div class="ss-item"><div class="ss-l">第2部</div><div class="ss-v">15問</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px;">英文の内容一致選択</div></div>
       </div>
-      <div style="background:#e8f5e9;border:1px solid #66bb6a;border-radius:8px;padding:.9rem 1rem;margin-top:.75rem;font-size:.82rem;color:#1b5e20;">
+      <div style="background:#eaf2fc;border:1px solid #66bb6a;border-radius:8px;padding:.9rem 1rem;margin-top:.75rem;font-size:.82rem;color:#1b5e20;">
         <strong>🎙️ 音声モードについて</strong><br>
         各問題の ▶ ボタンで音声を再生できます。問題画面で2つのモードを切り替えられます：<br>
         　🎙️ <strong>ネイティブ</strong>：講師が収録した本物の音声<br>
@@ -1253,8 +1253,8 @@ function updateScore(){
 function switchTab(tab){document.getElementById('panel-type').style.display=tab==='type'?'block':'none';document.getElementById('panel-photo').style.display=tab==='photo'?'block':'none';document.getElementById('tab-type').style.borderBottomColor=tab==='type'?'var(--accent)':'transparent';document.getElementById('tab-type').style.color=tab==='type'?'var(--accent)':'var(--muted)';document.getElementById('tab-photo').style.borderBottomColor=tab==='photo'?'var(--accent)':'transparent';document.getElementById('tab-photo').style.color=tab==='photo'?'var(--accent)':'var(--muted)';}
 function switchTab6(tab){document.getElementById('panel6-type').style.display=tab==='type'?'block':'none';document.getElementById('panel6-photo').style.display=tab==='photo'?'block':'none';document.getElementById('tab6-type').style.borderBottomColor=tab==='type'?'var(--accent)':'transparent';document.getElementById('tab6-type').style.color=tab==='type'?'var(--accent)':'var(--muted)';document.getElementById('tab6-photo').style.borderBottomColor=tab==='photo'?'var(--accent)':'transparent';document.getElementById('tab6-photo').style.color=tab==='photo'?'var(--accent)':'var(--muted)';}
 document.addEventListener('input',function(e){
-  if(e.target.id==='q5-textarea'){const n=e.target.value.trim().split(/\s+/).filter(w=>w.length>0).length;const el=document.getElementById('q5-wordcount');el.innerHTML='語数：'+n+'語';el.style.color=(n>=25&&n<=35)?'#0f6e56':(n>35?'#993c1d':'#9b9890');}
-  if(e.target.id==='q6-textarea'){const n=e.target.value.trim().split(/\s+/).filter(w=>w.length>0).length;const el=document.getElementById('q6-wordcount');el.innerHTML='語数：'+n+'語';el.style.color=(n>=50&&n<=60)?'#0f6e56':(n>60?'#993c1d':'#9b9890');}
+  if(e.target.id==='q5-textarea'){const n=e.target.value.trim().split(/\s+/).filter(w=>w.length>0).length;const el=document.getElementById('q5-wordcount');el.innerHTML='語数：'+n+'語';el.style.color=(n>=25&&n<=35)?'#1d5fa8':(n>35?'#b42318':'#9b9890');}
+  if(e.target.id==='q6-textarea'){const n=e.target.value.trim().split(/\s+/).filter(w=>w.length>0).length;const el=document.getElementById('q6-wordcount');el.innerHTML='語数：'+n+'語';el.style.color=(n>=50&&n<=60)?'#1d5fa8':(n>60?'#b42318':'#9b9890');}
 });
 
 function checkQ5(){if(submitted.q5)return;const text=document.getElementById('q5-textarea').value.trim();if(!text){alert('要約を入力してください。');return;}submitted.q5=true;document.getElementById('q5-submit').disabled=true;scores.q5=1;const n=text.split(/\s+/).filter(w=>w.length>0).length;const inRange=n>=25&&n<=35;let html=`<div class="score-banner ${inRange?'perfect':'partial'}">${inRange?'語数OK！（'+n+'語）':'語数：'+n+'語（目安：25〜35語）'}</div>`;html+=`<div class="result-q"><div class="rq-header"><span class="rb rb-ok">採点ポイント</span></div><div style="margin-bottom:.75rem"><p style="font-size:13px;color:#6b6960;margin-bottom:.6rem">以下のポイントを自己チェックしてください：</p>${Q5_POINTS.map(p=>`<p style="font-size:13px;margin-bottom:.4rem">${p}</p>`).join('')}</div><div class="point-box" style="margin-bottom:.75rem">📝 <strong>模範解答例</strong><br><span style="font-size:13px;line-height:1.8;white-space:pre-wrap">${Q5_MODEL}</span></div><div style="font-size:12px;color:#6b6960">※模範解答はあくまで一例です。</div></div>`;const ra=document.getElementById('q5-result');ra.innerHTML=html;ra.classList.add('show');ra.scrollIntoView({behavior:'smooth',block:'start'});updateScore();saveState();}
@@ -1492,7 +1492,7 @@ function lisReviewHTML(part){
     h+=`<div class="lis-review-item ${ok?'ok':'ng'}" style="margin-bottom:8px;">
       <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:4px;">
         <span style="color:var(--muted)">No. ${q.no}</span>
-        <span style="padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:${ok?'#d1fae5':'#fee2e2'};color:${ok?'var(--green)':'var(--red)'}">${ok?'✅ 正解':'❌ 不正解'}</span>
+        <span style="padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:${ok?'#dbe9fa':'#fee2e2'};color:${ok?'var(--ok)':'var(--red)'}">${ok?'✅ 正解':'❌ 不正解'}</span>
       </div>
       <div style="background:var(--brand-pale);border-radius:4px;padding:7px 10px;margin-bottom:6px;font-size:.76rem;color:var(--brand-deep);line-height:1.8;">
         <div style="font-size:.72rem;color:var(--brand-mid);font-weight:700;margin-bottom:4px;">📝 スクリプト</div>
@@ -1504,8 +1504,8 @@ function lisReviewHTML(part){
       <div style="margin:6px 0 4px;">
         ${q.choices.map((c,ci)=>{
           let bg='#fafaf8';let border='#cccac3';let fw='400';
-          if(ci===q.answer){bg='#e1f5ee';border='#0f6e56';fw='700';}
-          else if(ci===ans&&!ok){bg='#faece7';border='#993c1d';}
+          if(ci===q.answer){bg='#e6f0fb';border='#1d5fa8';fw='700';}
+          else if(ci===ans&&!ok){bg='#fdecea';border='#b42318';}
           return `<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 10px;margin-bottom:4px;border:1px solid ${border};border-radius:4px;background:${bg};font-size:.78rem;font-weight:${fw};">
             <span style="flex-shrink:0;font-weight:700;">${ci+1}.</span><span>${c}</span>
           </div>`;
@@ -1842,7 +1842,7 @@ function showLisReview(){
       return `<div class="lis-review-item ${ok?'ok':'ng'}">
         <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:5px;">
           <span style="color:var(--muted)">No. ${q.no} ／ ${PART_LABELS_LIS[q.part]}</span>
-          <span style="padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:${ok?'#d1fae5':'#fee2e2'};color:${ok?'var(--green)':'var(--red)'}">${ok?'✅ 正解':'❌ 不正解'}</span>
+          <span style="padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:${ok?'#dbe9fa':'#fee2e2'};color:${ok?'var(--ok)':'var(--red)'}">${ok?'✅ 正解':'❌ 不正解'}</span>
         </div>
         <p style="font-size:.83rem;color:var(--muted);margin-bottom:4px"><strong>正解：</strong>${q.choices[q.answer]}</p>
         ${!ok?`<p style="font-size:.83rem;color:var(--muted);margin-bottom:4px"><strong>あなたの答え：</strong>${userAns}</p>`:''}
@@ -1856,6 +1856,79 @@ function showLisReview(){
 // ★ 保存・復元・送信
 // =========================================================
 const LS_KEY='eiken_pre2plus_set1_v1'; // 例: eiken_pre2_set3_v2
+
+// ===== 進捗の端末間同期（スプレッドシート「進捗」） =====
+const LS_SYNC=LS_KEY+'_sync';
+let progOn=false,progTimer=null,progBusy=false,progDirty=false;
+function progMeta(){try{return JSON.parse(localStorage.getItem(LS_SYNC))||{};}catch(e){return{};}}
+function progSetMeta(o){try{localStorage.setItem(LS_SYNC,JSON.stringify(Object.assign(progMeta(),o)));}catch(e){}}
+async function progCall(action,extra,ka){
+  const body=Object.assign({action,studentId:document.getElementById('student-id').value.trim(),name:document.getElementById('student-name').value.trim()},extra||{});
+  const res=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},keepalive:!!ka,body:JSON.stringify(body)});
+  return res.json();
+}
+function progRetry(){if(!progTimer)progTimer=setTimeout(()=>{progTimer=null;progPush();},60000);}
+function progMarkDirty(){ // saveState()から呼ぶ：変更時のみ30秒にまとめて保存
+  if(!progOn)return;
+  progDirty=true;progSetMeta({dirty:true});
+  if(!progTimer)progTimer=setTimeout(()=>{progTimer=null;progPush();},30000);
+}
+async function progPush(ka){
+  if(!progOn||progBusy)return;
+  if(progMeta().delPending){
+    try{const r=await progCall('deleteProgress',{lsKey:LS_KEY},ka);if(r.ok)progSetMeta({delPending:false});else return progRetry();}
+    catch(e){return progRetry();}
+  }
+  if(!progDirty)return;
+  const raw=localStorage.getItem(LS_KEY);if(!raw)return;
+  if(raw.length>45000){console.warn('進捗が大きすぎて同期できません');progDirty=false;return;}
+  progBusy=true;progDirty=false;
+  try{
+    const r=await progCall('saveProgress',{lsKey:LS_KEY,json:raw},ka);
+    if(r.ok)progSetMeta({syncedAt:r.updatedAt,dirty:progDirty});
+    else if(r.error!=='too_large'){progDirty=true;progRetry();}
+  }catch(e){progDirty=true;progRetry();}
+  finally{progBusy=false;}
+}
+async function progDelete(){ // 「データをリセット」時：サーバー側も削除（失敗時は次回に再試行）
+  if(!progOn)return;
+  clearTimeout(progTimer);progTimer=null;progDirty=false;
+  progSetMeta({dirty:false,syncedAt:'',delPending:true});
+  try{const r=await progCall('deleteProgress',{lsKey:LS_KEY});if(r.ok)progSetMeta({delPending:false});else progRetry();}
+  catch(e){progRetry();}
+}
+function progEmpty(st){
+  if(!st)return true;
+  return !(Object.values(st.submitted||{}).some(Boolean)||st.lisSubmitted||st.q5text||st.q6text
+    ||['q1','q2','q3'].some(k=>st.sel&&st.sel[k]&&Object.keys(st.sel[k]).length)
+    ||(st.lisAnswered||[]).some(v=>v!==null&&v!==undefined));
+}
+function progApply(r){ // サーバーの進捗を端末に反映
+  clearState(true);
+  clearTimeout(progTimer);progTimer=null;
+  try{localStorage.setItem(LS_KEY,r.json);}catch(e){}
+  progDirty=false;progSetMeta({syncedAt:r.updatedAt,dirty:false});
+  loadState();updateScore();
+  const el=document.getElementById('restore-msg');
+  if(el){el.textContent='☁️ 別の端末の続きを読み込みました';el.style.display='block';}
+}
+async function progSync(){ // ログイン時：サーバーと端末の進捗を突き合わせ
+  if(!progOn)return;
+  let r;try{r=await progCall('loadProgress',{lsKey:LS_KEY});}catch(e){return;}
+  if(!r||!r.ok)return;
+  const m=progMeta();
+  if(m.delPending){progPush();return;}
+  let local=null;try{local=JSON.parse(localStorage.getItem(LS_KEY));}catch(e){}
+  if(!r.found){if(!progEmpty(local)){progDirty=true;progSetMeta({dirty:true});progPush();}return;}
+  if(r.updatedAt===m.syncedAt){if(m.dirty){progDirty=true;progPush();}return;}
+  let useServer=true;
+  if(!progEmpty(local))useServer=confirm('別の端末の続きがあります。読み込みますか？\n（OK：別の端末の続きを読み込む／キャンセル：この端末の内容を使う）');
+  if(useServer)progApply(r);
+  else{progSetMeta({syncedAt:r.updatedAt,dirty:true});progDirty=true;progPush();}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')progPush(true);});
+window.addEventListener('pagehide',()=>progPush(true));
+window.addEventListener('online',()=>progPush());
 
 function saveState(){
   try{
@@ -1873,6 +1946,7 @@ function saveState(){
       savedAt:new Date().toISOString()
     };
     localStorage.setItem(LS_KEY,JSON.stringify(state));
+    progMarkDirty();
   }catch(e){}
 }
 
@@ -1976,8 +2050,8 @@ function loadState(){
   }catch(e){}
 }
 
-function clearState(){
-  if(!confirm('保存されたデータをリセットしますか？\n（すべての解答・スコアが消えます）'))return;
+function clearState(silent){
+  if(!silent&&!confirm('保存されたデータをリセットしますか？\n（すべての解答・スコアが消えます。他の端末の保存データも消えます）'))return;
   // 1. localStorageを先に削除
   localStorage.removeItem(LS_KEY);
   // 2. 全変数をリセット
@@ -2014,6 +2088,7 @@ function clearState(){
   // 6. スコア表示更新 → 保存（リセット済み状態を保存）
   updateScore();
   saveState();
+  if(!silent)progDelete();
   goPage('home');
 }
 
@@ -2406,6 +2481,7 @@ async function doLogin(){
     if(semail)semail.value=email||'';
     // 管理者タブ表示
     const adminTab=document.getElementById('nav-tab-admin');
+    progOn=!isAdmin; // 管理者は同期しない（テストアカウントは通常どおり同期）
     if(isAdmin && adminTab){
       adminTab.style.display = 'block';
       window._isAdmin = true;
@@ -2474,8 +2550,11 @@ async function doLogin(){
     if(loadingEl) loadingEl.style.display = 'none';
     // 問題を描画してから状態復元
     buildQ1(); buildQ2(); buildQ3();
+    // 別の生徒のローカルデータが残っていれば破棄（共用端末対策）
+    try{const st=JSON.parse(localStorage.getItem(LS_KEY));if(st&&st.studentId&&st.studentId!==id){localStorage.removeItem(LS_KEY);localStorage.removeItem(LS_SYNC);}}catch(e){}
     loadState();
     updateScore();
+    progSync();
   }
   function loginError(msg){
     const err=document.getElementById('login-error');
@@ -2583,6 +2662,7 @@ async function doLogin(){
 
 function doLogout() {
   if(!confirm('ログアウトしますか？')) return;
+  progPush(true); location.reload(); return; // 未保存分を送ってから初期状態へ（別の生徒のデータが残らないように）
   // ログイン画面に戻す
   const overlay = document.getElementById('login-overlay');
   if(overlay) overlay.style.display = 'flex';
@@ -2601,6 +2681,7 @@ function doLogout() {
 function doIdleLogout() {
   // モーダルを閉じてログイン画面に戻す
   document.getElementById('idle-modal').classList.remove('show');
+  progPush(true); location.reload(); return;
   const overlay = document.getElementById('login-overlay');
   if (overlay) overlay.style.display = 'flex';
   // 入力フィールドをクリア
@@ -2733,7 +2814,7 @@ function renderTrendChart(allRows, items, si, ei, unit) {
     wrap2.innerHTML =
       '<div class="admin-trend-val" style="color:var(--accent);font-size:9px">' + (pd.wAvg!==null?pd.wAvg.toFixed(1):'—') + '</div>' +
       '<div class="admin-trend-bar write" style="height:'+Math.round(wPct*maxH)+'px;margin-bottom:2px"></div>' +
-      '<div class="admin-trend-val" style="color:#0f6e56;font-size:9px">' + (pd.lAvg!==null?pd.lAvg.toFixed(1):'—') + '</div>' +
+      '<div class="admin-trend-val" style="color:#1d5fa8;font-size:9px">' + (pd.lAvg!==null?pd.lAvg.toFixed(1):'—') + '</div>' +
       '<div class="admin-trend-bar lis" style="height:'+Math.round(lPct*maxH)+'px"></div>' +
       '<div class="admin-trend-label">' + pd.label + '<br><span style="color:#9b9890">'+pd.count+'件</span></div>';
     chart.appendChild(wrap2);
@@ -2807,7 +2888,7 @@ function adminShowDetail(studentId) {
     const numVal = parseInt(item.val);
     const hasVal = !isNaN(numVal) && item.val !== '';
     const pct = hasVal ? Math.round(numVal / item.max * 100) : null;
-    const pctColor = pct === null ? '#9b9890' : pct >= 70 ? '#065f46' : pct >= 50 ? '#92400e' : '#991b1b';
+    const pctColor = pct === null ? '#9b9890' : pct >= 70 ? '#174a85' : pct >= 50 ? '#6b3fa0' : '#991b1b';
     return '<div class="admin-score-item' + (item.total?' total':'') + '">' +
       '<div class="asi-label">' + item.label + '</div>' +
       '<div class="asi-val" style="color:' + pctColor + '">' + (hasVal ? numVal : '—') + '</div>' +
@@ -3020,7 +3101,7 @@ function renderAdminTable(rows, items, si, ei, unit) {
       return '<div class="proofread-cb-wrap" style="display:flex;align-items:center;gap:5px;">' +
         '<input type="checkbox" ' + (checked?'checked':'') +
         ' onchange="adminToggleProofread(this,\'' + studentId + '\',\'' + q + '\')" style="cursor:pointer;width:15px;height:15px;">' +
-        '<span style="font-size:12px;color:' + (checked?'#065f46':'#9b9890') + '">' + label + '</span>' +
+        '<span style="font-size:12px;color:' + (checked?'#174a85':'#9b9890') + '">' + label + '</span>' +
         '</div>';
     }
 
@@ -3072,7 +3153,7 @@ function adminToggleProofread(checkbox, targetStudentId, question) {
   const label = checkbox.nextElementSibling;
   if (label) {
     label.textContent = checkbox.checked ? fmtDateOnly(dateStr) : '—';
-    label.style.color = checkbox.checked ? '#065f46' : '#9b9890';
+    label.style.color = checkbox.checked ? '#174a85' : '#9b9890';
   }
 
   fetch(GAS_URL, {
@@ -3269,7 +3350,7 @@ window.addEventListener('afterprint', function() {
       <div class="admin-trend-chart" id="admin-trend-chart"></div>
       <div class="admin-trend-legend">
         <span><i style="background:var(--accent)"></i>大問1-3平均</span>
-        <span><i style="background:#0f6e56"></i>リスニング平均</span>
+        <span><i style="background:#1d5fa8"></i>リスニング平均</span>
       </div>
     </div>
 
